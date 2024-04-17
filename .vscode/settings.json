@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "__config": "cpp"
+        "__config": "cpp",
+        "cstring": "cpp",
+        "cstdlib": "cpp"
     }
 }

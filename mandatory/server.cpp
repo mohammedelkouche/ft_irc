@@ -1,7 +1,17 @@
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+#include <unistd.h>
+#include <arpa/inet.h>
+
 #include <unistd.h>
 #include <sys/socket.h>
 #include <iostream>
 // #include <>
+
+const int PORT = 8080;
+const int MAX_CLIENTS = 5;
+const int BUFFER_SIZE = 1024;
 
 int main(int argc, char **argv)
 {
@@ -14,7 +24,8 @@ int main(int argc, char **argv)
         return (1);
     }
     // bind the socket to an IP addres and port
-    
+    // sockaddr_in serverAddress;
+    struct sockaddr_in serverAddress;
 
     return (0);
 }
