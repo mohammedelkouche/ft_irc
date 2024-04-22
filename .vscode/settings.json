@@ -1,7 +1,5 @@
 {
     "files.associations": {
-        "__config": "cpp",
-        "cstring": "cpp",
-        "cstdlib": "cpp"
+        "iosfwd": "cpp"
     }
 }
