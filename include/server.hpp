@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/04/22 15:05:19 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/04/23 19:00:58 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <cstring>
 #include <unistd.h>
 #include <sstream>
-// #include <arpa/inet.h>
+#include <arpa/inet.h>
 
 #include <sys/socket.h>
 #include <iostream>

@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:21 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/04/22 16:41:09 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/04/23 23:04:48 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,16 @@ void	Server::config_server(int port_nbr,std::string str)
 {
 	this->port = port_nbr;
 	this->pass = str;
-
-	int	fd_socket = socket(AF_INET, SOCK_STREAM, 0);
 	
-	// if (fd_socket == -1)
-	// 	throw std::;
+	// variable
+	int fd_socket;
+	struct sockaddr_in server_addr;
+	
+	if (fd_socket = socket(AF_INET, SOCK_STREAM, 0) == -1)
+		throw "socker creation error";
+	memset(&server_addr, 0, sizeof(server_addr));
+	server_addr.sin_family = AF_INET;
+	server_addr.sin_port = htons(this->port);
+	server_addr.sin_addr.s_addr = INADDR_ANY;
+	
 }
