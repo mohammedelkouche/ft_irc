@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 16:04:57 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/04/23 15:19:50 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/04/25 21:21:37 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int main(int argc, char **argv) {
     catch (const char *error_message)
     {
         std::cerr << error_message << std::endl;
+        return 1;
     }
 	catch (...) 
 	{

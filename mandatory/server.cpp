@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:21 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/04/23 23:04:48 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/04/25 19:03:46 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,9 @@ void	Server::config_server(int port_nbr,std::string str)
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(this->port);
 	server_addr.sin_addr.s_addr = INADDR_ANY;
+	if (bind(fd_socket, (struct sockaddr*)&server_addr,sizeof(server_addr)) == -1)
+		throw "Binding error";
+	if (listen(fd_socket,SOMAXCONN) == -1)
+		throw "listening error";
 	
 }
