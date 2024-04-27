@@ -6,11 +6,16 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 16:04:57 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/04/25 21:21:37 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/04/27 16:44:32 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/server.hpp"
+
+
+//---------------------------
+
+// const int BUFFER_SIZE = 1024;
 
 void check_arg(char **argv) {
     std::string portstr(argv[1]);
@@ -42,6 +47,19 @@ int main(int argc, char **argv) {
         }
         check_arg(argv);
 		irc.config_server(std::atoi(argv[1]), argv[2]);
+        std::cout << "Server started. Listening on port " << std::endl;
+        irc.acceptconnection();
+        while (true)
+        {
+            irc.receivemessage();
+            std::cout << "Server: ";
+            char inputMessage[BUFFER_SIZE];
+            
+            
+            std::cin.getline(inputMessage, BUFFER_SIZE);
+            irc.sendmessage(inputMessage);
+        }
+        
         // std::cout << "Arguments are valid." << std::endl;
     }
 	catch (const std::invalid_argument& e) 
@@ -65,47 +83,3 @@ int main(int argc, char **argv) {
     }
     return 0;
 }
-
-//---------------------------------------------------
-
-// int	check_arg(char **argv)
-// {
-// 	int port;
-// 	std::string str(argv[1]);
-// 	size_t portstr = str.find_first_not_of("0123456789");
-// 	if (portstr != std::string::npos)
-// 	{
-// 		std::cout << "error in the port" << std::endl;
-// 		return(1);
-// 	}
-// 	std::stringstream my_stream(str);
-// 	my_stream >> port;
-// 	if (port < 1024 || port > 65535)
-// 	{
-// 		std::cout << "error : invalide port number" << std::endl;
-// 		return(1);
-// 	}
-// 	return (0);
-// }
-
-// int main(int argc, char **argv)
-// {
-// 	if (argc != 3)
-// 	{
-// 		std::cout << "write: executable file, <port> ,<password>" << std::endl;
-// 		return (1);
-// 	}
-// 	check_arg(argv);
-// 	// creat socket
-// 	// int serversocket = socket(AF_INET, SOCK_STREAM, 0);
-// 	// if (serversocket == -1)
-// 	// {
-// 	// 	std::cout << "Error could not creat socket \n";
-// 	// 	// std::cerr << "Error could not creat socket \n";
-// 	// 	return (1);
-// 	// }
-// 	// // bind the socket to an IP addres and port
-// 	// // sockaddr_in serverAddress;
-// 	// struct sockaddr_in serverAddress;
-// 	return (0);
-// }
