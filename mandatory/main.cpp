@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 16:04:57 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/04/27 16:44:32 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/04/28 19:39:43 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int main(int argc, char **argv) {
             
             
             std::cin.getline(inputMessage, BUFFER_SIZE);
+            // std::cout << "responce: "<< inputMessage << std::endl;
             irc.sendmessage(inputMessage);
         }
         
@@ -76,10 +77,10 @@ int main(int argc, char **argv) {
         std::cerr << error_message << std::endl;
         return 1;
     }
-	catch (...) 
-	{
-        std::cerr << "Unknown error occurred" << std::endl;
-        return 1;
-    }
+	// catch (...)
+	// {
+    //     std::cerr << "Unknown error occurred" << std::endl;
+    //     return 1;
+    // }
     return 0;
 }
