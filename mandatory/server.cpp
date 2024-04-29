@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:21 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/04/28 19:30:16 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/04/29 11:10:57 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,32 +47,32 @@ void	Server::acceptconnection()
 
 void Server::receivemessage()
 {
-	// int bytes_read = recv(fd_c_socket, buffer, BUFFER_SIZE, 0);
+	int bytes_read = recv(fd_c_socket, buffer, BUFFER_SIZE, 0);
 
-	// if (bytes_read <= 0)
-	// 	throw ("Connection closed by client");
-	// buffer[bytes_read] = '\0';
-	// std::cout << "Client: " << buffer << std::endl;
+	if (bytes_read <= 0)
+		throw ("Connection closed by client");
+	buffer[bytes_read] = '\0';
+	std::cout << "Client: " << buffer << std::endl;
 	
 	//--------------- UPDATE -----------------
-	int bytes_read = recv(fd_c_socket, buffer, BUFFER_SIZE, MSG_DONTWAIT); // Use MSG_DONTWAIT to make recv non-blocking
-	if (bytes_read > 0) {
-            buffer[bytes_read] = '\0';
-            std::cout << "Client: " << buffer << std::endl;
-        } else if (bytes_read == 0) {
-            throw "Connection closed by client";
-        }
+	// int bytes_read = recv(fd_c_socket, buffer, BUFFER_SIZE, MSG_DONTWAIT); // Use MSG_DONTWAIT to make recv non-blocking
+	// if (bytes_read > 0) {
+    //         buffer[bytes_read] = '\0';
+    //         std::cout << "Client: " << buffer << std::endl;
+    //     } else if (bytes_read == 0) {
+    //         throw "Connection closed by client";
+    //     }
 }
 void	Server::sendmessage(char *message)
 {
-	// if (send(fd_c_socket, message, strlen(message), 0) == -1) {
-	// 	throw "Send error";
-	// }
-	
-	//--------------- UPDATE -----------------
-	if (send(fd_c_socket, message, strlen(message), MSG_DONTWAIT) == -1) {
+	if (send(fd_c_socket, message, strlen(message), 0) == -1) {
 		throw "Send error";
 	}
+	
+	//--------------- UPDATE -----------------
+	// if (send(fd_c_socket, message, strlen(message), MSG_DONTWAIT) == -1) {
+	// 	throw "Send error";
+	// }
 }
 
 Server::~Server()
