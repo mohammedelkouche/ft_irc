@@ -340,7 +340,6 @@ int main(int argc, char **argv) {
 //             if (ret == -1) {
 //                 throw "poll error";
 //             }
-//             std::cout << "how are you" << std::endl;
 //             if (fds[0].revents & POLLIN) {
 //                 char inputMessage[BUFFER_SIZE];
 //                 std::cin.getline(inputMessage, BUFFER_SIZE);

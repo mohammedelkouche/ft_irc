@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 16:04:57 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/04/28 19:39:43 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:54:02 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void check_arg(char **argv) {
     if (port < 1024 || port > 65535) {
         throw std::out_of_range("Error: Invalid port number");
     }
-        if (std::strlen(argv[2]) == 0) {
+    if (std::strlen(argv[2]) == 0) {
         throw std::invalid_argument("Error: Empty password");
     }
 }
@@ -46,20 +46,21 @@ int main(int argc, char **argv) {
             return 1;
         }
         check_arg(argv);
-		irc.config_server(std::atoi(argv[1]), argv[2]);
+        irc.initializeServer(std::atoi(argv[1]), argv[2]);
+		// irc.config_server(std::atoi(argv[1]), argv[2]);
         std::cout << "Server started. Listening on port " << std::endl;
-        irc.acceptconnection();
-        while (true)
-        {
-            irc.receivemessage();
-            std::cout << "Server: ";
-            char inputMessage[BUFFER_SIZE];
+        // irc.acceptconnection();
+        // while (true)
+        // {
+        //     irc.receivemessage();
+        //     std::cout << "Server: ";
+        //     char inputMessage[BUFFER_SIZE];
             
             
-            std::cin.getline(inputMessage, BUFFER_SIZE);
-            // std::cout << "responce: "<< inputMessage << std::endl;
-            irc.sendmessage(inputMessage);
-        }
+        //     std::cin.getline(inputMessage, BUFFER_SIZE);
+        //     // std::cout << "responce: "<< inputMessage << std::endl;
+        //     irc.sendmessage(inputMessage);
+        // }
         
         // std::cout << "Arguments are valid." << std::endl;
     }
