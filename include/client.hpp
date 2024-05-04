@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 17:11:32 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/03 22:20:32 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/04 18:14:43 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,5 @@ class   Client
 		// void SetIpAddress(std::string ip) { ipAddress = ip; }
 		~Client();
 };
-
-// Client::Client()
-// {}
-
-// int	Client::get_fd()
-// {
-// 	return(fd);
-// }
-
-// void	Client::set_ipAddress(std::string ip)
-// {
-// 	this->ipaddress = ip;
-// }
-// Client::~Client()
-// {}
 
 #endif

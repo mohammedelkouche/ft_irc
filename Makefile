@@ -6,7 +6,7 @@
 #    By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/20 16:54:34 by mel-kouc          #+#    #+#              #
-#    Updated: 2024/05/04 15:40:30 by mel-kouc         ###   ########.fr        #
+#    Updated: 2024/05/04 18:15:48 by mel-kouc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,27 +14,28 @@ NAME = ircserv
 
 SRC = ./mandatory/main.cpp ./mandatory/client.cpp ./mandatory/server.cpp
 
-HEADER = ./include/client.hpp ./include/server.hpp
+OBJ = $(SRC:.cpp=.o)
+
+HEADER =  ./include/server.hpp ./include/client.hpp
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 CC = c++
 
-OBJ = $(SRC:.c=.o)
 
 
 all :: $(NAME)
 
-$(NAME) : $(OBJ)
+$(NAME) : $(OBJ) $(HEADER)
 		$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-%.o : %.c $(HEADER) $(Bonus_HEADER)
-	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+%.o : %.cpp $(HEADER)
+	$(CC) $(CFLAGS)  -c $< -o $@
 
 clean:
-		rm -rf $(OBJ) $(BOBJ)
+		rm -rf $(OBJ)
 
 fclean: clean
-		rm -rf $(NAME) $(BNAME)
+		rm -rf $(NAME)
 
 re:	fclean all
