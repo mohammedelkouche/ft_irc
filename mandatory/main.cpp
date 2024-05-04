@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/20 16:04:57 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/03 15:54:02 by mel-kouc         ###   ########.fr       */
+/*   Created: 2024/05/04 17:08:30 by mel-kouc          #+#    #+#             */
+/*   Updated: 2024/05/04 17:08:31 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../include/server.hpp"
 
@@ -48,7 +49,7 @@ int main(int argc, char **argv) {
         check_arg(argv);
         irc.initializeServer(std::atoi(argv[1]), argv[2]);
 		// irc.config_server(std::atoi(argv[1]), argv[2]);
-        std::cout << "Server started. Listening on port " << std::endl;
+        // std::cout << "Server started. Listening on port " << std::endl;
         // irc.acceptconnection();
         // while (true)
         // {

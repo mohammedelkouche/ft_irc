@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/20 15:38:21 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/03 23:19:42 by mel-kouc         ###   ########.fr       */
+/*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
+/*   Updated: 2024/05/04 17:08:57 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ Server::Server()
 
 void	Server::config_server()
 {
+	int enable = 1;
 	struct sockaddr_in server_addr;
 	
 	server_addr.sin_family = AF_INET;
@@ -86,6 +87,8 @@ void	Server::config_server()
 	fd_srv_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (fd_srv_socket == -1)
 		throw(std::runtime_error("Failed to create socket"));
+	if (setsockopt(fd_srv_socket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable)) == -1)
+        throw(std::runtime_error("Failed to set option (SO_REUSEADDR) on socket"));
 	if (fcntl(fd_srv_socket, F_SETFL, O_NONBLOCK)  == -1)
 		throw(std::runtime_error("Failed to set option (O_NONBLOCK) on socket"));
 	if (bind(fd_srv_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)))
@@ -131,7 +134,7 @@ void	Server::AcceptNewClient()
 	newclient.set_ipAddress(inet_ntoa(client_addr.sin_addr));
 	clients.push_back(newclient);
 	pollfds.push_back(client_poll_fd);
-	std::cout << "Client <" << fd_client_sock << "> Connected" << std::endl;
+	std::cout << "Client fd = '" << fd_client_sock << "' Connected" << std::endl;
 }
 
 void	Server::RemoveClient(int fd)
@@ -160,14 +163,14 @@ void	Server::ReceiveClientData(int fd)
 	size_t bytes_received = recv(fd, buffer, BUFFER_SIZE - 1, 0);
 	if (bytes_received <= 0)
 	{
-		 std::cout << "Client <" << fd << "> Disconnected" << std::endl;
+		 std::cout << "Client fd = '" << fd << "' Disconnected" << std::endl;
         RemoveClient(fd);
         close(fd);
 	}
 	else
 	{
 		buffer[bytes_received] = '\0';
-		std::cout << "Client <" << fd << "> Data: " << buffer;
+		std::cout << "Client fd = '" << fd << "' send : " << buffer;
 	}
 }
 
@@ -178,6 +181,7 @@ void	Server::initializeServer(int port_nbr,std::string str)
 	config_server();
 
 	std::cout << "Server with fd <" << fd_srv_socket << "> Connected" << std::endl;
+	std::cout << "Server started. Listening on port : " << this->port << std::endl;
 	std::cout << "Waiting to accept a connection...\n";
 	
 	while (true)
