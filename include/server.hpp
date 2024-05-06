@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/04 18:13:39 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:20:10 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include <iostream>
 #include <poll.h>
 #include "./client.hpp"
+#include <map>
 
 #define BUFFER_SIZE 1024
 
@@ -34,8 +35,8 @@ class Server
 		int port;
 		std::string pass;
 		int fd_srv_socket;
-		// int fd_client_sock;
 		std::vector<Client> clients;
+		// std::map<int, Client>clients;
 		std::vector <struct pollfd> pollfds;
 		char buffer[BUFFER_SIZE];
 	public :
