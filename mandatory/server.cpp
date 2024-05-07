@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/06 20:56:09 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/08 00:30:53 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,24 +109,62 @@ void	Server::RemoveClient(int fd)
 	}
 }
 
-void	devide_commande(std::string message, int fd)
+std::vector<std::string>	devide_commande(std::string message, int fd)
 {
-	
+	std::vector<std::string> vector;
 	(void)fd;
+	int	flag = 0;
 	std::string Command;
-	// Client user = get_client(fd);
-	size_t	pos = message.find(' ');
-	std::cout << "pos = '" << pos << std::endl;
-	if (pos != std::string::npos)
+	for (size_t space = 0; space < message.size(); space++)
 	{
-		Command = message.substr(0, pos);
-		std::cout << "test = '" << Command << std::endl;
+		
+		if (message[0] == ':' && flag == 0)
+		{
+			vector.push_back(message.substr(0,1));
+			flag = 1;
+		}
+		else if (!std::isspace(message[space]))
+		// else if (message[space] != ' ')
+		{
+			size_t	next_space = message.find(' ', space);
+			if (next_space != std::string::npos)
+			{
+				vector.push_back(message.substr(space, next_space - space));
+				space = next_space;
+			}
+			else
+			{
+				vector.push_back(message.substr(space, message.size() - space));
+				break ;
+			}
+		}
 	}
+	// for (std::vector<std::string>::iterator it = vector.begin(); it != vector.end(); ++it)
+    // {
+    //     std::cout << "it  = <" << *it << ">" << std::endl;
+    // }
+	return vector;
 }
+
+// Client* Client::get_connect_client(int fd)
+// Client* Server::get_connect_client(int fd)
+// {
+// 	for (size_t i = 0; i < clients.size(); i++)
+// 	{
+		
+// 		if (clients.)
+// 		{
+			
+// 		}
+// 	}
+	
+// }
 
 void	parse_message(std::string buffer, int fd)
 {
+	std::vector <std::string> commande;
 	std::string message;
+	// Client	*user = get_connect_client(fd);
 	// size_t	pos = buffer.find_first_of("\r\n");
 	// size_t	pos = buffer.find("ou");
 	// size_t	pos = buffer.find("\n");
@@ -136,7 +174,11 @@ void	parse_message(std::string buffer, int fd)
 	{
 		message = buffer.substr(0, pos);
 		// std::cout << "test = '" << message << std::endl;
-		devide_commande(message, fd);
+		commande = devide_commande(message, fd);
+		for (std::vector<std::string>::iterator it = commande.begin(); it != commande.end(); ++it)
+		{
+			std::cout << "it  = <" << *it << ">" << std::endl;
+		}
 	}
 }
 

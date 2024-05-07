@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/06 13:20:10 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/07 22:17:56 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ class Server
 		std::string pass;
 		int fd_srv_socket;
 		std::vector<Client> clients;
+		Client*	user;
 		// std::map<int, Client>clients;
 		std::vector <struct pollfd> pollfds;
 		char buffer[BUFFER_SIZE];
@@ -48,7 +49,9 @@ class Server
 		void	AcceptNewClient();
 		void	ReceiveClientData(int fd);
 		void	RemoveClient(int fd);
+		Client	*get_connect_client(int fd);
 		void	CloseConnections();
+		
 		// void	acceptconnection();
 		// void	receivemessage();
 		// void	sendmessage(char *message);

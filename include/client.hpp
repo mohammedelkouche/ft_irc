@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 17:11:32 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/06 18:04:33 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/07 22:17:39 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class   Client
 		Client();
 		void	set_fd(int fd_client);
 		int		get_fd();
-		
+		// Client	*get_connect_client(int fd);
 		void	set_ipAddress(std::string ip);
 		~Client();
 };
