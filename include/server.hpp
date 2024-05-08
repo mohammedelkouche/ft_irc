@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/07 22:17:56 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/08 23:58:21 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,9 @@ class Server
 		void	AcceptNewClient();
 		void	ReceiveClientData(int fd);
 		void	RemoveClient(int fd);
+		void	parse_message(std::string buffer, int fd);
 		Client	*get_connect_client(int fd);
+		void	execute_commande(Client *user);
 		void	CloseConnections();
 		
 		// void	acceptconnection();
