@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/08 23:58:06 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/09 18:25:29 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,41 @@ Client* Server::get_connect_client(int fd)
 			return (&clients[i]);
 	}
 	return (NULL);
+}
+
+void	Server::execute_commande(Client *user)
+{
+	std::vector <std::string> commande;
+	
+	commande = user->get_commande();
+	// if (user->get_commande().empty())
+	// {
+	// 	std::cout << "is empty" << std::endl;
+	// 	return ;
+	// }
+	
+	if (commande[0] == "pass" || commande[0] == "PASS")
+	{
+		handle_pass(user);
+	}
+	else if (commande[0] == "nick" || commande[0] == "NICK")
+	{
+		
+	}
+	// else if (commande[0] == "nick" || commande[0] == "NICK")
+	// {
+		
+	// }
+	// switch (expression)
+	// {
+	// case /* constant-expression */:
+	// 	/* code */
+	// 	break;
+	
+	// default:
+	// 	break;
+	// }
+	
 }
 
 void	Server::parse_message(std::string buffer, int fd)
