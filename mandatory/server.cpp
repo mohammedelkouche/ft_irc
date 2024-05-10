@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/09 18:25:29 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/10 19:22:39 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,12 +116,6 @@ std::vector<std::string>	devide_commande(std::string message, int fd)
 	std::string Command;
 	for (size_t space = 0; space < message.size(); space++)
 	{
-		
-		// if (message[0] == ':' && flag == 0)
-		// {
-		// 	vector.push_back(message.substr(0,1));
-		// 	flag = 1;
-		// }
 		if (!std::isspace(message[space]))
 		{
 			size_t	next_space = message.find(' ', space);
@@ -163,7 +157,6 @@ void	Server::execute_commande(Client *user)
 	commande = user->get_commande();
 	// if (user->get_commande().empty())
 	// {
-	// 	std::cout << "is empty" << std::endl;
 	// 	return ;
 	// }
 	
@@ -196,8 +189,6 @@ void	Server::parse_message(std::string buffer, int fd)
 	std::vector <std::string> commande;
 	std::string message;
 	Client	*user = get_connect_client(fd);
-	if (user)
-		std::cout << "hello" << std::endl;
 	// size_t	pos = buffer.find_first_of("\r\n");
 	// size_t	pos = buffer.find("ou");
 	// size_t	pos = buffer.find("\n");
