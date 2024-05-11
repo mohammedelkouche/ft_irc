@@ -38,7 +38,7 @@
 
 // void Server::config_server(int port_nbr, std::string str) {
 //     this->port = port_nbr;
-//     this->pass = str;
+//     this-> = str;
 
 //     struct sockaddr_in server_addr;
 //     this->fd_s_socket = socket(AF_INET, SOCK_STREAM, 0);
