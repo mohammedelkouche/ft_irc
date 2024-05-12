@@ -6,13 +6,13 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/10 19:22:39 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/12 01:06:36 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/server.hpp"
 
-Server::Server()
+Server::Server() : pass("")
 {
 	
 }
@@ -112,7 +112,6 @@ std::vector<std::string>	devide_commande(std::string message, int fd)
 {
 	std::vector<std::string> vector;
 	(void)fd;
-	// int	flag = 0;
 	std::string Command;
 	for (size_t space = 0; space < message.size(); space++)
 	{
@@ -120,7 +119,12 @@ std::vector<std::string>	devide_commande(std::string message, int fd)
 		{
 			size_t	next_space = message.find(' ', space);
 			if (message[space] == ':')
+			{
 				vector.push_back(message.substr(space,1));
+				// add
+				vector.push_back(message.substr(space + 1, message.size() - (space + 1)));
+				break ;
+			}
 			else if (next_space != std::string::npos)
 			{
 				vector.push_back(message.substr(space, next_space - space));
@@ -133,10 +137,6 @@ std::vector<std::string>	devide_commande(std::string message, int fd)
 			}
 		}
 	}
-	// for (std::vector<std::string>::iterator it = vector.begin(); it != vector.end(); ++it)
-    // {
-    //     std::cout << "it  = <" << *it << ">" << std::endl;
-    // }
 	return vector;
 }
 
@@ -159,14 +159,13 @@ void	Server::execute_commande(Client *user)
 	// {
 	// 	return ;
 	// }
-	
 	if (commande[0] == "pass" || commande[0] == "PASS")
 	{
 		handle_pass(user);
 	}
 	else if (commande[0] == "nick" || commande[0] == "NICK")
 	{
-		
+		handle_nickname(user);
 	}
 	// else if (commande[0] == "nick" || commande[0] == "NICK")
 	// {
@@ -191,8 +190,8 @@ void	Server::parse_message(std::string buffer, int fd)
 	Client	*user = get_connect_client(fd);
 	// size_t	pos = buffer.find_first_of("\r\n");
 	// size_t	pos = buffer.find("ou");
-	// size_t	pos = buffer.find("\n");
-	size_t	pos = buffer.find("\r\n");
+	size_t	pos = buffer.find("\n");
+	// size_t	limechat = buffer.find("\r\n");
 	// std::cout << "pos = '" << pos << std::endl;
 	if (pos != std::string::npos)
 	{

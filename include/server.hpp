@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/10 00:59:32 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/12 01:00:57 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,15 @@ class Server
 		void	parse_message(std::string buffer, int fd);
 		Client	*get_connect_client(int fd);
 		void	execute_commande(Client *user);
-		void	handle_pass(Client *user);
 		void	CloseConnections();
 		
-		// void	acceptconnection();
-		// void	receivemessage();
-		// void	sendmessage(char *message);
+		// handel cmd
+		void	handle_pass(Client *user);
+		void	handle_nickname(Client *user);
+
+		// server utils
+		bool	unique_nickname(std::string nickname);
+
 		~Server();
 };
 

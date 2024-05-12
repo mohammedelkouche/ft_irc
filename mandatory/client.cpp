@@ -6,14 +6,16 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/10 16:33:04 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/12 01:15:54 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // #include "../include/server.hpp"
 #include "../include/client.hpp"
 #include <iostream>
-Client::Client()
+
+
+Client::Client() : ipaddress(""), nickname(""), username ("")
 {
 	this->registred = false;
 }
@@ -22,6 +24,7 @@ void	Client::set_fd(int fd_client)
 {
 	this->fd  = fd_client;
 }
+
 
 int    Client::get_fd()
 {
@@ -50,7 +53,16 @@ void	Client::set_username(std::string user)
 {
 	this->username = user;
 }
+void	Client::set_pass_client(std::string password)
+{
+	this->pass_client = password;
+}
 
+std::string	Client::get_pass_client()
+{
+	return this->pass_client;
+	
+}
 std::string	Client::get_nickname()
 {
 	return this->nickname;
