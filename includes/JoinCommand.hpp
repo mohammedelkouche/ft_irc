@@ -5,24 +5,13 @@
 #include<string>
 #include<vector>
 
+#include "../Server/include/server.hpp"
+#include "../Server/include/client.hpp"
 
-class JoinCommand
-{
-    private:
-        
-    public:
-        JoinCommand();
-        ~JoinCommand();
-        void JoinConstruction(std::string buffer);
-};
 
-JoinCommand::JoinCommand()
-{
-}
+class Client;
+class Server;
 
-JoinCommand::~JoinCommand()
-{
-}
-
+void JoinConstruction(std::vector<std::string> command, int clientFd);
 
 #endif

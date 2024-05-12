@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/04 18:13:39 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/11 22:42:08 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,11 @@
 #include <iostream>
 #include <poll.h>
 #include "./client.hpp"
+#include <map>
+#include "../../includes/JoinCommand.hpp"
 
+
+class JoinCommand;
 #define BUFFER_SIZE 1024
 
 class Server
@@ -34,8 +38,9 @@ class Server
 		int port;
 		std::string pass;
 		int fd_srv_socket;
-		// int fd_client_sock;
 		std::vector<Client> clients;
+		Client*	user;
+		// std::map<int, Client>clients;
 		std::vector <struct pollfd> pollfds;
 		char buffer[BUFFER_SIZE];
 	public :
@@ -47,7 +52,12 @@ class Server
 		void	AcceptNewClient();
 		void	ReceiveClientData(int fd);
 		void	RemoveClient(int fd);
+		void	parse_message(std::string buffer, int fd);
+		Client	*get_connect_client(int fd);
+		void	execute_commande(Client *user);
+		void	handle_pass(Client *user);
 		void	CloseConnections();
+		
 		// void	acceptconnection();
 		// void	receivemessage();
 		// void	sendmessage(char *message);

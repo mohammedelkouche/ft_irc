@@ -3,30 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 17:11:32 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/11 20:43:46 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/10 16:33:28 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 #include <iostream>
-#include "../../includes/Join.hpp"
+#include <vector>
 
-class Join;
 
 class   Client
 {
 	private :
 		int	fd;
 		std::string ipaddress;
+		std::vector<std::string> commande;
+		std::string nickname;
+		std::string username;
+		bool registred;
 	public :
 		Client();
-		int get_fd();
-		void set_ipAddress(std::string ip);
-		// void SetIpAddress(std::string ip) { ipAddress = ip; }
+		void	set_fd(int fd_client);
+		void	set_commande(std::vector <std::string> &cmd);
+		void	set_nickname(std::string nick);
+		void	set_username(std::string user);
+		bool	is_enregistred();
+		std::vector<std::string>	get_commande();
+		int		get_fd();
+		std::string		get_nickname();
+		std::string		get_username();
+		// Client	*get_connect_client(int fd);
+		void	set_ipAddress(std::string ip);
 		~Client();
 };
 
