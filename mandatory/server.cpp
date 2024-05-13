@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/13 05:36:04 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 05:53:11 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ void	Server::execute_commande(Client *user)
 	{
 	}
 	else if (commande[0] == "join" || commande[0] == "JOIN")
-		JoinConstruction(user->get_commande(), user->get_fd());
+		JoinConstruction(commande, user->get_fd());
 	// switch (expression)
 	// {
 	// case /* constant-expression */:

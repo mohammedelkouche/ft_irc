@@ -5,7 +5,7 @@ SRC = ./mandatory/main.cpp ./mandatory/client.cpp ./mandatory/authentication.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
-HEADER =  ./include/server.hpp ./include/client.hpp ./include/JoinCommand.hpp ./include/channels.hpp
+HEADER =  ./include/server.hpp ./include/client.hpp  ./include/channels.hpp ./include/JoinCommand.hpp
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 

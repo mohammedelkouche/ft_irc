@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/13 00:55:31 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 05:53:41 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@
 #include <map>
 #include "JoinCommand.hpp"
 
-
-class JoinCommand;
 #define BUFFER_SIZE 1024
 
 class Server
