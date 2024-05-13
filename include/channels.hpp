@@ -4,18 +4,22 @@
 #include<iostream>
 #include<string>
 #include<vector>
-#include"../Server/include/client.hpp"
+#include<algorithm>
+#include <sys/socket.h>
+#include"client.hpp"
 
 
 class Channels
 {
     private:
         std::string name;
-        std::vector<Client> ClientssHouse;
+        std::vector<int> ClientssHouse;
     public:
-        std::string getChannelName();
+        Channels(std::string name);
         Channels();
+        void join(int clientFd);
         ~Channels();
+        std::string getChannelName();
     };
 
 #endif

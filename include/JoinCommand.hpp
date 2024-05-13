@@ -1,5 +1,5 @@
-#ifndef JOIN_HPP
-#define JOIN_HPP
+#ifndef JOINCOMMAND_HPP
+#define JOINCOMMAND_HPP
 
 #include<iostream>
 #include<string>
@@ -7,10 +7,9 @@
 
 #include "server.hpp"
 #include "client.hpp"
+#include "channels.hpp"
 
-
-class Client;
-class Server;
+// class Channels;
 
 void JoinConstruction(std::vector<std::string> command, int clientFd);
 

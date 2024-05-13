@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:30 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/13 01:04:02 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 01:33:28 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,10 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 	catch (const std::out_of_range& e) {
+		std::cerr << e.what() << std::endl;
+		return 1;
+	}
+	catch (const std::runtime_error& e) {
 		std::cerr << e.what() << std::endl;
 		return 1;
 	}
