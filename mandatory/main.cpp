@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:30 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/05 16:57:09 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/13 01:04:02 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include "../include/server.hpp"
 
 
-void check_arg(char **argv) {
+void check_arg(char **argv) 
+{
 	std::string portstr(argv[1]);
 	size_t portPos = portstr.find_first_not_of("0123456789");
 	if (portPos != std::string::npos) {

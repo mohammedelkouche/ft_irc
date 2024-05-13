@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/11 22:42:08 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 00:55:31 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #include <poll.h>
 #include "./client.hpp"
 #include <map>
-#include "../../includes/JoinCommand.hpp"
+#include "JoinCommand.hpp"
 
 
 class JoinCommand;

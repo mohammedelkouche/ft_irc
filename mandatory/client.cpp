@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/10 16:33:04 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/13 01:04:02 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // #include "../include/server.hpp"
 #include "../include/client.hpp"
 #include <iostream>
+
 Client::Client()
 {
 	this->registred = false;
