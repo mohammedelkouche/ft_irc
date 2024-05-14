@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/12 01:06:36 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/14 20:13:39 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	Server::config_server()
 void	Server::AcceptNewClient()
 {
 	Client	newclient;
+	std::string	host;
 
 	struct sockaddr_in client_addr;
 	socklen_t addresslenght = sizeof(client_addr);
@@ -75,6 +76,8 @@ void	Server::AcceptNewClient()
 
 	newclient.set_ipAddress(inet_ntoa(client_addr.sin_addr));
 	newclient.set_fd(fd_client_sock);
+	host = newclient.get_client_host();
+	newclient.set_hostname(host);
 	// for vector
 	// clients.insert(std::make_pair(fd_client_sock, newclient));
 	
@@ -167,10 +170,10 @@ void	Server::execute_commande(Client *user)
 	{
 		handle_nickname(user);
 	}
-	// else if (commande[0] == "nick" || commande[0] == "NICK")
-	// {
-		
-	// }
+	else if (commande[0] == "user" || commande[0] == "USER")
+	{
+		handle_username(user);
+	}
 	// switch (expression)
 	// {
 	// case /* constant-expression */:

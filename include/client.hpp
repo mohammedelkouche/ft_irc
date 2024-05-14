@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 17:11:32 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/12 01:14:34 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/14 17:58:11 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #define CLIENT_HPP
 #include <iostream>
 #include <vector>
+#include <netdb.h>
+#include <unistd.h>
 
 
 class   Client
@@ -25,6 +27,7 @@ class   Client
 		std::string nickname;
 		std::string pass_client;
 		std::string username;
+		std::string hostname;
 		bool registred;
 	public :
 		Client();
@@ -33,12 +36,17 @@ class   Client
 		void	set_nickname(std::string nick);
 		void	set_pass_client(std::string password);
 		void	set_username(std::string user);
+		void	set_hostname(std::string host);
+		
 		bool	is_enregistred();
 		std::vector<std::string>	get_commande();
 		int		get_fd();
 		std::string	get_nickname();
 		std::string	get_username();
 		std::string	get_pass_client();
+		std::string	get_hostname();
+		std::string	get_client_host();
+		void	check_registre(std::string pass);
 		// Client	*get_connect_client(int fd);
 		void	set_ipAddress(std::string ip);
 		~Client();

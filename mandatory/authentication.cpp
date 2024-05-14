@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/13 22:54:04 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/14 22:35:04 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,31 +32,36 @@
 // Optionally, a literal asterisk character ('*', 0x2A) to indicate that the user is a server operator.
 void	Server::handle_pass(Client *user)
 {
-	// handle " q w"	
 	std::vector<std::string> commande = user->get_commande();
 	if (user->get_commande().size() == 1)
 	{
 		if (user->is_enregistred())
-			// std::cout << ": Not enough parameters" << std::endl;
-			ERR_NEEDMOREPARAMS(user->get_nickname(), "PASS", user->get_fd());
+		{
+			sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(user->get_nickname(), user->get_hostname()));
+			// ERR_NEEDMOREPARAMS(user->get_nickname(), "PASS", user->get_fd());
+		}
 		else
-			// std::cout <<": Not enough parameters" << std::endl;
-			ERR_NEEDMOREPARAMS(" * ", "PASS", user->get_fd());
+		{
+			sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(" * ", user->get_hostname()));
+			// ERR_NEEDMOREPARAMS(" * ", "PASS", user->get_fd());
+		}
 	}
-	// else if(user->get_commande().size() == 2)
 	else
 	{
-		// if(this->pass == user->get_commande())
 		if (user->is_enregistred())
-			ERR_ALREADYREGISTERED(user->get_nickname(), "PASS", user->get_fd());
+		{
+			sendToClient(user->get_fd(), ERROR_ALREADYREGISTERED(user->get_nickname(), user->get_hostname()));
+			// ERR_ALREADYREGISTERED(user->get_nickname(), "PASS", user->get_fd());
+		}
 		else
 		{
 			if(this->pass != commande[1])
-				ERR_PASSWDMISMATCH(" * ", "PASS", user->get_fd());
+			{
+				sendToClient(user->get_fd(), ERROR_PASSWDMISMATCH(" * ", user->get_hostname()));
+				// ERR_PASSWDMISMATCH(" * ", "PASS", user->get_fd());
+			}
 			else
 				user->set_pass_client(commande[1]);
-			// 	std::cout <<": what can do here ? " << std::endl;
-				// ERR_PASSWDMISMATCH(" * ", "PASS");
 		}
 	}
 }
@@ -88,28 +93,6 @@ bool	Server::check_valid_nick_name(std::string nick_name)
 	return true;
 }
 
-// std::string getHostname() {
-//     char hostname[256]; // Buffer to hold the hostname
-//     if (gethostname(hostname, sizeof(hostname)) == 0) {
-//         return std::string(hostname); // Convert the C-style string to std::string
-//     } else {
-//         return "Unknown"; // Return "Unknown" if gethostname fails
-//     }
-// }
-
-#include <netdb.h>
-
-std::string getHostname() {
-    char hostname[256]; // Buffer to hold the hostname
-    if (gethostname(hostname, sizeof(hostname)) == 0) {
-        struct hostent* hostInfo = gethostbyname(hostname);
-        if (hostInfo != NULL) {
-            return std::string(hostInfo->h_name); // Convert the C-style string to std::string
-        }
-    }
-    return "Unknown"; // Return "Unknown" if gethostname or gethostbyname fails
-}
-
 void	Server::sendToClient(int fd, const std::string& message)
 {
 	send(fd, message.c_str(), message.length(), 0);
@@ -117,50 +100,61 @@ void	Server::sendToClient(int fd, const std::string& message)
 
 void	Server::handle_nickname(Client *user)
 {
-	std::cout << "getHostname = " <<  getHostname() << std::endl;
 	std::vector<std::string> commande = user->get_commande();
 	// nickname is already in use on the network ERR_NICKNAMEINUSE 
 	if (user->get_commande().size() == 1)
 	{
 		if (user->is_enregistred())
-			ERR_NONICKNAMEGIVEN(user->get_nickname(), user->get_fd());
-			// std::cout << ": Not enough parameters" << std::endl;
-			// ERR_NEEDMOREPARAMS(user->get_nickname(), "NICK");
+			sendToClient(user->get_fd(), ERROR_NONICKNAMEGIVEN(user->get_nickname(), user->get_hostname()));
 		else
-			ERR_NONICKNAMEGIVEN(" * ", user->get_fd());
-			// std::cout <<": Not enough parameters" << std::endl;
-			// ERR_NEEDMOREPARAMS(" * ", "NICK");
+			sendToClient(user->get_fd(), ERROR_NONICKNAMEGIVEN(" * ", user->get_hostname()));
 	}
 	else
 	{
 		// check first if he enter pssword correct ?
 		// ERR_NOTREGISTERED
-		
-		if (user->get_pass_client().compare(""))
-			ERR_NOTREGISTERED(" * ", "NICK", user->get_fd());
-		//{ here }
-		// user->is_enregistred()
-		// check nickname
-		if (!check_valid_nick_name(commande[1]))
+
+		if (!user->get_pass_client().compare(""))
+		{
+			sendToClient(user->get_fd(), ERROR_NOTREGISTERED(" * ", user->get_hostname()));
+		}
+			// ERR_NOTREGISTERED(" * ", "NICK", user->get_fd());
+		else if (check_valid_nick_name(commande[1]))
 		{
 			// std::cout << " : hay is not valid" << std::endl;
 			if (!user->is_enregistred())
 			{
 				if (!unique_nickname(commande[1]))
-					ERR_NICKNAMEINUSE(" * ", "NICK", user->get_fd());
+					sendToClient(user->get_fd(), ERROR_NICKNAMEINUSE(" * ", user->get_hostname()));
+					// ERR_NICKNAMEINUSE(" * ", "NICK", user->get_fd());
 				else
 					user->set_nickname(commande[1]);
 			}
 			// else if (user->is_enregistred())
-			// {
-				
-			// }
+			else
+			{
+				// add in here  RPL_NICKCHANGE
+				sendToClient(user->get_fd(), REPLY_NICKCHANGE(user->get_nickname(), commande[1], user->get_hostname()));
+				user->set_nickname(commande[1]);
+			}
 		}
-			
+		else
+			sendToClient(user->get_fd(), ERROR_ERRONEUSNICKNAME(" * ", user->get_hostname()));
+		// user->check_registre(user->get_nickname());
 		// else
 		// {
 			// test
 			// user->set_nickname(commande[1]);
 		// }
 	}
+
+}
+
+void	Server::handle_username(Client *user)
+{
+	(void)user;
+	// if (user->get_commande().size() )
+	// {
+		
+	// }
 }

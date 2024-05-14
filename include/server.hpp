@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/13 22:34:05 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/14 20:14:13 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@
 #include <iostream>
 #include <poll.h>
 #include "./client.hpp"
-#include <map>
+// #include <map>
+
 
 #define BUFFER_SIZE 1024
 
@@ -58,6 +59,7 @@ class Server
 		// handel cmd
 		void	handle_pass(Client *user);
 		void	handle_nickname(Client *user);
+		void	handle_username(Client *user);
 
 		// server utils
 		bool	unique_nickname(std::string nickname);
