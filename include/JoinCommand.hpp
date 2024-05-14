@@ -8,7 +8,9 @@
 #include "server.hpp"
 #include "client.hpp"
 #include "channels.hpp"
+#include "reply.hpp"
 
-void JoinConstruction(std::vector<std::string> command, int clientFd);
+
+void JoinConstruction(Client *client);
 
 #endif

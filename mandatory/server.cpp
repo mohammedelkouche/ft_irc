@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/13 05:53:11 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 21:29:07 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,13 +162,13 @@ void	Server::execute_commande(Client *user)
 	
 	if (commande[0] == "pass" || commande[0] == "PASS")
 	{
-		handle_pass(user);
+		// handle_pass(user);
 	}
 	else if (commande[0] == "nick" || commande[0] == "NICK")
 	{
 	}
 	else if (commande[0] == "join" || commande[0] == "JOIN")
-		JoinConstruction(commande, user->get_fd());
+		JoinConstruction(user);
 	// switch (expression)
 	// {
 	// case /* constant-expression */:
@@ -198,10 +198,10 @@ void	Server::parse_message(std::string buffer, int fd)
 		commande = devide_commande(message, fd);
 		user->set_commande(commande);
 		execute_commande(user);
-		for (std::vector<std::string>::iterator it = commande.begin(); it != commande.end(); ++it)
-		{
-			std::cout << "it  = <" << *it << ">" << std::endl;
-		}
+	// 	for (std::vector<std::string>::iterator it = commande.begin(); it != commande.end(); ++it)
+	// 	{
+	// 		std::cout << "it  = <" << *it << ">" << std::endl;
+	// 	}
 	}
 	else
 		std::cout << "we don't found \n\r  " << std::endl;

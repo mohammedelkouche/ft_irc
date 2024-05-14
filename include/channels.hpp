@@ -1,5 +1,5 @@
-#ifndef MY_COMMANDS_HPP
-#define MY_COMMANDS_HPP
+#ifndef CHANNELS_HPP
+#define CHANNELS_HPP
 
 #include<iostream>
 #include<string>
@@ -7,6 +7,7 @@
 #include<algorithm>
 #include <sys/socket.h>
 #include"client.hpp"
+#include "reply.hpp"
 
 
 class Channels
@@ -17,7 +18,8 @@ class Channels
     public:
         Channels(std::string name);
         Channels();
-        void join(int clientFd);
+        void join(int clientFd, Client *client);
+        // bool clientExists(int clientFd);
         ~Channels();
         std::string getChannelName();
     };

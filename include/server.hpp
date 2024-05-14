@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/13 05:53:41 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/13 21:28:10 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include <sys/socket.h>
 #include <iostream>
 #include <poll.h>
-#include "./client.hpp"
+#include "client.hpp"
 #include <map>
 #include "JoinCommand.hpp"
 
