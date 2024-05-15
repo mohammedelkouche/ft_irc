@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:05:25 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/14 22:33:46 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:43:01 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,15 @@
 // #define RPL_CREATED(nick, hostname) ":" + hostname + " 003 " + nick + " :This server was created 2023-9-15 !\r\n"
 // #define RPL_MYINFO(nick, hostname) ":" + hostname + " 004 " + nick + " :Host: " + hostname + ", Version: 1.0, User mode: none, Channel modes: o, t, k, i !\r\n"
 
-#define ERROR_PASSWDMISMATCH(nick, hostname) ": " + hostname + " 464 " + nick + " :Password incorrect !\r\n"
-#define ERROR_ALREADYREGISTERED(nick, hostname) ": " + hostname + " 462 " + nick + " :You may not reregister !\r\n"
-#define ERROR_NEEDMOREPARAMS(nick, hostname) ": " + hostname + " 461 " + nick + " :Not enough parameters !\r\n"
+#define ERROR_PASSWDMISMATCH(nick, hostname) ":" + hostname + " 464 " + nick + " :Password incorrect !\r\n"
+#define ERROR_ALREADYREGISTERED(nick, hostname) ":" + hostname + " 462 " + nick + " :You may not reregister !\r\n"
+#define ERROR_NEEDMOREPARAMS(nick, hostname) ":" + hostname + " 461 " + nick + " :Not enough parameters !\r\n"
 
-#define ERROR_NOTREGISTERED(nick, hostname) ": " + hostname + " 451 " + nick + " :You have not registered !\r\n"
-#define ERROR_NONICKNAMEGIVEN(nick, hostname) ": " + hostname + " 431 " + nick + " :No nickname given !\r\n"
-#define ERROR_NICKNAMEINUSE(nick, hostname) ": " + hostname + " 433 " + nick + " :Nickname is already in use !\r\n"
-#define ERROR_ERRONEUSNICKNAME(nick, hostname) ": " + hostname + " 432 " + nick + " :Erroneus nickname !\r\n"
-#define REPLY_NICKCHANGE(oldnick, nick, hostname) ": " + oldnick + " NICK " + nick + "\r\n"
+#define ERROR_NOTREGISTERED(nick, hostname) ":" + hostname + " 451 " + nick + " :You have not registered !\r\n"
+#define ERROR_NONICKNAMEGIVEN(nick, hostname) ":" + hostname + " 431 " + nick + " :No nickname given !\r\n"
+#define ERROR_NICKNAMEINUSE(nick, hostname) ":" + hostname + " 433 " + nick + " :Nickname is already in use !\r\n"
+#define ERROR_ERRONEUSNICKNAME(nick, hostname) ":" + hostname + " 432 " + nick + " :Erroneus nickname !\r\n"
+#define REPLY_NICKCHANGE(oldnick, nick, hostname) ":" + oldnick + " NICK " + nick + "\r\n"
 
 
 // #define ERR_BADCHANNELNAME(nick, hostname, channelname) ":" + hostname + " 476 " + nick + " " + channelname + " :Invalid channel name." + "\r\n"
@@ -125,7 +125,7 @@
 // #define RPL_YOUREOPER(hostname, nick) ":" + hostname + " 381 " + nick + ":You are now an IRC operator\r\n"
 // #define RPL_KICK(kicker, username, host, channel, targetuser, reason) ":" + kicker + "!" + username + "@" + host + " KICK " + channel + " " + targetuser + " :" + reason + "\r\n"
 // #define PRIVMSG_FORMAT(senderNick, senderUsername, senderHostname, receiver, message) ":" + senderNick + "!~" + senderUsername + "@" + senderHostname + " PRIVMSG " + receiver + " :" + message + "\r\n"
-// #define ERR_UNKNOWNCOMMAND(nick, hostname, command) ":" + hostname + " 421 " + nick + " " + command + " :Unknown command\r\n"
+#define ERROR_UNKNOWNCOMMAND(nick, hostname, command) ":" + hostname + " 421 " + nick + " " + command + " :Unknown command hay\r\n"
 
 
 #endif

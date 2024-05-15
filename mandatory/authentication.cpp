@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/14 22:35:04 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/15 22:59:47 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,6 @@ void	Server::handle_nickname(Client *user)
 	}
 	else
 	{
-		// check first if he enter pssword correct ?
-		// ERR_NOTREGISTERED
-
 		if (!user->get_pass_client().compare(""))
 		{
 			sendToClient(user->get_fd(), ERROR_NOTREGISTERED(" * ", user->get_hostname()));
@@ -140,21 +137,36 @@ void	Server::handle_nickname(Client *user)
 		}
 		else
 			sendToClient(user->get_fd(), ERROR_ERRONEUSNICKNAME(" * ", user->get_hostname()));
-		// user->check_registre(user->get_nickname());
-		// else
-		// {
-			// test
-			// user->set_nickname(commande[1]);
-		// }
 	}
 
 }
 
 void	Server::handle_username(Client *user)
 {
-	(void)user;
-	// if (user->get_commande().size() )
-	// {
-		
-	// }
+	std::vector<std::string> commande = user->get_commande();
+	if (user->get_commande().size() < 5)
+	{
+		if (user->is_enregistred())
+			sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(user->get_nickname(), user->get_hostname()));
+		else
+			sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(" * ", user->get_hostname()));
+	}
+	else if (!user->get_pass_client().compare(""))
+	{
+		sendToClient(user->get_fd(), ERROR_NOTREGISTERED(" * ", user->get_hostname()));
+	}
+	else if (user->is_enregistred())
+		sendToClient(user->get_fd(), ERROR_ALREADYREGISTERED(user->get_nickname(), user->get_hostname()));
+	else
+		user->set_username(commande[1]);
+}
+
+
+void	Server::handle_Unknown_command(Client *user)
+{
+	std::vector<std::string> commande = user->get_commande();
+	if (user->is_enregistred())
+			sendToClient(user->get_fd(), ERROR_UNKNOWNCOMMAND(user->get_nickname(), user->get_hostname(), commande[0]));
+	else
+		sendToClient(user->get_fd(), ERROR_UNKNOWNCOMMAND(" * ", user->get_hostname(), commande[0]));
 }

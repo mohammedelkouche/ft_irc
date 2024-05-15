@@ -1,0 +1,17 @@
+// 1  controle D
+
+pass^D
+
+// 2 send multi lign
+
+pass hello test
+            ; Ident server gets contacted and
+            returns the name "danp"
+            ; User gets registered with username
+
+// 3 send multicommande in one lign (using script)
+
+pass asd \r\n nick ahmed \r\n user mel-kouc 0 * realname \r\n
+
+
+// 4 segfault  ->  pass^D tap enter

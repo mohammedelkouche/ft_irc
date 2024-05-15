@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/14 20:14:13 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/15 23:06:36 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ class Server
 		std::string pass;
 		int fd_srv_socket;
 		std::vector<Client> clients;
-		Client*	user;
+		// Client*	user;
 		// std::map<int, Client>clients;
 		std::vector <struct pollfd> pollfds;
 		char buffer[BUFFER_SIZE];
@@ -60,10 +60,12 @@ class Server
 		void	handle_pass(Client *user);
 		void	handle_nickname(Client *user);
 		void	handle_username(Client *user);
+		void	handle_Unknown_command(Client *user);
 
 		// server utils
 		bool	unique_nickname(std::string nickname);
 		bool	check_valid_nick_name(std::string nick_name);
+		// void	check_registration(Client *user);
 
 		~Server();
 };

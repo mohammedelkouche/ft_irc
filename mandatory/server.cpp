@@ -6,11 +6,12 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/14 20:13:39 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/15 23:33:36 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/server.hpp"
+#include "../include/client.hpp"
 
 Server::Server() : pass("")
 {
@@ -153,6 +154,13 @@ Client* Server::get_connect_client(int fd)
 	return (NULL);
 }
 
+// void	Server::check_registration(Client *user)
+// {
+// 	if (user->get_pass_client().compare("") && user->get_nickname().compare("") && user->get_username().compare(""))
+// 		user->get
+// }
+
+
 void	Server::execute_commande(Client *user)
 {
 	std::vector <std::string> commande;
@@ -174,6 +182,13 @@ void	Server::execute_commande(Client *user)
 	{
 		handle_username(user);
 	}
+	// if (check_registration(user))
+	// if (user->is_enregistred()) i have to find a solution to user->registred = true;
+	// {
+	// 	std::cout << "execute other commande" <<std::endl;
+	// }
+	else
+		handle_Unknown_command(user);
 	// switch (expression)
 	// {
 	// case /* constant-expression */:
@@ -193,8 +208,9 @@ void	Server::parse_message(std::string buffer, int fd)
 	Client	*user = get_connect_client(fd);
 	// size_t	pos = buffer.find_first_of("\r\n");
 	// size_t	pos = buffer.find("ou");
-	size_t	pos = buffer.find("\n");
+	// size_t	pos = buffer.find("\n");
 	// size_t	limechat = buffer.find("\r\n");
+	size_t	pos = buffer.find("\r\n");
 	// std::cout << "pos = '" << pos << std::endl;
 	if (pos != std::string::npos)
 	{
@@ -209,7 +225,7 @@ void	Server::parse_message(std::string buffer, int fd)
 		}
 	}
 	else
-		std::cout << "we don't found \n\r  " << std::endl;
+		std::cout << "we don't found " << std::endl;
 }
 
 void	Server::ReceiveClientData(int fd)
