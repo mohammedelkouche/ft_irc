@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/15 23:32:26 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/15 23:47:51 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ std::string	Client::get_hostname()
 
 bool	Client::check_registration(Client *user)
 {
-	if (user->get_pass_client().compare("") && user->get_nickname().compare("") && user->get_username().compare(""))
+	if (user->get_pass_client().compare("")   && user->get_nickname().compare("") && user->get_username().compare(""))
 	{
 		user->registred = true;
 		return true;

@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/15 23:33:36 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/15 23:50:21 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,11 +182,12 @@ void	Server::execute_commande(Client *user)
 	{
 		handle_username(user);
 	}
+	// user->check_registration(user);
 	// if (check_registration(user))
-	// if (user->is_enregistred()) i have to find a solution to user->registred = true;
-	// {
-	// 	std::cout << "execute other commande" <<std::endl;
-	// }
+	if (user->check_registration(user)) 
+	{
+		std::cout << "execute other commande" <<std::endl;
+	}
 	else
 		handle_Unknown_command(user);
 	// switch (expression)
