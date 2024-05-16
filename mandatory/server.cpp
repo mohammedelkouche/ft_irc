@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/16 21:39:11 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/16 23:51:54 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,13 +183,7 @@ void	Server::success_connect(Client *user)
     // Format the date and time according to the specified format
 	std::strftime(buffer, sizeof(buffer), "%a, %d %b %Y %H:%M:%S %Z", utcTime);
     std::string formatted_time = buffer;
-	std::cout << "formatted_time = " << formatted_time << std::endl;
-	// sendToClient(user->get_fd(), REPLY_CREATED(user->get_nickname(), user->get_hostname(), formatted_time));
-
-	// std::strftime(buffer, sizeof(buffer), "This server was created %a, %d %b %Y %H:%M:%S %Z", utcTime);
-	// sendToClient(user->get_fd(), REPLY_CREATED(user->get_nickname(), user->get_hostname(), formatted_time));
-	// sendToClient(user->get_fd(), REPLY_CREATED(user->get_nickname(), user->get_hostname(), formatted_time));
-	// sendToClient();
+	sendToClient(user->get_fd(), REPLY_CREATED(user->get_nickname(), user->get_hostname(), formatted_time));
 }
 
 void	Server::execute_commande(Client *user)
