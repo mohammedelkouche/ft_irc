@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:05:25 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/13 21:47:24 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 01:43:53 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 #define REPLY_HPP
 
 #include <iostream>
-#include "./JoinCommand.hpp"
 #include "./channels.hpp"
+#include "./server.hpp"
 #include <iostream>
 
 

@@ -1,4 +1,4 @@
-#include "../include/JoinCommand.hpp"
+#include "../include/server.hpp"
 
 bool isDupChannel(std::vector<Channels> haystack, std::string needle)
 {
@@ -10,9 +10,6 @@ bool isDupChannel(std::vector<Channels> haystack, std::string needle)
 
 void Server::JoinConstruction(Client *client)
 {
-    // std::cout << "channel  : " << cmd[1] << std::endl;
-    // std::cout << "cmd.size()  : " << cmd.size() << std::endl;
-    // std::string serverMsg ;
     std::vector<std::string> cmd = client->get_commande();
     std::string msg = ERR_BADCHANNELKEY(client->get_nickname(), "localhost" , cmd[1]);
     if (cmd.size() < 2 || cmd[1].empty() || !cmd[1][1])
@@ -29,9 +26,9 @@ void Server::JoinConstruction(Client *client)
         channel.join(client->get_fd(), client);
         channels.push_back(cmd[1]);
     }
-    for(size_t i = 0; i < channels.size(); i++)
-        std::cout << "channel: " << channels[i].getChannelName() << std::endl;
-    for(size_t i = 0; i < clients.size(); i++)
-        std::cout << "client: " << clients[i].get_fd() << std::endl;
+    // for(size_t i = 0; i < channels.size(); i++)
+    //     std::cout << "channel: " << channels[i].getChannelName() << std::endl;
+    // for(size_t i = 0; i < clients.size(); i++)
+    //     std::cout << "client: " << clients[i].get_fd() << std::endl;
     // std::cout<< "Client joined "<< cmd[1] << " successfully !" << std::endl;
 }

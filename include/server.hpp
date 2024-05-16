@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/15 23:22:54 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 01:36:57 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 #include "client.hpp"
 #include "channels.hpp"
 #include <map>
-#include "JoinCommand.hpp"
 
 #define BUFFER_SIZE 1024
 
@@ -63,6 +62,7 @@ class Server
 		// void	acceptconnection();
 		// void	receivemessage();
 		void JoinConstruction(Client *client);
+		void InviteConstruction(Client *client);
 		// void	sendmessage(char *message);
 		~Server();
 		//

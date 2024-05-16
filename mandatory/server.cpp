@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/15 20:43:43 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 01:19:41 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,12 +180,9 @@ void	Server::execute_commande(Client *user)
 	{
 	}
 	else if (commande[0] == "join" || commande[0] == "JOIN")
-	{
-		// for(size_t i = 0; i < clients.size(); i++)
-        // 	std::cout << "client:=> " << clients[i].get_fd() << std::endl; 
 		JoinConstruction(user);
-		
-	}
+	else if(commande[0] == "invite" || commande[0] == "INVITE")
+		InviteConstruction(user);
 	// switch (expression)
 	// {
 	// case /* constant-expression */:
