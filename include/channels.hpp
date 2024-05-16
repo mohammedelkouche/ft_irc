@@ -15,9 +15,11 @@ class Channels
     private:
         std::string name;
         std::vector<int> ClientssHouse;
+        // std::vector<Client> ClientssHouse;
     public:
         Channels(std::string name);
         Channels();
+        Channels(const Channels& copy);
         void join(int clientFd, Client *client);
         // bool clientExists(int clientFd);
         ~Channels();

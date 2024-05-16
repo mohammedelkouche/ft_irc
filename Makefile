@@ -9,7 +9,7 @@ HEADER =  ./include/server.hpp ./include/client.hpp  ./include/channels.hpp ./in
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
-CC = c++
+CC = c++ -g
 
 all :: $(NAME)
 

@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/13 21:28:10 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 23:22:54 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,13 @@
 #include <iostream>
 #include <poll.h>
 #include "client.hpp"
+#include "channels.hpp"
 #include <map>
 #include "JoinCommand.hpp"
 
 #define BUFFER_SIZE 1024
 
+class Channels;
 class Server
 {
 	private :
@@ -37,7 +39,9 @@ class Server
 		std::string pass;
 		int fd_srv_socket;
 		std::vector<Client> clients;
-		Client*	user;
+		std::vector<Channels> channels;
+		// Client*	user;
+		
 		// std::map<int, Client>clients;
 		std::vector <struct pollfd> pollfds;
 		char buffer[BUFFER_SIZE];
@@ -58,8 +62,11 @@ class Server
 		
 		// void	acceptconnection();
 		// void	receivemessage();
+		void JoinConstruction(Client *client);
 		// void	sendmessage(char *message);
 		~Server();
+		//
+
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/13 21:29:07 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 20:43:43 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,20 @@
 
 Server::Server()
 {
-	
+
 }
+
+	
+Server::Server(const Server &obj) {
+	port = obj.port;
+	pass = obj.pass;
+	fd_srv_socket = obj.fd_srv_socket;
+	for(size_t i = 0; i < clients.size(); i++)
+        	clients[i] = obj.clients[i];
+	for(size_t i = 0; i < channels.size(); i++)
+        	channels[i] = obj.channels[i];
+}
+
 
 void	Server::config_server()
 {
@@ -168,7 +180,12 @@ void	Server::execute_commande(Client *user)
 	{
 	}
 	else if (commande[0] == "join" || commande[0] == "JOIN")
+	{
+		// for(size_t i = 0; i < clients.size(); i++)
+        // 	std::cout << "client:=> " << clients[i].get_fd() << std::endl; 
 		JoinConstruction(user);
+		
+	}
 	// switch (expression)
 	// {
 	// case /* constant-expression */:

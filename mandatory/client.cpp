@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/13 01:04:02 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/15 20:50:00 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,18 @@
 Client::Client()
 {
 	this->registred = false;
+}
+
+
+Client::Client(const Client& copy)
+{
+	fd = copy.fd;
+	ipaddress = copy.ipaddress;
+	nickname = copy.nickname;
+	username = copy.username;
+	registred = copy.registred;
+	for(size_t i = 0; i < commande.size(); i++)
+		commande[i] = copy.commande[i];
 }
 
 void	Client::set_fd(int fd_client)

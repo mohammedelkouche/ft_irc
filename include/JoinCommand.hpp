@@ -11,6 +11,6 @@
 #include "reply.hpp"
 
 
-void JoinConstruction(Client *client);
+// void JoinConstruction(Client *client);
 
 #endif
