@@ -19,16 +19,13 @@ void print(std::vector<int> v)
 void Channels::join(int clientFd, Client *client)
 {
     // print(ClientssHouse);
-    std::string joinMessage = "JOIN " + name + "\r\n";
     // Send JOIN message to the client;
     if(std::find(ClientssHouse.begin(), ClientssHouse.end(), clientFd) == ClientssHouse.end())
     {
-        // std::cout << "ana ldakhel client mkainch" << std::endl;
+        std::string rpl = RPL_JOIN(client->get_nickname(), client->get_username(), name, "localhost");
         ClientssHouse.push_back(clientFd);
-        if (send(clientFd, joinMessage.c_str(), joinMessage.length(), 0) == -1)
+        if(send(clientFd, rpl.c_str(), rpl.length(), 0) == -1)
             throw std::runtime_error("Failed Send JOIN message to the client");
-        std::string rpl = RPL_JOIN();
-        
     }
     else
     {

@@ -11,7 +11,10 @@ bool isDupChannel(std::vector<Channels> haystack, std::string needle)
 void Server::JoinConstruction(Client *client)
 {
     std::vector<std::string> cmd = client->get_commande();
-    std::string msg = ERR_BADCHANNELKEY(client->get_nickname(), "localhost" , cmd[1]);
+    std::string msg = ERR_NEEDMOREPARAMS("haha");
+
+    std::cout << "Generated error message: " << msg << std::endl;
+
     if (cmd.size() < 2 || cmd[1].empty() || !cmd[1][1])
     {
         if (send(client->get_fd(),msg.c_str(), msg.length(), 0) == -1)

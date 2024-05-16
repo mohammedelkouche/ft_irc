@@ -9,10 +9,11 @@ void Server::InviteConstruction(Client *client)
     //     std::cout << "vec: " << vec[i]<< std::endl;
     // std::cout<< "****************************" << std::endl;
 
-    if (vec.size() < 3 || vec[1].empty() || !vec[1][1])
-    {
-        if (send(client->get_fd(),msg.c_str(), msg.length(), 0) == -1)
-            throw std::runtime_error("Failed Send JOIN message to the client");
-        return ;
-    }
+    // if (vec.size() < 3 || vec[1].empty() || !vec[1][1])
+    // {
+    //     std::string msg = ERR_NEEDMOREPARAMS(client->get_nickname());
+    //     if (send(client->get_fd(),msg.c_str(), msg.length(), 0) == -1)
+    //         throw std::runtime_error("Failed Send JOIN message to the client");
+    //     return ;
+    // }
 }

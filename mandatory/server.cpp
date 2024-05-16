@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/16 01:19:41 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:40:18 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ Server::Server()
 }
 
 	
-Server::Server(const Server &obj) {
+Server::Server(const Server &obj) 
+{
 	port = obj.port;
 	pass = obj.pass;
 	fd_srv_socket = obj.fd_srv_socket;

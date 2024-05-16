@@ -6,15 +6,13 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/13 01:04:02 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:38:00 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/server.hpp"
 #include "../include/client.hpp"
 #include "../include/reply.hpp"
-
-
 
 
 // Optionally, a literal asterisk character ('*', 0x2A) to indicate that the user is a server operator.
