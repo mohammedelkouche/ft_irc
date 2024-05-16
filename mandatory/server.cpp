@@ -6,12 +6,14 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/15 23:50:21 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/16 21:39:11 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/server.hpp"
 #include "../include/client.hpp"
+#include "../include/reply.hpp"
+
 
 Server::Server() : pass("")
 {
@@ -160,16 +162,45 @@ Client* Server::get_connect_client(int fd)
 // 		user->get
 // }
 
+// add this 
+
+#include <ctime>
+
+void	Server::success_connect(Client *user)
+{
+	// REPLY_WELCOME(nick, hostname)
+	sendToClient(user->get_fd(), REPLY_WELCOME(user->get_nickname(), user->get_hostname()));
+	
+	//     
+	std::time_t currentTime = std::time(NULL);
+
+    // Convert to UTC time
+    std::tm* utcTime = std::gmtime(&currentTime);
+
+    // Buffer to hold the formatted date and time string
+    char buffer[80];
+
+    // Format the date and time according to the specified format
+	std::strftime(buffer, sizeof(buffer), "%a, %d %b %Y %H:%M:%S %Z", utcTime);
+    std::string formatted_time = buffer;
+	std::cout << "formatted_time = " << formatted_time << std::endl;
+	// sendToClient(user->get_fd(), REPLY_CREATED(user->get_nickname(), user->get_hostname(), formatted_time));
+
+	// std::strftime(buffer, sizeof(buffer), "This server was created %a, %d %b %Y %H:%M:%S %Z", utcTime);
+	// sendToClient(user->get_fd(), REPLY_CREATED(user->get_nickname(), user->get_hostname(), formatted_time));
+	// sendToClient(user->get_fd(), REPLY_CREATED(user->get_nickname(), user->get_hostname(), formatted_time));
+	// sendToClient();
+}
 
 void	Server::execute_commande(Client *user)
 {
 	std::vector <std::string> commande;
 	
 	commande = user->get_commande();
-	// if (user->get_commande().empty())
-	// {
-	// 	return ;
-	// }
+	if (user->get_commande().empty())
+	{
+		return ;
+	}
 	if (commande[0] == "pass" || commande[0] == "PASS")
 	{
 		handle_pass(user);
@@ -177,19 +208,24 @@ void	Server::execute_commande(Client *user)
 	else if (commande[0] == "nick" || commande[0] == "NICK")
 	{
 		handle_nickname(user);
+		if (user->check_registration(user))
+			success_connect(user);
 	}
 	else if (commande[0] == "user" || commande[0] == "USER")
 	{
 		handle_username(user);
+		if (user->check_registration(user))
+			success_connect(user);
 	}
 	// user->check_registration(user);
 	// if (check_registration(user))
-	if (user->check_registration(user)) 
+	if (user->is_enregistred())
 	{
-		std::cout << "execute other commande" <<std::endl;
+		// std::cout << "execute other commande" <<std::endl;
+		// handle_Unknown_command(user);
 	}
-	else
-		handle_Unknown_command(user);
+	// else
+	// 	handle_Unknown_command(user);
 	// switch (expression)
 	// {
 	// case /* constant-expression */:

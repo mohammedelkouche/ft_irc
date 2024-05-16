@@ -6,7 +6,7 @@
 #    By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/20 16:54:34 by mel-kouc          #+#    #+#              #
-#    Updated: 2024/05/10 17:07:49 by mel-kouc         ###   ########.fr        #
+#    Updated: 2024/05/16 15:46:55 by mel-kouc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ OBJ = $(SRC:.cpp=.o)
 
 HEADER =  ./include/server.hpp ./include/client.hpp
 
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+CFLAGS = -Wall -Wextra -Werror  -std=c++98 -fsanitize=address
 
 CC = c++
 

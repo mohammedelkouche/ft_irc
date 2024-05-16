@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 17:11:32 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/15 23:45:44 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:23:19 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class   Client
 		std::string pass_client;
 		std::string username;
 		std::string hostname;
-		bool registred;
+		bool	registred;
 	public :
 		Client();
 		void	set_fd(int fd_client);
@@ -46,7 +46,6 @@ class   Client
 		std::string	get_pass_client();
 		std::string	get_hostname();
 		std::string	get_client_host();
-		// void	check_registre(std::string pass);
 		bool	check_registration(Client *user);
 		// Client	*get_connect_client(int fd);
 		void	set_ipAddress(std::string ip);

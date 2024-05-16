@@ -14,4 +14,4 @@ pass hello test
 pass asd \r\n nick ahmed \r\n user mel-kouc 0 * realname \r\n
 
 
-// 4 segfault  ->  pass^D tap enter
+// 4 segfault  ->  pass    ->  tap enter

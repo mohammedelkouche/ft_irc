@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/15 23:06:36 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/16 19:34:49 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ class Server
 		// server utils
 		bool	unique_nickname(std::string nickname);
 		bool	check_valid_nick_name(std::string nick_name);
+		void	success_connect(Client *user);
 		// void	check_registration(Client *user);
 
 		~Server();
