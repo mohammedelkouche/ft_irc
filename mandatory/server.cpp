@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/17 18:40:20 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/17 21:29:43 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,6 +219,8 @@ void	Server::ReceiveClientData(int fd)
 	size_t bytes_received = recv(fd, buffer, BUFFER_SIZE - 1, 0);
 	if (bytes_received <= 0)
 	{
+		// quit();
+		// sendToClient(fd, "Client fd = '" << fd << "' Disconnected);
 		std::cout << "Client fd = '" << fd << "' Disconnected" << std::endl;
         RemoveClient(fd);
         close(fd);
