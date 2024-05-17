@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/16 23:51:54 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/17 18:40:20 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void	Server::AcceptNewClient()
 	// for vector
 	// clients.insert(std::make_pair(fd_client_sock, newclient));
 	
-	// for vector
 	clients.push_back(newclient);
 	pollfds.push_back(client_poll_fd);
 	std::cout << "Client fd = '" << fd_client_sock << "' Connected" << std::endl;
@@ -127,7 +126,6 @@ std::vector<std::string>	devide_commande(std::string message, int fd)
 			if (message[space] == ':')
 			{
 				vector.push_back(message.substr(space,1));
-				// add
 				vector.push_back(message.substr(space + 1, message.size() - (space + 1)));
 				break ;
 			}
@@ -156,35 +154,7 @@ Client* Server::get_connect_client(int fd)
 	return (NULL);
 }
 
-// void	Server::check_registration(Client *user)
-// {
-// 	if (user->get_pass_client().compare("") && user->get_nickname().compare("") && user->get_username().compare(""))
-// 		user->get
-// }
 
-// add this 
-
-#include <ctime>
-
-void	Server::success_connect(Client *user)
-{
-	// REPLY_WELCOME(nick, hostname)
-	sendToClient(user->get_fd(), REPLY_WELCOME(user->get_nickname(), user->get_hostname()));
-	
-	//     
-	std::time_t currentTime = std::time(NULL);
-
-    // Convert to UTC time
-    std::tm* utcTime = std::gmtime(&currentTime);
-
-    // Buffer to hold the formatted date and time string
-    char buffer[80];
-
-    // Format the date and time according to the specified format
-	std::strftime(buffer, sizeof(buffer), "%a, %d %b %Y %H:%M:%S %Z", utcTime);
-    std::string formatted_time = buffer;
-	sendToClient(user->get_fd(), REPLY_CREATED(user->get_nickname(), user->get_hostname(), formatted_time));
-}
 
 void	Server::execute_commande(Client *user)
 {
@@ -211,8 +181,6 @@ void	Server::execute_commande(Client *user)
 		if (user->check_registration(user))
 			success_connect(user);
 	}
-	// user->check_registration(user);
-	// if (check_registration(user))
 	if (user->is_enregistred())
 	{
 		// std::cout << "execute other commande" <<std::endl;
@@ -220,16 +188,6 @@ void	Server::execute_commande(Client *user)
 	}
 	// else
 	// 	handle_Unknown_command(user);
-	// switch (expression)
-	// {
-	// case /* constant-expression */:
-	// 	/* code */
-	// 	break;
-	
-	// default:
-	// 	break;
-	// }
-	
 }
 
 void	Server::parse_message(std::string buffer, int fd)
@@ -242,11 +200,9 @@ void	Server::parse_message(std::string buffer, int fd)
 	// size_t	pos = buffer.find("\n");
 	// size_t	limechat = buffer.find("\r\n");
 	size_t	pos = buffer.find("\r\n");
-	// std::cout << "pos = '" << pos << std::endl;
 	if (pos != std::string::npos)
 	{
 		message = buffer.substr(0, pos);
-		// std::cout << "test = '" << message << std::endl;
 		commande = devide_commande(message, fd);
 		user->set_commande(commande);
 		execute_commande(user);
@@ -255,8 +211,6 @@ void	Server::parse_message(std::string buffer, int fd)
 			std::cout << "it  = <" << *it << ">" << std::endl;
 		}
 	}
-	else
-		std::cout << "we don't found " << std::endl;
 }
 
 void	Server::ReceiveClientData(int fd)
@@ -274,7 +228,7 @@ void	Server::ReceiveClientData(int fd)
 		buffer[bytes_received] = '\0';
 		std::cout << "Client fd = '" << fd << "' send : " << buffer;
 		parse_message(buffer,fd);
-	}	
+	}
 }
 
 void	Server::initializeServer(int port_nbr,std::string str)

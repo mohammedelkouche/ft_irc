@@ -6,14 +6,13 @@
 #    By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/20 16:54:34 by mel-kouc          #+#    #+#              #
-#    Updated: 2024/05/16 15:46:55 by mel-kouc         ###   ########.fr        #
+#    Updated: 2024/05/17 18:54:44 by mel-kouc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 
-SRC = ./mandatory/main.cpp ./mandatory/client.cpp ./mandatory/server.cpp ./mandatory/authentication.cpp 
-
+SRC = ./mandatory/main.cpp ./mandatory/client.cpp ./mandatory/server.cpp ./mandatory/authentication.cpp ./mandatory/utils_authn.cpp
 OBJ = $(SRC:.cpp=.o)
 
 HEADER =  ./include/server.hpp ./include/client.hpp

@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/16 19:34:49 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/17 17:17:08 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include <iostream>
 #include <poll.h>
 #include "./client.hpp"
+#include <ctime>
 // #include <map>
 
 

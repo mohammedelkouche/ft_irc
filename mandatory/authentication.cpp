@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/16 14:45:48 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/17 18:32:39 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@
 void	Server::handle_pass(Client *user)
 {
 	std::vector<std::string> commande = user->get_commande();
+	std::vector <std::string>::iterator it = std::find(commande.begin(), commande.end(), ":");
+	if (it != commande.end())
+		commande.erase(it);
 	if (user->get_commande().size() == 1)
 	{
 		if (user->is_enregistred())
@@ -66,32 +69,6 @@ void	Server::handle_pass(Client *user)
 	}
 }
 
-bool	Server::unique_nickname(std::string nickname)
-{
-	for (std::vector<Client>::iterator it  = clients.begin(); it != clients.end(); it++)
-	{
-		if (!it->get_nickname().compare(nickname))
-		{
-			std::cout << "get_nickname = " <<  it->get_nickname() << std::endl;
-			std::cout << "string nickname :" << nickname << std::endl;
-			return (false);
-		}
-	}
-	return (true);
-}
-
-bool	Server::check_valid_nick_name(std::string nick_name)
-{
-	if (isdigit(nick_name[0]))
-		return false;
-	if (size_t test =  nick_name.find_first_of("#: ") != std::string::npos)
-		return false;
-	if (nick_name.find("#&") != std::string::npos)
-		return false;
-	if (nick_name.find("&#") != std::string::npos)
-		return false;
-	return true;
-}
 
 void	Server::sendToClient(int fd, const std::string& message)
 {
@@ -101,7 +78,9 @@ void	Server::sendToClient(int fd, const std::string& message)
 void	Server::handle_nickname(Client *user)
 {
 	std::vector<std::string> commande = user->get_commande();
-	// nickname is already in use on the network ERR_NICKNAMEINUSE 
+	std::vector <std::string>::iterator it = std::find(commande.begin(), commande.end(), ":");
+	if (it != commande.end())
+		commande.erase(it);
 	if (user->get_commande().size() == 1)
 	{
 		if (user->is_enregistred())
@@ -115,35 +94,42 @@ void	Server::handle_nickname(Client *user)
 		{
 			sendToClient(user->get_fd(), ERROR_NOTREGISTERED(" * ", user->get_hostname()));
 		}
-			// ERR_NOTREGISTERED(" * ", "NICK", user->get_fd());
-		else if (check_valid_nick_name(commande[1]))
+		else if (!user->is_enregistred())
 		{
-			// std::cout << " : hay is not valid" << std::endl;
-			if (!user->is_enregistred())
+			if (check_valid_nick_name(commande[1]))
 			{
 				if (!unique_nickname(commande[1]))
 					sendToClient(user->get_fd(), ERROR_NICKNAMEINUSE(" * ", user->get_hostname()));
-					// ERR_NICKNAMEINUSE(" * ", "NICK", user->get_fd());
 				else
 					user->set_nickname(commande[1]);
 			}
-			// else if (user->is_enregistred())
 			else
-			{
-				// add in here  RPL_NICKCHANGE
-				sendToClient(user->get_fd(), REPLY_NICKCHANGE(user->get_nickname(), commande[1], user->get_hostname()));
-				user->set_nickname(commande[1]);
-			}
+				sendToClient(user->get_fd(), ERROR_ERRONEUSNICKNAME(" * ", user->get_hostname()));
 		}
-		else
-			sendToClient(user->get_fd(), ERROR_ERRONEUSNICKNAME(" * ", user->get_hostname()));
+		else if (user->is_enregistred())
+		{
+			if (check_valid_nick_name(commande[1]))
+			{
+				if (!unique_nickname(commande[1]))
+					sendToClient(user->get_fd(), ERROR_NICKNAMEINUSE(user->get_nickname(), user->get_hostname()));
+				else
+				{
+					sendToClient(user->get_fd(), REPLY_NICKCHANGE(user->get_nickname(), commande[1], user->get_hostname()));
+					user->set_nickname(commande[1]);
+				}
+			}
+			else
+				sendToClient(user->get_fd(), ERROR_ERRONEUSNICKNAME(" * ", user->get_hostname()));
+		}
 	}
-
 }
 
 void	Server::handle_username(Client *user)
 {
 	std::vector<std::string> commande = user->get_commande();
+	std::vector <std::string>::iterator it = std::find(commande.begin(), commande.end(), ":");
+	if (it != commande.end())
+		commande.erase(it);
 	if (user->get_commande().size() < 5)
 	{
 		if (user->is_enregistred())
@@ -160,7 +146,6 @@ void	Server::handle_username(Client *user)
 	else
 		user->set_username(commande[1]);
 }
-
 
 void	Server::handle_Unknown_command(Client *user)
 {
