@@ -22,14 +22,14 @@ void Channels::join(int clientFd, Client *client)
     // Send JOIN message to the client;
     if(std::find(ClientssHouse.begin(), ClientssHouse.end(), clientFd) == ClientssHouse.end())
     {
-        std::string rpl = RPL_JOIN(client->get_nickname(), client->get_username(), name, "localhost");
+        std::string rpl = REPLY_JOIN(client->get_nickname(), client->get_username(), name, "localhost");
         ClientssHouse.push_back(clientFd);
         if(send(clientFd, rpl.c_str(), rpl.length(), 0) == -1)
             throw std::runtime_error("Failed Send JOIN message to the client");
     }
     else
     {
-        std::string msg = ERR_ALREADYREGISTERED(client->get_nickname(), getChannelName());
+        std::string msg = ERROR_ALREADYREGISTERED(client->get_nickname(), getChannelName());
         if (send(clientFd, msg.c_str(), msg.length(), 0) == -1)
             throw std::runtime_error("Failed Send JOIN message to the client");
     }

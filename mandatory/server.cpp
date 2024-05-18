@@ -6,19 +6,22 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/16 20:40:18 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/18 18:53:28 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/server.hpp"
+#include "../include/client.hpp"
+#include "../include/reply.hpp"
 
-Server::Server()
+
+Server::Server() : pass("")
 {
 
 }
 
 	
-Server::Server(const Server &obj) 
+Server::Server(const Server &obj)
 {
 	port = obj.port;
 	pass = obj.pass;
@@ -65,6 +68,7 @@ void	Server::config_server()
 void	Server::AcceptNewClient()
 {
 	Client	newclient;
+	std::string	host;
 
 	struct sockaddr_in client_addr;
 	socklen_t addresslenght = sizeof(client_addr);
@@ -88,10 +92,12 @@ void	Server::AcceptNewClient()
 
 	newclient.set_ipAddress(inet_ntoa(client_addr.sin_addr));
 	newclient.set_fd(fd_client_sock);
+	host = newclient.get_client_host();
+	newclient.set_hostname(host);
+	std::cout<< "BEFOOOOORE"<< newclient.get_hostname() << std::endl; 
 	// for vector
 	// clients.insert(std::make_pair(fd_client_sock, newclient));
 	
-	// for vector
 	clients.push_back(newclient);
 	pollfds.push_back(client_poll_fd);
 	std::cout << "Client fd = '" << fd_client_sock << "' Connected" << std::endl;
@@ -113,9 +119,9 @@ void	Server::RemoveClient(int fd)
 	}
 	for (size_t i = 0; i < pollfds.size(); i++)
 	{
-		if (pollfds[i].fd == fd)
+		if (clients[i].get_fd() == fd)
 		{
-			pollfds.erase(pollfds.begin() + i);
+			clients.erase(clients.begin() + i);
 			break ;
 		}
 	}
@@ -125,7 +131,6 @@ std::vector<std::string>	devide_commande(std::string message, int fd)
 {
 	std::vector<std::string> vector;
 	(void)fd;
-	// int	flag = 0;
 	std::string Command;
 	for (size_t space = 0; space < message.size(); space++)
 	{
@@ -133,7 +138,11 @@ std::vector<std::string>	devide_commande(std::string message, int fd)
 		{
 			size_t	next_space = message.find(' ', space);
 			if (message[space] == ':')
+			{
 				vector.push_back(message.substr(space,1));
+				vector.push_back(message.substr(space + 1, message.size() - (space + 1)));
+				break ;
+			}
 			else if (next_space != std::string::npos)
 			{
 				vector.push_back(message.substr(space, next_space - space));
@@ -146,11 +155,68 @@ std::vector<std::string>	devide_commande(std::string message, int fd)
 			}
 		}
 	}
-	// for (std::vector<std::string>::iterator it = vector.begin(); it != vector.end(); ++it)
-    // {
-    //     std::cout << "it  = <" << *it << ">" << std::endl;
-    // }
 	return vector;
+}
+
+void	Server::execute_commande(Client *user)
+{
+	std::vector <std::string> commande;
+	std::cout<< "AFTER"<< user->get_hostname() << std::endl;
+	commande = user->get_commande();
+	if (user->get_commande().empty())
+	{
+		return ;
+	}
+	if (commande[0] == "pass" || commande[0] == "PASS")
+	{
+		handle_pass(user);
+	}
+	else if (commande[0] == "nick" || commande[0] == "NICK")
+	{
+		handle_nickname(user);
+		if (user->check_registration(user))
+			success_connect(user);
+	}
+	else if (commande[0] == "user" || commande[0] == "USER")
+	{
+		handle_username(user);
+		if (user->check_registration(user))
+			success_connect(user);
+	}
+	if (user->is_enregistred())
+	{
+		// std::cout << "execute other commande" <<std::endl;
+		// handle_Unknown_command(user);
+		if (commande[0] == "join" || commande[0] == "JOIN")
+			JoinConstruction(user);
+		else if(commande[0] == "invite" || commande[0] == "INVITE")
+			InviteConstruction(user);
+	}
+	// else
+	// 	handle_Unknown_command(user);
+}
+
+void	Server::parse_message(std::string buffer, int fd)
+{
+	std::vector <std::string> commande;
+	std::string message;
+	Client	*user = get_connect_client(fd);
+	// size_t	pos = buffer.find_first_of("\r\n");
+	// size_t	pos = buffer.find("ou");
+	// size_t	pos = buffer.find("\n");
+	// size_t	limechat = buffer.find("\r\n");
+	size_t	pos = buffer.find("\r\n");
+	if (pos != std::string::npos)
+	{
+		message = buffer.substr(0, pos);
+		commande = devide_commande(message, fd);
+		user->set_commande(commande);
+		execute_commande(user);
+		for (std::vector<std::string>::iterator it = commande.begin(); it != commande.end(); ++it)
+		{
+			std::cout << "it  = <" << *it << ">" << std::endl;
+		}
+	}
 }
 
 Client* Server::get_connect_client(int fd)
@@ -163,64 +229,6 @@ Client* Server::get_connect_client(int fd)
 	return (NULL);
 }
 
-void	Server::execute_commande(Client *user)
-{
-	std::vector <std::string> commande;
-	
-	commande = user->get_commande();
-	// if (user->get_commande().empty())
-	// {
-	// 	return ;
-	// }
-	
-	if (commande[0] == "pass" || commande[0] == "PASS")
-	{
-		// handle_pass(user);
-	}
-	else if (commande[0] == "nick" || commande[0] == "NICK")
-	{
-	}
-	else if (commande[0] == "join" || commande[0] == "JOIN")
-		JoinConstruction(user);
-	else if(commande[0] == "invite" || commande[0] == "INVITE")
-		InviteConstruction(user);
-	// switch (expression)
-	// {
-	// case /* constant-expression */:
-	// 	/* code */
-	// 	break;
-	
-	// default:
-	// 	break;
-	// }
-	
-}
-
-void	Server::parse_message(std::string buffer, int fd)
-{
-	std::vector <std::string> commande;
-	std::string message;
-	Client	*user = get_connect_client(fd);
-	// size_t	pos = buffer.find_first_of("\r\n");
-	// size_t	pos = buffer.find("ou");
-	// size_t	pos = buffer.find("\n");
-	size_t	pos = buffer.find("\r\n");
-	// std::cout << "pos = '" << pos << std::endl;
-	if (pos != std::string::npos)
-	{
-		message = buffer.substr(0, pos);
-		// std::cout << "test = '" << message << std::endl;
-		commande = devide_commande(message, fd);
-		user->set_commande(commande);
-		execute_commande(user);
-	// 	for (std::vector<std::string>::iterator it = commande.begin(); it != commande.end(); ++it)
-	// 	{
-	// 		std::cout << "it  = <" << *it << ">" << std::endl;
-	// 	}
-	}
-	else
-		std::cout << "we don't found \n\r  " << std::endl;
-}
 
 void	Server::ReceiveClientData(int fd)
 {
@@ -228,6 +236,8 @@ void	Server::ReceiveClientData(int fd)
 	size_t bytes_received = recv(fd, buffer, BUFFER_SIZE - 1, 0);
 	if (bytes_received <= 0)
 	{
+		// quit();
+		// sendToClient(fd, "Client fd = '" << fd << "' Disconnected);
 		std::cout << "Client fd = '" << fd << "' Disconnected" << std::endl;
         RemoveClient(fd);
         close(fd);
@@ -237,7 +247,7 @@ void	Server::ReceiveClientData(int fd)
 		buffer[bytes_received] = '\0';
 		std::cout << "Client fd = '" << fd << "' send : " << buffer;
 		parse_message(buffer,fd);
-	}	
+	}
 }
 
 void	Server::initializeServer(int port_nbr,std::string str)

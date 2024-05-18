@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/16 01:36:57 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/18 18:53:41 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@
 #include <sys/socket.h>
 #include <iostream>
 #include <poll.h>
-#include "client.hpp"
-#include "channels.hpp"
-#include <map>
+#include "./client.hpp"
+#include "./channels.hpp"
+#include <ctime>
+// #include <map>
+
 
 #define BUFFER_SIZE 1024
 
@@ -39,9 +41,6 @@ class Server
 		int fd_srv_socket;
 		std::vector<Client> clients;
 		std::vector<Channels> channels;
-		// Client*	user;
-		
-		// std::map<int, Client>clients;
 		std::vector <struct pollfd> pollfds;
 		char buffer[BUFFER_SIZE];
 	public :
@@ -56,14 +55,22 @@ class Server
 		void	parse_message(std::string buffer, int fd);
 		Client	*get_connect_client(int fd);
 		void	execute_commande(Client *user);
-		void	handle_pass(Client *user);
+		void	sendToClient(int fd, const std::string& message);
 		void	CloseConnections();
 		
-		// void	acceptconnection();
-		// void	receivemessage();
+		// handel cmd
+		void	handle_pass(Client *user);
+		void	handle_nickname(Client *user);
+		void	handle_username(Client *user);
+		void	handle_Unknown_command(Client *user);
 		void JoinConstruction(Client *client);
 		void InviteConstruction(Client *client);
-		// void	sendmessage(char *message);
+		// server utils
+		bool	unique_nickname(std::string nickname);
+		bool	check_valid_nick_name(std::string nick_name);
+		void	success_connect(Client *user);
+		// void	check_registration(Client *user);
+
 		~Server();
 		//
 
