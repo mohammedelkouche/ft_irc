@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/18 18:53:28 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/18 20:19:50 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,6 @@ void	Server::AcceptNewClient()
 	newclient.set_fd(fd_client_sock);
 	host = newclient.get_client_host();
 	newclient.set_hostname(host);
-	std::cout<< "BEFOOOOORE"<< newclient.get_hostname() << std::endl; 
-	// for vector
-	// clients.insert(std::make_pair(fd_client_sock, newclient));
 	
 	clients.push_back(newclient);
 	pollfds.push_back(client_poll_fd);
@@ -105,10 +102,7 @@ void	Server::AcceptNewClient()
 
 void	Server::RemoveClient(int fd)
 {
-	// Erase the client from the map
-    // clients.erase(fd);
-	
-	// for vector
+	// std::cout<< "clients[i].get_fd() : "<< clients[0].get_fd() << "fd : " << fd<< std::endl;
 	for (size_t i = 0; i < pollfds.size(); i++)
 	{
 		if (clients[i].get_fd() == fd)
@@ -119,9 +113,9 @@ void	Server::RemoveClient(int fd)
 	}
 	for (size_t i = 0; i < pollfds.size(); i++)
 	{
-		if (clients[i].get_fd() == fd)
+		if (pollfds[i].fd == fd)
 		{
-			clients.erase(clients.begin() + i);
+			pollfds.erase(pollfds.begin() + i);
 			break ;
 		}
 	}
@@ -161,7 +155,6 @@ std::vector<std::string>	devide_commande(std::string message, int fd)
 void	Server::execute_commande(Client *user)
 {
 	std::vector <std::string> commande;
-	std::cout<< "AFTER"<< user->get_hostname() << std::endl;
 	commande = user->get_commande();
 	if (user->get_commande().empty())
 	{
@@ -212,10 +205,10 @@ void	Server::parse_message(std::string buffer, int fd)
 		commande = devide_commande(message, fd);
 		user->set_commande(commande);
 		execute_commande(user);
-		for (std::vector<std::string>::iterator it = commande.begin(); it != commande.end(); ++it)
-		{
-			std::cout << "it  = <" << *it << ">" << std::endl;
-		}
+		// for (std::vector<std::string>::iterator it = commande.begin(); it != commande.end(); ++it)
+		// {
+		// 	std::cout << "it  = <" << *it << ">" << std::endl;
+		// }
 	}
 }
 

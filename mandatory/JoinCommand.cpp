@@ -21,7 +21,7 @@ void Server::JoinConstruction(Client *client)
             throw std::runtime_error("Failed Send JOIN message to the client");
         return ;
     }
-    if(!isDupChannel(channels, cmd[1]))
+    else if(!isDupChannel(channels, cmd[1]))
         return ;
     else
     {
