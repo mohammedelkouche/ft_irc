@@ -16,21 +16,25 @@ void print(std::vector<int> v)
     std::cout << "-----------------\n";
 }
 
-void Channels::join(int clientFd, Client *client)
+void Channels::join(Client *client)
 {
     // print(ClientssHouse);
     // Send JOIN message to the client;
-    if(std::find(ClientssHouse.begin(), ClientssHouse.end(), clientFd) == ClientssHouse.end())
+    if(std::find(ClientssHouse.begin(), ClientssHouse.end(), client->get_fd()) == ClientssHouse.end())
     {
-        std::string rpl = REPLY_JOIN(client->get_nickname(), client->get_username(), name, "localhost");
-        ClientssHouse.push_back(clientFd);
-        if(send(clientFd, rpl.c_str(), rpl.length(), 0) == -1)
+        // clients still undefined in join reply replaced just with a nickname
+        std::string rpl = REPLY_JOIN(client->get_nickname(), client->get_username(), name, client->get_hostname());
+        ClientssHouse.push_back(client->get_fd());
+        std::cout<< rpl;
+        std::cout << REPLY_NAMREPLY(client->get_hostname(), client->get_nickname(), getChannelName(), client->get_nickname()) \
+        << REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), getChannelName()) << std::endl;
+        if(send(client->get_fd(), rpl.c_str(), rpl.length(), 0) == -1)
             throw std::runtime_error("Failed Send JOIN message to the client");
     }
     else
     {
         std::string msg = ERROR_ALREADYREGISTERED(client->get_nickname(), getChannelName());
-        if (send(clientFd, msg.c_str(), msg.length(), 0) == -1)
+        if (send(client->get_fd(), msg.c_str(), msg.length(), 0) == -1)
             throw std::runtime_error("Failed Send JOIN message to the client");
     }
 

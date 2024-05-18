@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/18 18:53:28 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/05/18 21:49:35 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void	Server::AcceptNewClient()
 	newclient.set_fd(fd_client_sock);
 	host = newclient.get_client_host();
 	newclient.set_hostname(host);
-	std::cout<< "BEFOOOOORE"<< newclient.get_hostname() << std::endl; 
 	// for vector
 	// clients.insert(std::make_pair(fd_client_sock, newclient));
 	
@@ -117,14 +116,7 @@ void	Server::RemoveClient(int fd)
 			break ;
 		}
 	}
-	for (size_t i = 0; i < pollfds.size(); i++)
-	{
-		if (clients[i].get_fd() == fd)
-		{
-			clients.erase(clients.begin() + i);
-			break ;
-		}
-	}
+
 }
 
 std::vector<std::string>	devide_commande(std::string message, int fd)
@@ -161,7 +153,6 @@ std::vector<std::string>	devide_commande(std::string message, int fd)
 void	Server::execute_commande(Client *user)
 {
 	std::vector <std::string> commande;
-	std::cout<< "AFTER"<< user->get_hostname() << std::endl;
 	commande = user->get_commande();
 	if (user->get_commande().empty())
 	{
@@ -185,8 +176,6 @@ void	Server::execute_commande(Client *user)
 	}
 	if (user->is_enregistred())
 	{
-		// std::cout << "execute other commande" <<std::endl;
-		// handle_Unknown_command(user);
 		if (commande[0] == "join" || commande[0] == "JOIN")
 			JoinConstruction(user);
 		else if(commande[0] == "invite" || commande[0] == "INVITE")
@@ -212,10 +201,10 @@ void	Server::parse_message(std::string buffer, int fd)
 		commande = devide_commande(message, fd);
 		user->set_commande(commande);
 		execute_commande(user);
-		for (std::vector<std::string>::iterator it = commande.begin(); it != commande.end(); ++it)
-		{
-			std::cout << "it  = <" << *it << ">" << std::endl;
-		}
+		// for (std::vector<std::string>::iterator it = commande.begin(); it != commande.end(); ++it)
+		// {
+		// 	std::cout << "it  = <" << *it << ">" << std::endl;
+		// }
 	}
 }
 
@@ -238,14 +227,14 @@ void	Server::ReceiveClientData(int fd)
 	{
 		// quit();
 		// sendToClient(fd, "Client fd = '" << fd << "' Disconnected);
-		std::cout << "Client fd = '" << fd << "' Disconnected" << std::endl;
+		std::cout << "[Client fd]= [" << fd << "] [Disconnected]" << std::endl;
         RemoveClient(fd);
         close(fd);
 	}
 	else
 	{
 		buffer[bytes_received] = '\0';
-		std::cout << "Client fd = '" << fd << "' send : " << buffer;
+		std::cout << "[Client fd]= '["<< fd << "]' ==> [sent msg] : " << buffer;
 		parse_message(buffer,fd);
 	}
 }
