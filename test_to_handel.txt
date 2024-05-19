@@ -1,6 +1,11 @@
 // 1  controle D
-
 pass^D
+
+
+
+// remove ->   devide_commande function i have to delete fd i don't use it 
+
+
 
 // 2 send multi lign
 
@@ -16,3 +21,5 @@ pass asd \r\n nick ahmed \r\n user mel-kouc 0 * realname \r\n
 // 4 is user mel-kouc 0 * realname \r\n necessaire ?
 
 // when we have to remove client
+
+
