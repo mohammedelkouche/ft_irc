@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/19 16:00:23 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/21 22:41:45 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,9 @@ void	Server::RemoveClient(int fd)
 			break ;
 		}
 	}
+
+	// add 
+	// partial_messages.erase(fd);
 }
 
 std::vector<std::string>	devide_commande(std::string message, int fd)
@@ -185,8 +188,8 @@ void	Server::execute_commande(Client *user)
 		else if(commande[0] == "invite" || commande[0] == "INVITE")
 			InviteConstruction(user);
 	}
-	// else
-	// 	handle_Unknown_command(user);
+	else
+		handle_Unknown_command(user);
 }
 
 void	Server::parse_message(std::string buffer, int fd)
@@ -209,16 +212,27 @@ void	Server::parse_message(std::string buffer, int fd)
 	// }
 	//----- OLD -----
 	//----- new -----
+
+	
 	size_t pos = 0;
     size_t end_pos = 0;
-    while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos) {
-        std::string command = buffer.substr(pos, end_pos - pos);
-        std::vector<std::string> commande = devide_commande(command, fd);
-        user->set_commande(commande);
-        execute_commande(user);
-        pos = end_pos + 2; // Move past "\r\n"
-    }
+	if ((end_pos = buffer.find("\r\n", pos)) != std::string::npos)
+	{
+		while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos) {
+			std::string command = buffer.substr(pos, end_pos - pos);
+			std::vector<std::string> commande = devide_commande(command, fd);
+			user->set_commande(commande);
+			execute_commande(user);
+			pos = end_pos + 2; // Move past "\r\n"
+		}
+	}
+	else
+		std::cout << " the \r is not found " << std::endl;
 	//----- new -----
+	// // ----------- add --------------
+	// std::vector<std::string> commands = devide_commande(buffer, fd);
+	// user->set_commande(commands);
+	// execute_commande(user);
 
 }
 
@@ -236,6 +250,8 @@ Client* Server::get_connect_client(int fd)
 void	Server::ReceiveClientData(int fd)
 {
 	memset(buffer, 0 , BUFFER_SIZE);
+	size_t pos = 0;
+    size_t end_pos = 0;
 	size_t bytes_received = recv(fd, buffer, BUFFER_SIZE - 1, 0);
 	if (bytes_received <= 0)
 	{
@@ -247,9 +263,38 @@ void	Server::ReceiveClientData(int fd)
 	}
 	else
 	{
-		buffer[bytes_received] = '\0';
+		// std::cout << " bytes_received =  " << bytes_received << std::endl;
+		// buffer[bytes_received] = '\0';
 		std::cout << "Client fd = '" << fd << "' send : " << buffer;
-		parse_message(buffer,fd);
+		receivedData.append(buffer, bytes_received);
+		std::cout << "receivedData fd = '" << fd << "' receivedData : " << receivedData;
+		
+		if ((end_pos = receivedData.find("\r\n", pos)) != std::string::npos)
+		{
+		// 	std::cout << " goooooooooooooooool " << std::endl;
+			parse_message(receivedData,fd);
+		}
+		else
+			return ;
+	// // --------- add --------------
+	// 	buffer[bytes_received] = '\0';
+	// 	// std::cout << "Client fd = '" << fd <<  "' send : " << buffer;
+
+	// 	// Concatenate any previous partial message
+	// 	std::string message  = partial_messages[fd] + buffer; 
+	// 		std::cout << "Client fd = '" << fd <<  "' send message : " << message;
+	// 	// Process complete messages and save any partial message
+		
+	// 	size_t pos = 0;
+	// 	while ((pos = message.find("\r\n")) != std::string::npos)
+	// 	{
+	// 		std::string complete_message = message.substr(0, pos);
+	// 		// std::cout << "Client fd = '" << fd <<  "' send : " << complete_message;
+	// 		parse_message(complete_message, fd);
+	// 		message.erase(0, pos + 2);
+	// 	}
+	// 	partial_messages[fd] = message;  // Save any remaining partial message
+	// // --------- add --------------
 	}
 }
 
@@ -285,3 +330,5 @@ void	Server::initializeServer(int port_nbr,std::string str)
 Server::~Server()
 {
 }
+
+
