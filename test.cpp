@@ -276,20 +276,23 @@ int main() {
         return 1;
     }
 
-    // Register with the server
-    std::string nick = "NICK testuser\r\n";
-    std::string user = "USER testuser 0 * :Test User\r\n";
+    std::string pass = "pass VIVAKHAWA\r\n";
+    send_to_server(sockfd, pass);
 
-    send_to_server(sockfd, nick);
-    send_to_server(sockfd, user);
+    // Register with the server
+    // std::string nick = "NICK AYGAOUA\r\n";
+    // std::string user = "USER AYMANE  * :Test azgaoua\r\n";
+
+    // send_to_server(sockfd, nick);
+    // send_to_server(sockfd, user);
 
     // Join a channel
-    std::string join = "JOIN #testchannel\r\n";
-    send_to_server(sockfd, join);
+    // std::string join = "JOIN #testchannel\r\n";
+    // send_to_server(sockfd, join);
 
-    // Send a message to the channel
-    std::string message = "PRIVMSG #testchannel :Hello, World!\r\n";
-    send_to_server(sockfd, message);
+    // // Send a message to the channel
+    // std::string message = "PRIVMSG #testchannel :Hello, World!\r\n";
+    // send_to_server(sockfd, message);
 
     // Receive and print responses from the server
     while (true) {
