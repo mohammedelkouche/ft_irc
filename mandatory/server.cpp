@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/21 22:41:45 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/22 23:12:18 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,18 +216,19 @@ void	Server::parse_message(std::string buffer, int fd)
 	
 	size_t pos = 0;
     size_t end_pos = 0;
-	if ((end_pos = buffer.find("\r\n", pos)) != std::string::npos)
-	{
+	// if ((end_pos = buffer.find("\r\n", pos)) != std::string::npos)
+	// {
 		while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos) {
 			std::string command = buffer.substr(pos, end_pos - pos);
+			// std::cout << "command = " << command << std::endl;
 			std::vector<std::string> commande = devide_commande(command, fd);
 			user->set_commande(commande);
 			execute_commande(user);
 			pos = end_pos + 2; // Move past "\r\n"
 		}
-	}
-	else
-		std::cout << " the \r is not found " << std::endl;
+	// }
+	// else
+	// 	std::cout << " the \r \n is not found " << std::endl;
 	//----- new -----
 	// // ----------- add --------------
 	// std::vector<std::string> commands = devide_commande(buffer, fd);
@@ -249,14 +250,48 @@ Client* Server::get_connect_client(int fd)
 
 void	Server::ReceiveClientData(int fd)
 {
+	// -------------------- this is the how receive data handle controle D in one client --------------------
+	// char buffer[BUFFER_SIZE];
+	// std::string message;
+	// memset(buffer, 0 , BUFFER_SIZE);
+	// size_t pos = 0;
+    // size_t end_pos = 0;
+	// size_t bytes_received = recv(fd, buffer, BUFFER_SIZE - 1, 0);
+	// if (bytes_received <= 0)
+	// {
+	// 	std::cout << "Client fd = '" << fd << "' Disconnected" << std::endl;
+    //     RemoveClient(fd);
+    //     close(fd);
+	// }
+	// else
+	// {
+	// 	// std::cout << " bytes_received =  " << bytes_received << std::endl;
+	// 	buffer[bytes_received] = '\0';
+	// 	std::cout << "Client fd = '" << fd << "' send : " << buffer;
+	// 	message = buffer;
+	// 	if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
+	// 	{
+	// 		receivedData += message;
+	// 		parse_message(receivedData,fd);
+	// 		receivedData.clear();
+	// 	}
+	// 	else if (message.find("\n", pos) == std::string::npos)
+	// 	{
+	// 		receivedData += message;
+	// 		// receivedData.append(buffer, bytes_received);
+	// 	}
+	// }
+	// --------------------------------------------------------------------------------
+	// i have to handel control D of multiple client 
+	
+	char buffer[BUFFER_SIZE];
+	std::string message;
 	memset(buffer, 0 , BUFFER_SIZE);
 	size_t pos = 0;
     size_t end_pos = 0;
 	size_t bytes_received = recv(fd, buffer, BUFFER_SIZE - 1, 0);
 	if (bytes_received <= 0)
 	{
-		// quit();
-		// sendToClient(fd, "Client fd = '" << fd << "' Disconnected);
 		std::cout << "Client fd = '" << fd << "' Disconnected" << std::endl;
         RemoveClient(fd);
         close(fd);
@@ -264,37 +299,24 @@ void	Server::ReceiveClientData(int fd)
 	else
 	{
 		// std::cout << " bytes_received =  " << bytes_received << std::endl;
-		// buffer[bytes_received] = '\0';
+		buffer[bytes_received] = '\0';
 		std::cout << "Client fd = '" << fd << "' send : " << buffer;
-		receivedData.append(buffer, bytes_received);
-		std::cout << "receivedData fd = '" << fd << "' receivedData : " << receivedData;
-		
-		if ((end_pos = receivedData.find("\r\n", pos)) != std::string::npos)
+		message = buffer;
+		if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
 		{
-		// 	std::cout << " goooooooooooooooool " << std::endl;
-			parse_message(receivedData,fd);
-		}
-		else
-			return ;
-	// // --------- add --------------
-	// 	buffer[bytes_received] = '\0';
-	// 	// std::cout << "Client fd = '" << fd <<  "' send : " << buffer;
+			partial_messages[fd] += message;
 
-	// 	// Concatenate any previous partial message
-	// 	std::string message  = partial_messages[fd] + buffer; 
-	// 		std::cout << "Client fd = '" << fd <<  "' send message : " << message;
-	// 	// Process complete messages and save any partial message
-		
-	// 	size_t pos = 0;
-	// 	while ((pos = message.find("\r\n")) != std::string::npos)
-	// 	{
-	// 		std::string complete_message = message.substr(0, pos);
-	// 		// std::cout << "Client fd = '" << fd <<  "' send : " << complete_message;
-	// 		parse_message(complete_message, fd);
-	// 		message.erase(0, pos + 2);
-	// 	}
-	// 	partial_messages[fd] = message;  // Save any remaining partial message
-	// // --------- add --------------
+			// thing if i have to use receivedData or useless
+			receivedData = partial_messages[fd];
+			parse_message(receivedData,fd);
+			partial_messages[fd].clear();
+		}
+		else if (message.find("\n", pos) == std::string::npos)
+		{
+			partial_messages[fd] += message;
+			// receivedData += message;
+			// receivedData.append(buffer, bytes_received);
+		}
 	}
 }
 
