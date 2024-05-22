@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:30 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/05 16:57:09 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/18 20:06:17 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,10 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 	catch (const std::out_of_range& e) {
+		std::cerr << e.what() << std::endl;
+		return 1;
+	}
+	catch (const std::runtime_error& e) {
 		std::cerr << e.what() << std::endl;
 		return 1;
 	}

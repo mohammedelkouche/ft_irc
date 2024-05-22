@@ -17,13 +17,12 @@ SRC = ./mandatory/main.cpp ./mandatory/client.cpp ./mandatory/server.cpp \
 			./mandatory/topic.cpp
 OBJ = $(SRC:.cpp=.o)
 
-HEADER =  ./include/server.hpp ./include/client.hpp ./include/topic.hpp
+HEADER =  ./include/server.hpp ./include/client.hpp ./include/topic.hpp \
+            ./include/channels.hpp ./include/reply.hpp
 
-CFLAGS = -Wall -Wextra -Werror  -std=c++98 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror  -std=c++98 -fsanitize=address -g
 
 CC = c++
-
-
 
 all :: $(NAME)
 

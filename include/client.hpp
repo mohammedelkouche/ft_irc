@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 17:11:32 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/16 18:23:19 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/18 18:59:25 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class   Client
 		bool	registred;
 	public :
 		Client();
+		Client(const Client& copy);
 		void	set_fd(int fd_client);
 		void	set_commande(std::vector <std::string> &cmd);
 		void	set_nickname(std::string nick);

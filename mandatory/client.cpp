@@ -3,21 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/16 19:33:00 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/18 18:57:15 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // #include "../include/server.hpp"
 #include "../include/client.hpp"
-#include <unistd.h>
+#include <iostream>
 
 
 Client::Client() : ipaddress(""), nickname(""), pass_client(""), username ("")
 {
 	this->registred = false;
+}
+
+
+Client::Client(const Client& copy)
+{
+	fd = copy.fd;
+	ipaddress = copy.ipaddress;
+	nickname = copy.nickname;
+	username = copy.username;
+	hostname = copy.hostname;
+	registred = copy.registred;
+	for(size_t i = 0; i < commande.size(); i++)
+		commande[i] = copy.commande[i];
 }
 
 void	Client::set_fd(int fd_client)

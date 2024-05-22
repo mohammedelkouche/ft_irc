@@ -6,12 +6,13 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/17 18:32:39 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/19 14:17:46 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/server.hpp"
 #include "../include/client.hpp"
+
 #include "../include/reply.hpp"
 
 //------------------------- question -------------------------------
@@ -72,6 +73,7 @@ void	Server::handle_pass(Client *user)
 
 void	Server::sendToClient(int fd, const std::string& message)
 {
+	// throw exception if send = -1;
 	send(fd, message.c_str(), message.length(), 0);
 }
 

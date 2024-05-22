@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/17 17:17:08 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/21 22:40:43 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,14 @@
 #include <iostream>
 #include <poll.h>
 #include "./client.hpp"
+#include "./channels.hpp"
 #include <ctime>
-// #include <map>
+#include <map>
 
 
 #define BUFFER_SIZE 1024
 
+class Channels;
 class Server
 {
 	private :
@@ -38,10 +40,11 @@ class Server
 		std::string pass;
 		int fd_srv_socket;
 		std::vector<Client> clients;
-		// Client*	user;
-		// std::map<int, Client>clients;
+		std::vector<Channels> channels;
 		std::vector <struct pollfd> pollfds;
 		char buffer[BUFFER_SIZE];
+		std::string receivedData;
+		std::map<int, std::string> partial_messages; // To store incomplete messages
 	public :
 		Server();
 		Server(const Server &obj);
@@ -62,7 +65,8 @@ class Server
 		void	handle_nickname(Client *user);
 		void	handle_username(Client *user);
 		void	handle_Unknown_command(Client *user);
-
+		void JoinConstruction(Client *client);
+		void InviteConstruction(Client *client);
 		// server utils
 		bool	unique_nickname(std::string nickname);
 		bool	check_valid_nick_name(std::string nick_name);
@@ -70,6 +74,8 @@ class Server
 		// void	check_registration(Client *user);
 
 		~Server();
+		//
+
 };
 
 #endif
