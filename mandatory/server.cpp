@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/23 16:09:31 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/23 17:14:31 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,6 @@ void	Server::config_server()
 	struct pollfd server_poll_fd;
 	server_poll_fd.fd = fd_srv_socket;
 	server_poll_fd.events = POLLIN;
-	// clearing any previous events that might have been stored in that member.
-	// ensuring that it doesn't carry over any previous events from previous
-	// poll() calls. This prepares it to store the new events detected by
-	// the next poll() call.
 	server_poll_fd.revents = 0;
 	pollfds.push_back(server_poll_fd);
 }
@@ -187,37 +183,17 @@ void	Server::execute_commande(Client *user)
 		else if(commande[0] == "invite" || commande[0] == "INVITE")
 			InviteConstruction(user);
 	}
-	else
-		handle_Unknown_command(user);
+	// else
+	// 	handle_Unknown_command(user);
 }
 
 void	Server::parse_message(std::string buffer, int fd)
 {
-	Client	*user = get_connect_client(fd);
-	//----- OLD -----
-	// std::vector <std::string> commande;
-	// std::string message;
-	// size_t	pos = buffer.find("\r\n");
-	// if (pos != std::string::npos)
-	// {
-	// 	message = buffer.substr(0, pos);
-	// 	commande = devide_commande(message, fd);
-	// 	user->set_commande(commande);
-	// 	execute_commande(user);
-	// 	// for (std::vector<std::string>::iterator it = commande.begin(); it != commande.end(); ++it)
-	// 	// {
-	// 	// 	std::cout << "it  = <" << *it << ">" << std::endl;
-	// 	// }
-	// }
-	//----- OLD -----
-	//----- new -----
-
-	
+	Client	*user = get_connect_client(fd);	
 	size_t pos = 0;
     size_t end_pos = 0;
 	while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos) {
 		std::string command = buffer.substr(pos, end_pos - pos);
-		// std::cout << "command = " << command << std::endl;
 		std::vector<std::string> commande = devide_commande(command, fd);
 		user->set_commande(commande);
 		execute_commande(user);
@@ -237,41 +213,7 @@ Client* Server::get_connect_client(int fd)
 
 
 void	Server::ReceiveClientData(int fd)
-{
-	// -------------------- this is the how receive data handle controle D in one client --------------------
-	// char buffer[BUFFER_SIZE];
-	// std::string message;
-	// memset(buffer, 0 , BUFFER_SIZE);
-	// size_t pos = 0;
-    // size_t end_pos = 0;
-	// size_t bytes_received = recv(fd, buffer, BUFFER_SIZE - 1, 0);
-	// if (bytes_received <= 0)
-	// {
-	// 	std::cout << "Client fd = '" << fd << "' Disconnected" << std::endl;
-    //     RemoveClient(fd);
-    //     close(fd);
-	// }
-	// else
-	// {
-	// 	// std::cout << " bytes_received =  " << bytes_received << std::endl;
-	// 	buffer[bytes_received] = '\0';
-	// 	std::cout << "Client fd = '" << fd << "' send : " << buffer;
-	// 	message = buffer;
-	// 	if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
-	// 	{
-	// 		receivedData += message;
-	// 		parse_message(receivedData,fd);
-	// 		receivedData.clear();
-	// 	}
-	// 	else if (message.find("\n", pos) == std::string::npos)
-	// 	{
-	// 		receivedData += message;
-	// 		// receivedData.append(buffer, bytes_received);
-	// 	}
-	// }
-	// --------------------------------------------------------------------------------
-	// i have to handel control D of multiple client 
-	
+{	
 	char buffer[BUFFER_SIZE];
 	std::string message;
 	memset(buffer, 0 , BUFFER_SIZE);
@@ -293,10 +235,7 @@ void	Server::ReceiveClientData(int fd)
 		if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
 		{
 			partial_messages[fd] += message;
-
-			// thing if i have to use receivedData or useless
-			receivedData = partial_messages[fd];
-			parse_message(receivedData,fd);
+			parse_message(partial_messages[fd],fd);
 			partial_messages[fd].clear();
 		}
 		else if (message.find("\n", pos) == std::string::npos)
