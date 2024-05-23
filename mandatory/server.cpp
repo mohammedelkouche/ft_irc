@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/22 23:12:18 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/23 16:09:31 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,13 @@ void	Server::AcceptNewClient()
 	
 	clients.push_back(newclient);
 	pollfds.push_back(client_poll_fd);
+	// insert a new buffer entry for the new client
+	partial_messages.insert(std::make_pair(fd_client_sock, ""));
 	std::cout << "Client fd = '" << fd_client_sock << "' Connected" << std::endl;
 }
 
 void	Server::RemoveClient(int fd)
 {
-	// std::cout<< "clients[i].get_fd() : "<< clients[0].get_fd() << "fd : " << fd<< std::endl;
 	for (size_t i = 0; i < pollfds.size(); i++)
 	{
 		if (clients[i].get_fd() == fd)
@@ -119,9 +120,7 @@ void	Server::RemoveClient(int fd)
 			break ;
 		}
 	}
-
-	// add 
-	// partial_messages.erase(fd);
+	partial_messages.erase(fd);  // Remove any stored partial messages for the client
 }
 
 std::vector<std::string>	devide_commande(std::string message, int fd)
@@ -216,25 +215,14 @@ void	Server::parse_message(std::string buffer, int fd)
 	
 	size_t pos = 0;
     size_t end_pos = 0;
-	// if ((end_pos = buffer.find("\r\n", pos)) != std::string::npos)
-	// {
-		while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos) {
-			std::string command = buffer.substr(pos, end_pos - pos);
-			// std::cout << "command = " << command << std::endl;
-			std::vector<std::string> commande = devide_commande(command, fd);
-			user->set_commande(commande);
-			execute_commande(user);
-			pos = end_pos + 2; // Move past "\r\n"
-		}
-	// }
-	// else
-	// 	std::cout << " the \r \n is not found " << std::endl;
-	//----- new -----
-	// // ----------- add --------------
-	// std::vector<std::string> commands = devide_commande(buffer, fd);
-	// user->set_commande(commands);
-	// execute_commande(user);
-
+	while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos) {
+		std::string command = buffer.substr(pos, end_pos - pos);
+		// std::cout << "command = " << command << std::endl;
+		std::vector<std::string> commande = devide_commande(command, fd);
+		user->set_commande(commande);
+		execute_commande(user);
+		pos = end_pos + 2; // Move past "\r\n"
+	}
 }
 
 Client* Server::get_connect_client(int fd)
@@ -312,11 +300,7 @@ void	Server::ReceiveClientData(int fd)
 			partial_messages[fd].clear();
 		}
 		else if (message.find("\n", pos) == std::string::npos)
-		{
 			partial_messages[fd] += message;
-			// receivedData += message;
-			// receivedData.append(buffer, bytes_received);
-		}
 	}
 }
 
