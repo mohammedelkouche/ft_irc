@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
 /*   Updated: 2024/05/21 22:41:45 by mel-kouc         ###   ########.fr       */
@@ -181,8 +181,6 @@ void	Server::execute_commande(Client *user)
 	}
 	if (user->is_enregistred())
 	{
-		/*AYGAOUA SPEAKING HERE*/
-		
 		// std::cout << "execute other commande" <<std::endl;
 		// handle_Unknown_command(user);
 		if (commande[0] == "join" || commande[0] == "JOIN")
