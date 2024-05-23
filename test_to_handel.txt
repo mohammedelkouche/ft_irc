@@ -34,9 +34,9 @@ thing
 
 
 
- pass hello
- test
- ident
+pass hello
+test
+ident
 
 // 3 send multicommande in one lign (using script)
 
