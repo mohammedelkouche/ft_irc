@@ -276,7 +276,7 @@ int main() {
         return 1;
     }
 
-    std::string pass = "pass VIVAKHAWA\r\n";
+    std::string pass = "pass .\r\n";
     send_to_server(sockfd, pass);
 
     // Register with the server
@@ -300,6 +300,9 @@ int main() {
         if (!response.empty()) {
             std::cout << response;
         }
+        pass = "";
+        std::getline(std::cin, pass);
+        send_to_server(sockfd, pass + "\r\n");
     }
 
     close(sockfd);

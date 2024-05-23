@@ -6,7 +6,7 @@
 #    By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/20 16:54:34 by mel-kouc          #+#    #+#              #
-#    Updated: 2024/05/22 18:50:29 by azgaoua          ###   ########.fr        #
+#    Updated: 2024/05/23 16:27:28 by azgaoua          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ OBJ = $(SRC:.cpp=.o)
 HEADER =  ./include/server.hpp ./include/client.hpp ./include/topic.hpp \
             ./include/channels.hpp ./include/reply.hpp
 
-CFLAGS = -Wall -Wextra -Werror  -std=c++98 -fsanitize=address -g
+CFLAGS = -Wall -Wextra -Werror  -std=c++98 -fsanitize=address -g3
 
 CC = c++
 
