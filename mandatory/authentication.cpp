@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/23 23:12:48 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/24 14:58:46 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,29 @@ void	Server::sendToClient(int fd, const std::string& message)
 {
 	// throw exception if send = -1;
 	std::cout <<  "this is the message : " << message;
-	send(fd, message.c_str(), message.length(), 0);
+	if (send(fd, message.c_str(), message.length(), 0) == -1)
+		throw std::runtime_error("Failed to send message");
 }
 
 void	Server::handle_nickname(Client *user)
 {
 	std::vector<std::string> commande = user->get_commande();
-	std::vector <std::string>::iterator iter = std::find(commande.begin(), commande.end(), ":");
-	if (iter != commande.end())
-		commande.erase(iter);
+	// -------- old ---------
+	// std::vector <std::string>::iterator iter = std::find(commande.begin(), commande.end(), ":");
+	// if (iter != commande.end())
+	// 	commande.erase(iter);
+	// -------- old ---------
+	// ------ new ------
+	std::vector<std::string>::iterator iter = commande.begin();
+	while (iter != commande.end())
+	{
+        if (*iter == ":" || *iter == "") {
+            iter = commande.erase(iter);
+        } else {
+            ++iter;
+        }
+    }
+	// ------ new ------
 	
 	// test
 	//-------------
@@ -107,7 +121,9 @@ void	Server::handle_nickname(Client *user)
 		{
 			if (check_valid_nick_name(commande[1]))
 			{
-				if (!unique_nickname(commande[1]))
+				if (!user->get_nickname().compare(commande[1]))
+					user->set_nickname(commande[1]);
+				else if (!unique_nickname(commande[1]))
 					sendToClient(user->get_fd(), ERROR_NICKNAMEINUSE(" * ", user->get_hostname()));
 				else
 					user->set_nickname(commande[1]);

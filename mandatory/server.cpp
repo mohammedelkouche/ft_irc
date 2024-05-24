@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/23 23:14:11 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/24 11:48:35 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,14 +154,14 @@ void	Server::execute_commande(Client *user)
 {
 	std::vector <std::string> commande;
 	commande = user->get_commande();
-	// //-------------
+	// //------ test -------
 	std::vector<std::string>::iterator it;
 	std::cout << "--------------------------" << std::endl;
 	for (it = commande.begin(); it != commande.end(); ++it) {
         std::cout << "this commande 1 = |"  << *it <<"|" << std::endl;
     }
 	std::cout << "--------------------------" << std::endl;
-	// //-------------
+	// //------- test ------
 	if (user->get_commande().empty())
 	{
 		return ;
