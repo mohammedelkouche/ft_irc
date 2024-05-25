@@ -6,13 +6,14 @@
 /*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/21 22:41:45 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/24 03:05:14 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/server.hpp"
 #include "../include/client.hpp"
 #include "../include/reply.hpp"
+#include "../include/topic.hpp"
 
 
 Server::Server() : pass("")
@@ -181,7 +182,7 @@ void	Server::execute_commande(Client *user)
 	}
 	if (user->is_enregistred())
 	{
-		/*AYGAOUA SPEAKING HERE*/
+/*                                AYGAOUA SPEAKING HERE                                */
 		
 		// std::cout << "execute other commande" <<std::endl;
 		// handle_Unknown_command(user);
@@ -189,6 +190,14 @@ void	Server::execute_commande(Client *user)
 			JoinConstruction(user);
 		else if(commande[0] == "invite" || commande[0] == "INVITE")
 			InviteConstruction(user);
+		else if(commande[0] == "topic" || commande[0] == "TOPIC")
+		{
+			if (commande.size() >= 3)
+				Topic_Command(commande, user);
+			else
+				DisplayTopic(commande[1], user);
+		}
+/*								AYGAOUA SPEAKING HERE                                */
 	}
 	else
 		handle_Unknown_command(user);
