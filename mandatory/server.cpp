@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/23 17:14:31 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/24 11:48:35 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,14 @@ void	Server::execute_commande(Client *user)
 {
 	std::vector <std::string> commande;
 	commande = user->get_commande();
+	// //------ test -------
+	std::vector<std::string>::iterator it;
+	std::cout << "--------------------------" << std::endl;
+	for (it = commande.begin(); it != commande.end(); ++it) {
+        std::cout << "this commande 1 = |"  << *it <<"|" << std::endl;
+    }
+	std::cout << "--------------------------" << std::endl;
+	// //------- test ------
 	if (user->get_commande().empty())
 	{
 		return ;
@@ -189,7 +197,7 @@ void	Server::execute_commande(Client *user)
 
 void	Server::parse_message(std::string buffer, int fd)
 {
-	Client	*user = get_connect_client(fd);	
+	Client	*user = get_connect_client(fd);
 	size_t pos = 0;
     size_t end_pos = 0;
 	while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos) {
