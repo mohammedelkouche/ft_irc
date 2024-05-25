@@ -2,6 +2,8 @@
 
 Channels::Channels(std::string name): name(name)
 {
+    bool_topic = false;
+    topic = "";
 }
 
 Channels::Channels()
@@ -34,6 +36,12 @@ void Channels::join(int clientFd, Client *client)
             throw std::runtime_error("Failed Send JOIN message to the client");
     }
 
+}
+
+void Channels::set_topic(std::string topic)
+{
+    this->topic = topic;
+    bool_topic = true;
 }
 
 
