@@ -6,7 +6,7 @@
 /*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/24 02:54:02 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/05/25 17:47:44 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ class Server
 		std::vector<Client> clients;
 		std::vector<Channels> channels;
 		std::vector <struct pollfd> pollfds;
-		char buffer[BUFFER_SIZE];
-		std::string receivedData;
 		std::map<int, std::string> partial_messages; // To store incomplete messages
 	public :
 		Server();
@@ -57,6 +55,7 @@ class Server
 		void	parse_message(std::string buffer, int fd);
 		Client	*get_connect_client(int fd);
 		void	execute_commande(Client *user);
+		// void	sendToClient(int fd, const std::string message);
 		void	sendToClient(int fd, const std::string& message);
 		void	CloseConnections();
 		
