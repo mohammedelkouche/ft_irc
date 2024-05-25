@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/21 22:40:43 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/24 02:54:02 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,12 @@ class Server
 		bool	check_valid_nick_name(std::string nick_name);
 		void	success_connect(Client *user);
 		// void	check_registration(Client *user);
+
+		/*                        AYGAOUA SPEAKING                        */
+
+		void	Topic_Command(std::vector<std::string> topic, Client *user);
+		void	DisplayTopic(std::string channel_name, Client *user);
+		/*----------------------------------------------------------------*/
 
 		~Server();
 		//
