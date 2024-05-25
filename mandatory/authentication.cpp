@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/24 14:58:46 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/25 22:04:43 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,30 +33,18 @@ void	Server::handle_pass(Client *user)
 	if (commande.size() == 1)
 	{
 		if (user->is_enregistred())
-		{
 			sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(user->get_nickname(), user->get_hostname()));
-			// ERR_NEEDMOREPARAMS(user->get_nickname(), "PASS", user->get_fd());
-		}
 		else
-		{
 			sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(" * ", user->get_hostname()));
-			// ERR_NEEDMOREPARAMS(" * ", "PASS", user->get_fd());
-		}
 	}
 	else
 	{
 		if (user->is_enregistred())
-		{
 			sendToClient(user->get_fd(), ERROR_ALREADYREGISTERED(user->get_nickname(), user->get_hostname()));
-			// ERR_ALREADYREGISTERED(user->get_nickname(), "PASS", user->get_fd());
-		}
 		else
 		{
 			if(this->pass != commande[1])
-			{
 				sendToClient(user->get_fd(), ERROR_PASSWDMISMATCH(" * ", user->get_hostname()));
-				// ERR_PASSWDMISMATCH(" * ", "PASS", user->get_fd());
-			}
 			else
 				user->set_pass_client(commande[1]);
 		}
@@ -64,11 +52,8 @@ void	Server::handle_pass(Client *user)
 }
 
 
-// void	Server::sendToClient(int fd, const std::string message)
 void	Server::sendToClient(int fd, const std::string& message)
 {
-	// throw exception if send = -1;
-	std::cout <<  "this is the message : " << message;
 	if (send(fd, message.c_str(), message.length(), 0) == -1)
 		throw std::runtime_error("Failed to send message");
 }
@@ -76,12 +61,6 @@ void	Server::sendToClient(int fd, const std::string& message)
 void	Server::handle_nickname(Client *user)
 {
 	std::vector<std::string> commande = user->get_commande();
-	// -------- old ---------
-	// std::vector <std::string>::iterator iter = std::find(commande.begin(), commande.end(), ":");
-	// if (iter != commande.end())
-	// 	commande.erase(iter);
-	// -------- old ---------
-	// ------ new ------
 	std::vector<std::string>::iterator iter = commande.begin();
 	while (iter != commande.end())
 	{
@@ -91,20 +70,8 @@ void	Server::handle_nickname(Client *user)
             ++iter;
         }
     }
-	// ------ new ------
-	
-	// test
-	//-------------
-	std::vector<std::string>::iterator it;
-	for (it = commande.begin(); it != commande.end(); ++it) {
-        std::cout << "this commande 2 = |"  << *it <<"|" << std::endl;
-    }
-	//-------------
-	std::cout <<  "size : " << commande.size() << std::endl;
-	// test
 	if (commande.size() == 1)
 	{
-		std::cout <<  "hayyyyyyyyyyyy: " <<std::endl;
 		if (user->is_enregistred())
 			sendToClient(user->get_fd(), ERROR_NONICKNAMEGIVEN(user->get_nickname(), user->get_hostname()));
 		else
@@ -112,7 +79,6 @@ void	Server::handle_nickname(Client *user)
 	}
 	else
 	{
-		std::cout <<  "Bayyyyyyyyyyyy: " <<std::endl;
 		if (!user->get_pass_client().compare(""))
 		{
 			sendToClient(user->get_fd(), ERROR_NOTREGISTERED(" * ", user->get_hostname()));
@@ -135,7 +101,6 @@ void	Server::handle_nickname(Client *user)
 		{
 			if (check_valid_nick_name(commande[1]))
 			{
-				// add the first condition
 				if (!user->get_nickname().compare(commande[1]))
 					user->set_nickname(commande[1]);
 				else if (!unique_nickname(commande[1]))
