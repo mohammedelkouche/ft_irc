@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/25 22:04:43 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/26 16:36:12 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,10 @@ void	Server::handle_nickname(Client *user)
 	std::vector<std::string>::iterator iter = commande.begin();
 	while (iter != commande.end())
 	{
-        if (*iter == ":" || *iter == "") {
+        if (*iter == ":" || *iter == "")
             iter = commande.erase(iter);
-        } else {
+        else
             ++iter;
-        }
     }
 	if (commande.size() == 1)
 	{
