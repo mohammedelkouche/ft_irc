@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 16:13:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/26 18:05:22 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/27 17:02:24 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ class Bot
 		Bot(const std::string ip, int port);
 		void	run();
 		void	connect_to_server();
+		void	play_game();
+		std::string receive_message();
+		int		choice_to_int(const std::string &choice);
+		void	send_message(const std::string &message);
 		~Bot();
 };
 
