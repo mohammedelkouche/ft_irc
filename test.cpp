@@ -166,3 +166,105 @@
 //     }
 //     return 0;
 // }
+
+
+
+// test client to send message to bot 
+
+
+// #include <iostream>
+// #include <cstring>
+// #include <sys/socket.h>
+// #include <arpa/inet.h>
+// #include <unistd.h>
+
+// class Client
+// {
+// private:
+//     int sock;
+//     struct sockaddr_in server_address;
+
+// public:
+//     Client(const std::string &ip, int port)
+//     {
+//         sock = socket(AF_INET, SOCK_STREAM, 0);
+//         if (sock < 0)
+//             throw std::runtime_error("Socket creation error");
+
+//         memset(&server_address, 0, sizeof(server_address));
+//         server_address.sin_family = AF_INET;
+//         server_address.sin_port = htons(port);
+
+//         if (inet_pton(AF_INET, ip.c_str(), &server_address.sin_addr) <= 0)
+//             throw std::runtime_error("Invalid address/ Address not supported");
+
+//         if (connect(sock, (struct sockaddr *)&server_address, sizeof(server_address)) < 0)
+//         {
+//             close(sock);
+//             throw std::runtime_error("Connection failed: " + std::string(strerror(errno)));
+//         }
+//         std::cout << "Connected to server on port " << port << std::endl;
+//     }
+
+//     ~Client()
+//     {
+//         close(sock);
+//     }
+
+//     void send_message(const std::string &message)
+//     {
+//         if (send(sock, message.c_str(), message.length(), 0) < 0)
+//             throw std::runtime_error("Failed to send message");
+//     }
+
+//     std::string receive_message()
+//     {
+//         char buffer[1024];
+//         int bytes_received = recv(sock, buffer, sizeof(buffer) - 1, 0);
+//         if (bytes_received < 0)
+//             throw std::runtime_error("Failed to receive message");
+//         buffer[bytes_received] = '\0';
+//         return std::string(buffer);
+//     }
+
+//     void start_game()
+//     {
+//         std::string user_input;
+//         while (true)
+//         {
+//             std::cout << "Enter your choice (rock, paper, scissors) or 'exit' to quit: ";
+//             std::getline(std::cin, user_input);
+
+//             send_message(user_input);
+//             std::string bot_response = receive_message();
+//             std::cout << "Server: " << bot_response << std::endl;
+
+//             if (user_input == "exit")
+//                 break;
+//         }
+//     }
+// };
+
+// int main(int argc, char **argv)
+// {
+//     if (argc != 3)
+//     {
+//         std::cerr << "Usage: " << argv[0] << " <server_ip> <server_port>" << std::endl;
+//         return 1;
+//     }
+
+//     try
+//     {
+//         std::string server_ip = argv[1];
+//         int server_port = std::atoi(argv[2]);
+
+//         Client client(server_ip, server_port);
+//         client.start_game();
+//     }
+//     catch (const std::exception &e)
+//     {
+//         std::cerr << "Error: " << e.what() << std::endl;
+//     }
+
+//     return 0;
+// }
