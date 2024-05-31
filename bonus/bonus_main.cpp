@@ -6,11 +6,11 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:52:46 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/30 23:27:28 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:26:15 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./bot_bonus.hpp"
+#include "../include/bot_bonus.hpp"
 
 void	CheckArg(char **argv)
 {
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 	{
 		CheckArg(argv);
 		Bot bot(argv[1], std::atoi(argv[2]));
-		bot.run();
+		bot.Run();
 	}
 	catch(const std::exception& e)
 	{

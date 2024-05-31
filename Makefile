@@ -13,7 +13,7 @@ BOBJ = $(BONUS:.cpp=.o)
 
 HEADER =  ./include/server.hpp ./include/client.hpp  ./include/channels.hpp ./include/reply.hpp
 
-HEADER_bonus =  ./bonus/bot_bonus.hpp
+HEADER_bonus =  ./include/bot_bonus.hpp
 
 CFLAGS = -Wall -Wextra -Werror  -std=c++98 -fsanitize=address -g
 

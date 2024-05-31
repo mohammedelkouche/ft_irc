@@ -6,11 +6,11 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:04:27 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/27 17:11:46 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:25:43 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./bot_bonus.hpp"
+#include "../include/bot_bonus.hpp"
 #include<cstring>
 #include<string>
 
@@ -25,7 +25,7 @@ Bot::Bot(const std::string  ip, int port) : port(port), server_ip(ip), bot_fd(-1
 
 }
 
-void	Bot::connect_to_server()
+void	Bot::ConnectToServer()
 {
 	bot_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (bot_fd < 0)
@@ -43,7 +43,7 @@ void	Bot::connect_to_server()
 
 }
 
-std::string	Bot::receive_message()
+std::string	Bot::ReceiveMessage()
 {
 	char buffer[1024];
 
@@ -54,7 +54,7 @@ std::string	Bot::receive_message()
 	return (std::string (buffer));
 }
 
-int	Bot::choice_to_int(const std::string &choice)
+int	Bot::ChoiceToInt(const std::string &choice)
 {
 	if (choice == "rock")
 		return (0);
@@ -65,69 +65,69 @@ int	Bot::choice_to_int(const std::string &choice)
 	return (-1);
 }
 
-void Bot::send_message(const std::string &message) {
+void Bot::SendMessage(const std::string &message) {
     if (send(bot_fd, message.c_str(), message.length(), 0) < 0) {
         throw std::runtime_error("Failed to send message");
     }
 }
 
-void	Bot::play_game()
+void	Bot::PlayGame()
 {
 	std::srand(std::time(0));
 	std::string choices[] = {"rock", "paper", "scissors"};
 	while(true)
 	{
-		std::string client_message = receive_message();
-		int client_choice = choice_to_int(client_message);
+		std::string client_message = ReceiveMessage();
+		int client_choice = ChoiceToInt(client_message);
 		if (client_message == "start")
-			send_message("Game started. Send 'rock', 'paper', or 'scissors'.");
+			SendMessage("Game started. Send 'rock', 'paper', or 'scissors'.");
 		else if (client_choice != -1)
 		{
 			int bot_choice = std::rand() % 3;
-			send_message("Bot chose " + std::string(choices[bot_choice]));
+			SendMessage("Bot chose " + std::string(choices[bot_choice]));
 			
 			switch(client_choice)
 			{
 				case 0 : // client chose rock
 					switch (bot_choice)
 					{
-						case 0 : send_message("It's a tie"); break;
-						case 1 : send_message("Bot wins! Paper covers rock."); break;
-                        case 2 : send_message("You win! Rock crushes scissors."); break;
+						case 0 : SendMessage("It's a tie"); break;
+						case 1 : SendMessage("Bot wins! Paper covers rock."); break;
+                        case 2 : SendMessage("You win! Rock crushes scissors."); break;
                     }
 					break;
 				case 1 : // Client chose paper
 				 	switch (bot_choice) 
 					{
-                        case 0: send_message("You win! Paper covers rock."); break;
-                        case 1: send_message("It's a tie!"); break;
-                        case 2: send_message("Bot wins! Scissors cut paper."); break;
+                        case 0: SendMessage("You win! Paper covers rock."); break;
+                        case 1: SendMessage("It's a tie!"); break;
+                        case 2: SendMessage("Bot wins! Scissors cut paper."); break;
                     }
                     break;
                 case 2 : // Client chose scissors
                     switch (bot_choice) {
-                        case 0: send_message("Bot wins! Rock crushes scissors."); break;
-                        case 1: send_message("You win! Scissors cut paper."); break;
-                        case 2: send_message("It's a tie!"); break;
+                        case 0: SendMessage("Bot wins! Rock crushes scissors."); break;
+                        case 1: SendMessage("You win! Scissors cut paper."); break;
+                        case 2: SendMessage("It's a tie!"); break;
                     }
                     break;
 			}
 		}
 		else if (client_message == "exit")
 		{
-            send_message("Game ended.");
+            SendMessage("Game ended.");
             break;
         }
 		else 
-            send_message("Invalid input. Send 'rock', 'paper', or 'scissors' to play, or 'exit' to quit.");
+            SendMessage("Invalid input. Send 'rock', 'paper', or 'scissors' to play, or 'exit' to quit.");
 
 	}
 }
 
-void	Bot::run()
+void	Bot::Run()
 {
-	connect_to_server();
-	play_game();
+	ConnectToServer();
+	PlayGame();
 	// while(true)
 	// {
 			
