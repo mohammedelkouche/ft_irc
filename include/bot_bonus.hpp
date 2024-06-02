@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 16:13:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/31 19:20:41 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/06/02 14:37:30 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class Bot
 		Bot(const std::string ip, int port);
 		void	Run();
 		void	ConnectToServer();
+		bool	Authenticate();
 		void	PlayGame();
 		std::string ReceiveMessage();
 		int		ChoiceToInt(const std::string &choice);

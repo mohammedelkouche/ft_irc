@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:04:27 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/31 19:25:43 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/06/02 17:03:41 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,14 +124,40 @@ void	Bot::PlayGame()
 	}
 }
 
+bool	Bot::Authenticate()
+{
+	std::string nick, user, pass;
+    std::cout << "Enter password: ";
+    std::cin >> pass;
+    std::cout << "Enter nickname: ";
+    std::cin >> nick;
+    std::cout << "Enter username: ";
+    std::cin >> user;
+
+    SendMessage("PASS " + pass + "\r\n");
+    SendMessage("NICK " + nick + "\r\n");
+    SendMessage("USER " + user + " 0 * " + user + "\r\n");
+
+    std::string response = ReceiveMessage();
+    std::cout << "Server: " << response << std::endl;
+
+    // Assuming "001" is the successful login code
+    if (response.find("001") != std::string::npos)
+	{
+        std::cout << "Authentication successful." << std::endl;
+        return true;
+    }
+	else
+        return false;
+}
+
 void	Bot::Run()
 {
 	ConnectToServer();
+	while (!Authenticate()) {
+		std::cout << "Authentication failed. Please try again." << std::endl;
+    }
 	PlayGame();
-	// while(true)
-	// {
-			
-	// }
 }
 
 Bot::~Bot()
