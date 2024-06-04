@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/06/04 17:31:38 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/06/04 21:09:23 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,9 @@ class Server
 		void	handle_nickname(Client *user);
 		void	handle_username(Client *user);
 		void	handle_Unknown_command(Client *user);
-		void JoinConstruction(Client *client);
-		void InviteConstruction(Client *client);
+		bool 	channelExists(std::vector<Channel> haystack, std::string needle);
+		void 	JoinConstruction(Client *client);
+		void 	InviteConstruction(Client *client);
 		// server utils
 		bool	unique_nickname(std::string nickname);
 		bool	check_valid_nick_name(std::string nick_name);

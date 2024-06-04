@@ -16,6 +16,7 @@ void print(std::vector<int> v)
     std::cout << "-----------------\n";
 }
 
+
 void Channel::join(Client *client)
 {
     // print(ClientssHouse);
@@ -35,6 +36,10 @@ void Channel::join(Client *client)
 
 }
 
+std::vector<int> Channel::GetClientssHouse()
+{
+    return(this->ClientssHouse);
+}
 
 std::string Channel::getChannelName()
 {

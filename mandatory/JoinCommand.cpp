@@ -1,13 +1,5 @@
 #include "../include/server.hpp"
 
-bool channelExists(std::vector<Channel> haystack, std::string needle)
-{
-    for (size_t i = 0; i < haystack.size(); i++)
-        if (haystack[i].getChannelName() == needle)
-            return false;
-    return true;
-}
-
 std::vector<std::string> Splitter(std::vector<std::string> cmd, std::string delimiter)
 {
     std::vector<std::string> result;
@@ -23,6 +15,15 @@ std::vector<std::string> Splitter(std::vector<std::string> cmd, std::string deli
     }
     result.push_back(cmd[1]);
     return result;
+}
+
+
+bool Server::channelExists(std::vector<Channel> haystack, std::string needle)
+{
+    for (size_t i = 0; i < haystack.size(); i++)
+        if (haystack[i].getChannelName() == needle)
+            return false;
+    return true;
 }
 
 

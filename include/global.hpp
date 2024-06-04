@@ -6,5 +6,7 @@
 
 class Client;
 void SendResponse(Client *client, std::string msg);
+std::vector<std::string> Splitter(std::vector<std::string> cmd, std::string delimiter);
+
 
 #endif
