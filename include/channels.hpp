@@ -1,5 +1,5 @@
-#ifndef CHANNELS_HPP
-#define CHANNELS_HPP
+#ifndef Channel_HPP
+#define Channel_HPP
 
 #include<iostream>
 #include<string>
@@ -7,22 +7,22 @@
 #include<algorithm>
 #include <sys/socket.h>
 #include"client.hpp"
+#include "global.hpp"
 #include "reply.hpp"
 
-
-class Channels
+class Client;
+class Channel
 {
     private:
         std::string name;
         std::vector<int> ClientssHouse;
-        // std::vector<Client> ClientssHouse;
     public:
-        Channels(std::string name);
-        Channels();
-        Channels(const Channels& copy);
+        Channel(std::string name);
+        Channel();
+        Channel(const Channel& copy);
         void join(Client *client);
         // bool clientExists(int clientFd);
-        ~Channels();
+        ~Channel();
         std::string getChannelName();
     };
 

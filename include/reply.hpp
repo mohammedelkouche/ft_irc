@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:05:25 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/18 20:30:18 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/06/04 17:03:56 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "./channels.hpp"
 #include "./server.hpp"
 #include <iostream>
+#include "global.hpp"
 
 
 #define REPLY_WELCOME(nick, hostname) ":" + hostname + " 001 " + nick + " :Welcome " + nick + " to the ft_irc network !\r\n"

@@ -1,6 +1,6 @@
 #include "../include/server.hpp"
 
-bool channelExists(std::vector<Channels> haystack, std::string needle)
+bool channelExists(std::vector<Channel> haystack, std::string needle)
 {
     for (size_t i = 0; i < haystack.size(); i++)
         if (haystack[i].getChannelName() == needle)
@@ -25,35 +25,35 @@ std::vector<std::string> Splitter(std::vector<std::string> cmd, std::string deli
     return result;
 }
 
+
+void SendResponse(Client *client, std::string msg)
+{
+    if (send(client->get_fd(), msg.c_str(), msg.length(), 0) == -1)
+        throw std::runtime_error("Failed Send JOIN message to the client");
+}
+
 void Server::JoinConstruction(Client *client)
 {
     std::vector<std::string> cmd = client->get_commande();
-    std::string msg = ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname());
     if (cmd.size() < 2 || cmd[1].empty() || !cmd[1][1])
-    {
-        if (send(client->get_fd(), msg.c_str(), msg.length(), 0) == -1)
-            throw std::runtime_error("Failed Send JOIN message to the client");
-        return ;
-    }
+        SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
     std::vector<std::string> channelNames = Splitter(cmd, ",");
     for (size_t i = 0; i < channelNames.size(); i++)
     {
         if(channelNames[i][0] != '#')
         {
-            msg = ERROR_NOSUCHCHANNEL(client->get_hostname(), channelNames[i], client->get_nickname());
-            std::cout << msg << std::endl;
-            if (send(client->get_fd(), msg.c_str(), msg.length(), 0) == -1)
-                throw std::runtime_error("Failed Send JOIN message to the client");
+            std::cout << ERROR_NOSUCHCHANNEL(client->get_hostname(), channelNames[i], client->get_nickname()) << std::endl;
+            SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelNames[i], client->get_nickname()));
         }
         else if(channelExists(channels, channelNames[i]))
         {
-            Channels channel(channelNames[i]);
+            Channel channel(channelNames[i]);
             channel.join(client);
             channels.push_back(channel);
         }
     }
-    for(size_t i = 0; i < channels.size(); i++)
-        std::cout << ""<< "channel: " << channels[i].getChannelName() << std::endl;
+    // for(size_t i = 0; i < channels.size(); i++)
+    //     std::cout << ""<< "channel: " << channels[i].getChannelName() << std::endl;
     // for(size_t i = 0; i < clients.size(); i++)
     //     std::cout << "client: " << clients[i].get_fd() << std::endl;
     // std::cout<< "Client joined "<< cmd[1] << " successfully !" << std::endl;

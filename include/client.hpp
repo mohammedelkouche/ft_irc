@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 17:11:32 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/18 18:59:25 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/06/04 17:05:12 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <vector>
 #include <netdb.h>
 #include <unistd.h>
-
+#include "global.hpp"
 
 class   Client
 {

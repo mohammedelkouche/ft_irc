@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/06/01 01:53:36 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/06/04 17:31:38 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@
 
 #define BUFFER_SIZE 1024
 
-class Channels;
+class Channel;
+class Client;
 
 class Server
 {
@@ -41,7 +42,7 @@ class Server
 		std::string pass;
 		int fd_srv_socket;
 		std::vector<Client> clients;
-		std::vector<Channels> channels;
+		std::vector<Channel> channels;
 		std::vector <struct pollfd> pollfds;
 		char buffer[BUFFER_SIZE];
 	public :
