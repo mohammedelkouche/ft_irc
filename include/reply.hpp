@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reply.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:05:25 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/18 18:16:17 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/06/07 00:18:33 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,5 @@
 #define ERROR_UNKNOWNCOMMAND(nick, hostname, command) ":" + hostname + " 421 " + nick + " " + command + " :Unknown command\r\n"
 
 
-
-
-
-// void	ERR_NEEDMOREPARAMS(std::string nick_name, std::string commande)
-// {
-// 	std::cout << "461 " <<  nick_name << " " << commande <<  " : Not enough parameters" << std::endl;
-// }
 
 #endif
