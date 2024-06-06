@@ -16,16 +16,23 @@ void print(std::vector<int> v)
     std::cout << "-----------------\n";
 }
 
+bool IsClientInChannel(std::vector<Client *> ClientssHouse, int fd)
+{
+    for(size_t i = 0; i < ClientssHouse.size(); i++)
+        if(ClientssHouse[i]->get_fd() == fd)
+            return true;
+    return false;
+}
 
-void Channel::join(Client *client)
+void Channel::addToChannel(Client *client)
 {
     // print(ClientssHouse);
     // Send JOIN message to the client;
-    if(std::find(ClientssHouse.begin(), ClientssHouse.end(), client->get_fd()) == ClientssHouse.end())
+    if(IsClientInChannel(ClientssHouse, client->get_fd()) == false)
     {
         // clients still undefined in join reply replaced just with a nickname
         std::string rpl = REPLY_JOIN(client->get_nickname(), client->get_username(), name, client->get_hostname());
-        ClientssHouse.push_back(client->get_fd());
+        ClientssHouse.push_back(client);
         std::cout<< rpl;
         std::cout << REPLY_NAMREPLY(client->get_hostname(), client->get_nickname(), getChannelName(), client->get_nickname()) \
         << REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), getChannelName()) << std::endl;
@@ -36,7 +43,12 @@ void Channel::join(Client *client)
 
 }
 
-std::vector<int> Channel::GetClientssHouse()
+void Channel::setChannelName(std::string name)
+{
+    this->name = name;
+}
+
+std::vector<Client *> Channel::GetClientssHouse()
 {
     return(this->ClientssHouse);
 }

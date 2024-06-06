@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/06/04 21:09:23 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/06/06 22:08:18 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,10 @@ class Server
 		bool 	channelExists(std::vector<Channel> haystack, std::string needle);
 		void 	JoinConstruction(Client *client);
 		void 	InviteConstruction(Client *client);
-		// server utils
+		std::vector<Client> getClientsInServer();
+		std::vector<Channel>  getChannelsInServer();
+		void 	sendMessageToClient(Client *client, std::string message);
+		// serChannels utils
 		bool	unique_nickname(std::string nickname);
 		bool	check_valid_nick_name(std::string nick_name);
 		void	success_connect(Client *user);
