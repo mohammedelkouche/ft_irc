@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/06/04 21:50:14 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/06/09 22:46:58 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ Server::Server(const Server &obj)
 {
 	port = obj.port;
 	pass = obj.pass;
-	
 	fd_srv_socket = obj.fd_srv_socket;
 	for(size_t i = 0; i < clients.size(); i++)
         	clients[i] = obj.clients[i];
@@ -160,9 +159,7 @@ void	Server::execute_commande(Client *user)
 		return ;
 	}
 	if (commande[0] == "pass" || commande[0] == "PASS")
-	{
 		handle_pass(user);
-	}
 	else if (commande[0] == "nick" || commande[0] == "NICK")
 	{
 		handle_nickname(user);
@@ -182,8 +179,6 @@ void	Server::execute_commande(Client *user)
 		else if(commande[0] == "invite" || commande[0] == "INVITE")
 			InviteConstruction(user);
 	}
-	// else
-	// 	handle_Unknown_command(user);
 }
 
 void	Server::parse_message(std::string buffer, int fd)
@@ -219,6 +214,16 @@ Client* Server::get_connect_client(int fd)
 	return (NULL);
 }
 
+
+std::vector<Client> Server::getClientsInServer()
+{
+	return clients;
+}
+
+std::vector<Channel>  Server::getChannelsInServer()
+{
+	return channels;
+}
 
 void	Server::ReceiveClientData(int fd)
 {

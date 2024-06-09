@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/06/09 22:26:50 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/06/09 22:46:16 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <iostream>
 
 
-Client::Client() : ipaddress(""), nickname(""), pass_client(""), username ("")
+Client::Client() : ipaddress(""), nickname(""), pass_client(""), username (""), isOperator(false)
 {
 	this->registred = false;
 }
@@ -29,6 +29,7 @@ Client::Client(const Client& copy)
 	username = copy.username;
 	hostname = copy.hostname;
 	registred = copy.registred;
+	isOperator = copy.isOperator;
 	for(size_t i = 0; i < commande.size(); i++)
 		commande[i] = copy.commande[i];
 	for(size_t i = 0; i < accessibleChannels.size(); i++)
@@ -76,6 +77,16 @@ void	Client::set_pass_client(std::string password)
 void	Client::set_hostname(std::string host)
 {
 	this->hostname = host;
+}
+
+void	Client::setOperatorStatus(bool status)
+{
+	this->isOperator = status;
+}
+
+bool	Client::getIsOperatorStatus()
+{
+	return this->isOperator;
 }
 
 std::vector<std::string>	Client::get_commande()

@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/06/09 21:34:20 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/06/09 22:49:22 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ class Server
 		void 	InviteConstruction(Client *client);
 		//cmd utils (oussama)
 		Client& getClientByNick(std::vector<Client> &clients, std::string nickname);
+		std::vector<Channel>  getChannelsInServer();
+		std::vector<Client> getClientsInServer();
 		// server utils
 		bool	unique_nickname(std::string nickname);
 		bool	check_valid_nick_name(std::string nick_name);

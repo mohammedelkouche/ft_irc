@@ -17,7 +17,6 @@ std::vector<std::string> Splitter(std::vector<std::string> cmd, std::string deli
     return result;
 }
 
-
 bool Server::channelExists(std::vector<Channel> haystack, std::string needle)
 {
     for (size_t i = 0; i < haystack.size(); i++)
@@ -35,6 +34,7 @@ void SendResponse(Client *client, std::string msg)
 
 void Server::JoinConstruction(Client *client)
 {
+    Channel channel("channel");
     std::vector<std::string> cmd = client->get_commande();
     if (cmd.size() < 2 || cmd[1].empty() || !cmd[1][1])
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
@@ -46,16 +46,25 @@ void Server::JoinConstruction(Client *client)
             std::cout << ERROR_NOSUCHCHANNEL(client->get_hostname(), channelNames[i], client->get_nickname()) << std::endl;
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelNames[i], client->get_nickname()));
         }
+        else if (channelExists(channels, channelNames[i]) && !channel.GetClientssHouse().size())
+        {
+            channel.setChannelName(channelNames[i]);
+            client->setOperatorStatus(true);
+            channel.addToChannel(client);
+            channels.push_back(channel);
+            std::cout << REPLY_JOIN(client->get_nickname(), client->get_username(), client->get_hostname(), channelNames[i]) << std::endl;
+            SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), client->get_hostname(), channelNames[i]));
+        }
         else if(channelExists(channels, channelNames[i]))
         {
             Channel channel(channelNames[i]);
-            channel.addClient(client);
+            channel.addToChannel(client);
             channels.push_back(channel);
         }
     }
-    // for(size_t i = 0; i < channels.size(); i++)
-    //     std::cout << ""<< "channel: " << channels[i].getChannelName() << std::endl;
-    // for(size_t i = 0; i < clients.size(); i++)
-    //     std::cout << "client: " << clients[i].get_fd() << std::endl;
-    // std::cout<< "Client joined "<< cmd[1] << " successfully !" << std::endl;
+    for(size_t i = 0; i < channels.size(); i++)
+        std::cout << ""<< "channel: " << channels[i].getChannelName() << "Operator Status: " <<  client->getIsOperatorStatus() << std::endl;
+// for(size_t i = 0; i < clients.size(); i++)
+//     std::cout << "client: " << clients[i].get_fd() << std::endl;
+// std::cout<< "Client joined "<< cmd[1] << " successfully !" << std::endl;
 }

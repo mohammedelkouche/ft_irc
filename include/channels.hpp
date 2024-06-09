@@ -15,16 +15,16 @@ class Channel
 {
     private:
         std::string name;
-        std::vector<int> ClientssHouse;
+        std::vector<Client *> ClientssHouse;
     public:
         Channel(std::string name);
         Channel();
         Channel(const Channel& copy);
-        void addClient(Client *client);
+        void addToChannel(Client *client);
         // bool clientExists(int clientFd);
         ~Channel();
+        void setChannelName(std::string name);
         std::string getChannelName();
-        std::vector<int> GetClientssHouse();
+        std::vector<Client *> GetClientssHouse();
     };
-
 #endif
