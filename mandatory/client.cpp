@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/06/04 17:05:14 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/06/09 22:26:50 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ Client::Client(const Client& copy)
 	registred = copy.registred;
 	for(size_t i = 0; i < commande.size(); i++)
 		commande[i] = copy.commande[i];
+	for(size_t i = 0; i < accessibleChannels.size(); i++)
+		accessibleChannels[i] = copy.accessibleChannels[i];
 }
 
 void	Client::set_fd(int fd_client)
@@ -127,6 +129,12 @@ std::string  Client::get_client_host() {
         }
     }
     return "Unknown";
+}
+
+
+std::vector<std::string>& Client::get_accessibleChannels()
+{
+	return this->accessibleChannels;
 }
 
 Client::~Client()

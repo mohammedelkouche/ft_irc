@@ -49,7 +49,7 @@ void Server::JoinConstruction(Client *client)
         else if(channelExists(channels, channelNames[i]))
         {
             Channel channel(channelNames[i]);
-            channel.join(client);
+            channel.addClient(client);
             channels.push_back(channel);
         }
     }

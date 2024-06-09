@@ -20,7 +20,7 @@ class Channel
         Channel(std::string name);
         Channel();
         Channel(const Channel& copy);
-        void join(Client *client);
+        void addClient(Client *client);
         // bool clientExists(int clientFd);
         ~Channel();
         std::string getChannelName();

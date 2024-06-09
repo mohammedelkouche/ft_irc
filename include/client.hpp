@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 17:11:32 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/06/04 17:05:12 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/06/09 22:26:42 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,18 @@ class   Client
 		std::string username;
 		std::string hostname;
 		bool	registred;
+		// the channels that the client invited to
+		std::vector<std::string> accessibleChannels;
 	public :
 		Client();
 		Client(const Client& copy);
+		~Client();
 		void	set_fd(int fd_client);
 		void	set_commande(std::vector <std::string> &cmd);
 		void	set_nickname(std::string nick);
 		void	set_pass_client(std::string password);
 		void	set_username(std::string user);
+		void	set_ipAddress(std::string ip);
 		void	set_hostname(std::string host);
 		
 		bool	is_enregistred();
@@ -49,8 +53,8 @@ class   Client
 		std::string	get_client_host();
 		bool	check_registration(Client *user);
 		// Client	*get_connect_client(int fd);
-		void	set_ipAddress(std::string ip);
-		~Client();
+		//oussama added a vector of channels accessible by the client
+		std::vector<std::string>& get_accessibleChannels();
 };
 
 #endif

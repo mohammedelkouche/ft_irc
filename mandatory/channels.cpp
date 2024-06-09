@@ -17,7 +17,7 @@ void print(std::vector<int> v)
 }
 
 
-void Channel::join(Client *client)
+void Channel::addClient(Client *client)
 {
     // print(ClientssHouse);
     // Send JOIN message to the client;
@@ -29,11 +29,9 @@ void Channel::join(Client *client)
         std::cout<< rpl;
         std::cout << REPLY_NAMREPLY(client->get_hostname(), client->get_nickname(), getChannelName(), client->get_nickname()) \
         << REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), getChannelName()) << std::endl;
-        SendResponse(client, rpl);
     }
     else
         SendResponse(client, ERROR_ALREADYREGISTERED(client->get_nickname(), getChannelName()));
-
 }
 
 std::vector<int> Channel::GetClientssHouse()
