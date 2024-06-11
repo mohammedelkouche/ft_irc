@@ -2,7 +2,7 @@ NAME = ircserv
 
 SRC = ./mandatory/main.cpp ./mandatory/client.cpp \
 	./mandatory/server.cpp ./mandatory/JoinCommand.cpp ./mandatory/channels.cpp \
-	./mandatory/InviteCommand.cpp ./mandatory/authentication.cpp ./mandatory/utils_authn.cpp
+	./mandatory/InviteCommand.cpp ./mandatory/KickCommand.cpp ./mandatory/authentication.cpp ./mandatory/utils_authn.cpp
 
 OBJ = $(SRC:.cpp=.o)
  

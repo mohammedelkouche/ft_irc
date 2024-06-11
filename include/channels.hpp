@@ -17,12 +17,13 @@ class Channel
         std::string name;
         std::vector<Client *> ClientssHouse;
     public:
-        Channel(std::string name);
         Channel();
+        Channel(std::string name);
         Channel(const Channel& copy);
-        void addToChannel(Client *client);
-        // bool clientExists(int clientFd);
         ~Channel();
+        void addToChannel(Client *client);
+        void removeFromChannel(Client *client);
+        // bool clientExists(int clientFd);
         void setChannelName(std::string name);
         std::string getChannelName();
         std::vector<Client *> GetClientssHouse();

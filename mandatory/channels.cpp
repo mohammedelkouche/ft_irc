@@ -28,7 +28,7 @@ void Channel::addToChannel(Client *client)
 {
     // print(ClientssHouse);
     // Send JOIN message to the client;
-    if(IsClientInChannel(ClientssHouse, client->get_fd()) == false)
+    if(!IsClientInChannel(ClientssHouse, client->get_fd()))
     {
         // clients still undefined in join reply replaced just with a nickname
         std::string rpl = REPLY_JOIN(client->get_nickname(), client->get_username(), name, client->get_hostname());
@@ -40,6 +40,19 @@ void Channel::addToChannel(Client *client)
     else
         SendResponse(client, ERROR_ALREADYREGISTERED(client->get_nickname(), getChannelName()));
 }
+
+// void Channel::removeFromChannel(Client *client)
+// {
+//     // Send PART message to the client;
+//     if(IsClientInChannel(ClientssHouse, client->get_fd()))
+//     {
+//         std::string rpl = PART_REPLY(client->get_nickname(), client->get_username(), name, client->get_hostname());
+//         ClientssHouse.erase(std::remove(ClientssHouse.begin(), ClientssHouse.end(), client), ClientssHouse.end());
+//         std::cout << rpl;
+//     }
+//     else
+//         SendResponse(client, ERROR_NOTONCHANNEL(client->get_nickname(), getChannelName()));
+// }
 
 void Channel::setChannelName(std::string name)
 {
