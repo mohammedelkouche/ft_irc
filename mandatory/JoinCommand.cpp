@@ -17,7 +17,7 @@ std::vector<std::string> Splitter(std::vector<std::string> cmd, std::string deli
     return result;
 }
 
-bool Server::channelExists(std::vector<Channel> haystack, std::string needle)
+bool Server::channeDoesntlExists(std::vector<Channel> haystack, std::string needle)
 {
     for (size_t i = 0; i < haystack.size(); i++)
         if (haystack[i].getChannelName() == needle)
@@ -46,7 +46,7 @@ void Server::JoinConstruction(Client *client)
             std::cout << ERROR_NOSUCHCHANNEL(client->get_hostname(), channelNames[i], client->get_nickname()) << std::endl;
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelNames[i], client->get_nickname()));
         }
-        else if (channelExists(channels, channelNames[i]) && !channel.GetClientssHouse().size())
+        else if (channeDoesntlExists(channels, channelNames[i]) && !channel.GetClientssHouse().size())
         {
             channel.setChannelName(channelNames[i]);
             client->setOperatorStatus(true);
@@ -55,7 +55,7 @@ void Server::JoinConstruction(Client *client)
             std::cout << REPLY_JOIN(client->get_nickname(), client->get_username(), client->get_hostname(), channelNames[i]) << std::endl;
             SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), client->get_hostname(), channelNames[i]));
         }
-        else if(channelExists(channels, channelNames[i]))
+        else if(channeDoesntlExists(channels, channelNames[i]))
         {
             Channel channel(channelNames[i]);
             channel.addToChannel(client);
