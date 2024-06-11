@@ -17,11 +17,20 @@ void print(std::vector<int> v)
 }
 
 bool IsClientInChannel(std::vector<Client *> ClientssHouse, int fd)
+
 {
     for(size_t i = 0; i < ClientssHouse.size(); i++)
         if(ClientssHouse[i]->get_fd() == fd)
             return true;
     return false;
+}
+
+Client& Channel::getTheOperator()
+{
+    for(size_t i = 0; i < GetClientssHouse().size(); i++)
+        if(GetClientssHouse()[i]->getIsOperatorStatus())
+            return (*GetClientssHouse()[i]);
+    throw std::runtime_error("No such operator found");
 }
 
 void Channel::addToChannel(Client *client)
@@ -41,11 +50,12 @@ void Channel::addToChannel(Client *client)
         SendResponse(client, ERROR_ALREADYREGISTERED(client->get_nickname(), getChannelName()));
 }
 
-void Channel::removeFromChannel(Client *client)
+void Channel::removeFromChannel(Client *client, std::string comment)
 {
     if(IsClientInChannel(ClientssHouse, client->get_fd()))
     {
-        std::string rpl = REPLY_KICK(client->get_nickname(), client->get_username(), name, client->get_hostname());
+        std::string rpl = REPLY_KICK(getTheOperator().get_nickname(), getTheOperator().get_username(),\
+        getTheOperator().get_hostname(), getChannelName(), client->get_nickname(), comment);
         ClientssHouse.erase(std::remove(ClientssHouse.begin(), ClientssHouse.end(), client), ClientssHouse.end());
         std::cout << rpl;
     }
@@ -60,12 +70,12 @@ void Channel::setChannelName(std::string name)
 
 std::vector<Client *> Channel::GetClientssHouse()
 {
-    return(this->ClientssHouse);
+    return (this->ClientssHouse);
 }
 
 std::string Channel::getChannelName()
 {
-    return(name);
+    return (name);
 }
 
 Channel::~Channel()
