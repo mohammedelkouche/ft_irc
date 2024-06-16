@@ -1,43 +1,70 @@
 #include "../include/server.hpp"
 
 
+Channel* getChannelByName(std::vector<Channel>& channels, std::string name)
+{
+    for (size_t i = 0; i < channels.size(); i++)
+        if (channels[i].getChannelName() == name)
+            return &channels[i];
+    return NULL;
+}
+
+
 void Server::KickConstruction(Client *client)
 {
-    std::vector<std::string> cmd = client->get_commande();
-    std::vector<std::string> secondParam;
-    secondParam.push_back((cmd[1]));
-    if(!client->getIsOperatorStatus())
-        throw std::runtime_error("Sorry! you don't have permession");
-    if (cmd.size() < 3)
-        SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), cmd[0]));
-    else if (cmd[0] != "#" || channeDoesntlExists(channels, cmd[0]))
-    {
-        std::cout << "statement 1" << std::endl;
-        SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_nickname(), client->get_hostname(), cmd[0]));
+    std::vector<std::string> vec = client->get_commande();
+    if (!client->getIsOperatorStatus()) {
+        SendResponse(client, ERROR_NOPRIVILEGES(client->get_nickname(), client->get_hostname()));
+        return;
     }
-    // else if(std::find(secondParam.begin(), secondParam.end(), ",") == secondParam.end())
-    // {
-    //     if(IsClientInChannel(channels[0].GetClientssHouse(), client->get_fd()))
-    //         channels[0].removeFromChannel(client, cmd[2]);
-    //     else if(!IsClientInChannel(channels[0].GetClientssHouse(), client->get_fd()))
-    //     {
-    //         std::cout << "statement 2" << std::endl;
-    //         SendResponse(client, ERROR_NOTONCHANNEL(client->get_nickname(), channels[0].getChannelName()));
-    //     }
-    // }
-    else if(std::find(secondParam.begin(), secondParam.end(), ",") != secondParam.end())
+    if (vec.size() < 3)
+        SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
+    else if (vec[1][0] != '#')
+        SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), vec[1], client->get_nickname()));
+    else if(channeDoesntlExists(channels, vec[1]))
+        SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), vec[1], client->get_nickname()));
+    else if (!isClientExist(clients, vec[2]))
+        SendResponse(client, ERROR_NOSUCHNICK(client->get_hostname(),client->get_nickname(), vec[2]));
+    else if (getClientByNick(clients, vec[2]).get_fd())
     {
-        std::vector<std::string> users = Splitter(secondParam ,",");
-        for (size_t i = 0; i < users.size(); i++)
-        {
-            if(IsClientInChannel(channels[i].GetClientssHouse(), client->get_fd()))
-                channels[i].removeFromChannel(client, cmd[2]);
-            else if(!IsClientInChannel(channels[i].GetClientssHouse(), client->get_fd()))
-            {
-                std::cout << "statement 2" << std::endl;
-                SendResponse(client, ERROR_NOTONCHANNEL(client->get_nickname(), channels[i].getChannelName()));
-            }
-        }
+        Client& target = getClientByNick(clients, vec[2]);
+        Channel* channelPtr = getChannelByName(channels, vec[1]);
+        if (!channelPtr)
+            return ;
+        Channel& channel = *channelPtr;
+        channel.removeFromChannel(&target, "KICK");
+        target.getInvitedChannels().push_back(vec[1]);
+        std::string rpl = REPLY_KICK(target.get_nickname(), target.get_username(), target.get_hostname(), vec[2], vec[1], vec[3]);
+        std::cout << rpl << std::endl;
+        // REMINDER : should broadcast to all clients in the channel
     }
-
 }
+
+// std::vector<std::string> cmd = client->get_commande();
+// std::vector<std::string> secondParam;
+// secondParam.push_back((cmd[1]));
+// if(!client->getIsOperatorStatus())
+//     return ;
+// if (cmd.size() < 4)
+// {
+//     SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
+//     return ;
+// }
+// if (cmd[1][0] != '#' || channeDoesntlExists(channels, cmd[1]))
+// {
+//     std::cout << "statement 1" << std::endl;
+//     SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_nickname(), client->get_hostname(), cmd[1]));
+//     return ;
+// }
+// std::vector<std::string> users = Splitter(secondParam[1] ,",");
+// for (size_t i = 0; i < users.size(); i++)
+// {
+//     std::cout << " ---------------------> IsClientInChannel " << IsClientInChannel(channels[i].GetClientssHouse(), client->get_fd()) << std::endl;
+//     if(IsClientInChannel(channels[i].GetClientssHouse(), client->get_fd()))
+//         channels[i].removeFromChannel(client, cmd[3]);
+//     else if(!IsClientInChannel(channels[i].GetClientssHouse(), client->get_fd()))
+//     {
+//         std::cout << "statement 3" << std::endl;
+//         SendResponse(client, ERROR_NOTONCHANNEL(client->get_nickname(), channels[i].getChannelName()));
+//     }
+// }

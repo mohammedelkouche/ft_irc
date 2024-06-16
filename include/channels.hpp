@@ -16,6 +16,7 @@ class Channel
     private:
         std::string name;
         std::vector<Client *> ClientssHouse;
+        std::vector<Client *> Operators;
     public:
         Channel();
         Channel(std::string name);
@@ -28,5 +29,6 @@ class Channel
         std::string getChannelName();
         Client& getTheOperator();
         std::vector<Client *> GetClientssHouse();
+        std::vector<Client *> GetTheOperators();
     };
 #endif

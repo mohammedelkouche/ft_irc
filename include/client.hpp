@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 17:11:32 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/06/09 22:44:32 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/06/15 21:39:28 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class   Client
 		std::string username;
 		std::string hostname;
 		// the channels that the client invited to
-		std::vector<std::string> accessibleChannels;
+		std::vector<std::string> invitedChannels;
 		bool	registred;
 		bool	isOperator;
 	public :
@@ -58,7 +58,7 @@ class   Client
 		bool		check_registration(Client *user);
 		// Client	*get_connect_client(int fd);
 		//oussama added a vector of channels accessible by the client
-		std::vector<std::string>& get_accessibleChannels();
+		std::vector<std::string>& getInvitedChannels();
 };
 
 #endif
