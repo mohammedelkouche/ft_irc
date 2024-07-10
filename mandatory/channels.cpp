@@ -43,7 +43,9 @@ void Channel::addToChannel(Client *client)
         // Determine if the client should be an operator
         bool shouldSetOperator = GetClientssHouse().empty(); // Set as operator if channel is empty
         if (shouldSetOperator)
-            client->setOperatorStatus(true);  // Set operator status for the client
+            client->setOperatorStatus(true);
+        else
+            client->setOperatorStatus(false);
         ClientssHouse.push_back(client);
         std::cout<< rpl;
         std::cout << REPLY_NAMREPLY(client->get_hostname(), client->get_nickname(), getChannelName(), client->get_nickname()) \
