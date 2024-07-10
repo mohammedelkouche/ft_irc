@@ -35,25 +35,6 @@ Client& Channel::getTheOperator()
     return NO_OPERATOR;
 }
 
-// void Channel::addToChannel(Client *client)
-// {
-//     // print(ClientssHouse);
-//     // Send JOIN message to the client;
-//     if(!IsClientInChannel(ClientssHouse, client->get_fd()))
-//     {
-//         // clients still undefined in join reply replaced just with a nickname
-//         std::string rpl = REPLY_JOIN(client->get_nickname(), client->get_username(), name, client->get_hostname());
-//         if (GetClientssHouse().empty())
-//             client->setOperatorStatus(true);
-//         ClientssHouse.push_back(client);
-//         std::cout<< rpl;
-//         std::cout << REPLY_NAMREPLY(client->get_hostname(), client->get_nickname(), getChannelName(), client->get_nickname()) \
-//         << REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), getChannelName()) << std::endl;
-//     }
-//     else
-//         SendResponse(client, ERROR_ALREADYREGISTERED(client->get_nickname(), getChannelName()));
-// }
-
 void Channel::addToChannel(Client *client)
 {
     if (!IsClientInChannel(ClientssHouse, client->get_fd()))
@@ -62,7 +43,9 @@ void Channel::addToChannel(Client *client)
         // Determine if the client should be an operator
         bool shouldSetOperator = GetClientssHouse().empty(); // Set as operator if channel is empty
         if (shouldSetOperator)
-            client->setOperatorStatus(true);  // Set operator status for the client
+            client->setOperatorStatus(true);
+        else
+            client->setOperatorStatus(false);
         ClientssHouse.push_back(client);
         std::cout<< rpl;
         std::cout << REPLY_NAMREPLY(client->get_hostname(), client->get_nickname(), getChannelName(), client->get_nickname()) \
