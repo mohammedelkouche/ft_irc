@@ -14,7 +14,6 @@ std::vector<std::string> Splitter(std::string cmd, std::string delimiter)
     result.push_back(cmd);
     return result;
 }
-
 bool Server::channeDoesntlExists(std::vector<Channel> haystack, std::string needle)
 {
     for (size_t i = 0; i < haystack.size(); i++)
@@ -22,7 +21,6 @@ bool Server::channeDoesntlExists(std::vector<Channel> haystack, std::string need
             return false;
     return true;
 }
-
 
 void SendResponse(Client *client, std::string msg)
 {

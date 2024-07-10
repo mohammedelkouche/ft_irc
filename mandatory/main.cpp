@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:30 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/06/01 01:54:48 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/06/16 05:43:30 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,13 @@ void check_arg(char **argv) {
 	}
 }
 
+
+
 int main(int argc, char **argv) {
 	try 
 	{
 		Server irc;
+		
 		if (argc != 3) {
 			std::cout << "write: executable file  <port> <password>" << std::endl;
 			return 1;

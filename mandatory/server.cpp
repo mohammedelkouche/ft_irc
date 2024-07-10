@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/06/15 21:46:56 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/07/08 17:13:30 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,6 +247,7 @@ void	Server::ReceiveClientData(int fd)
 	}
 }
 
+
 void	Server::initializeServer(int port_nbr,std::string str)
 {
 	this->port = port_nbr;
@@ -256,7 +257,6 @@ void	Server::initializeServer(int port_nbr,std::string str)
 	std::cout << "Server with fd <" << fd_srv_socket << "> Connected" << std::endl;
 	std::cout << "Server started. Listening on port : " << this->port << std::endl;
 	std::cout << "Waiting to accept a connection...\n";
-	
 	while (true)
 	{
 		if (poll(&pollfds[0], pollfds.size(), -1) == -1)
@@ -278,4 +278,4 @@ void	Server::initializeServer(int port_nbr,std::string str)
 
 Server::~Server()
 {
-}
+}  
