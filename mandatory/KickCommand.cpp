@@ -1,11 +1,10 @@
 #include "../include/server.hpp"
 
-
-Channel* getChannelByName(std::vector<Channel>& channels, std::string name)
+Channel* getChannelByName(std::vector<Channel *> channels, std::string name)
 {
     for (size_t i = 0; i < channels.size(); i++)
-        if (channels[i].getChannelName() == name)
-            return &channels[i];
+        if (channels[i]->getChannelName() == name)
+            return channels[i];
     return NULL;
 }
 
@@ -13,11 +12,12 @@ Channel* getChannelByName(std::vector<Channel>& channels, std::string name)
 void Server::KickConstruction(Client *client)
 {
     std::vector<std::string> vec = client->get_commande();
-    if (!client->getIsOperatorStatus()) {
-        SendResponse(client, ERROR_NOPRIVILEGES(client->get_nickname(), client->get_hostname()));
+    if (!client->getIsOperatorStatus()) 
+    {
+        std::cout << ERROR_NOPRIVILEGES(client->get_nickname(), client->get_hostname()) << std::endl;
         return;
     }
-    if (vec.size() < 3)
+    if (vec.size() < 4)
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
     else if (vec[1][0] != '#')
         SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), vec[1], client->get_nickname()));
@@ -37,6 +37,24 @@ void Server::KickConstruction(Client *client)
         std::string rpl = REPLY_KICK(target.get_nickname(), target.get_username(), target.get_hostname(), vec[2], vec[1], vec[3]);
         std::cout << rpl << std::endl;
         // REMINDER : should broadcast to all clients in the channel
+    }
+    else
+        std::cout << "Client not kicked" << std::endl;
+    for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) 
+    {
+        std::cout << "Channel: " << (*it)->getChannelName() << std::endl;
+        std::vector<Client*> clientsHouse = (*it)->GetClientssHouse();
+        if (clientsHouse.empty())
+        {
+        std::cout << "No clients in channel: " << (*it)->getChannelName() << std::endl;
+        continue;
+        }
+        for (std::vector<Client*>::iterator clientIt = clientsHouse.begin(); clientIt != clientsHouse.end(); ++clientIt)
+        {
+        std::cout << "Client fd: " << (*clientIt)->get_fd()
+                    << " nickname: " << (*clientIt)->get_nickname()
+                    << " operator status: " << (*clientIt)->getIsOperatorStatus() << std::endl;
+        }
     }
 }
 

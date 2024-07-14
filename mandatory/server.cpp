@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/07/08 17:13:30 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/07/13 23:27:36 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ std::vector<Client> Server::getClientsInServer()
 	return clients;
 }
 
-std::vector<Channel>  Server::getChannelsInServer()
+std::vector<Channel *>  &Server::getChannelsInServer()
 {
 	return channels;
 }

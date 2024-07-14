@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/06/11 16:16:38 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/07/13 19:52:40 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ class Server
 		std::string pass;
 		int fd_srv_socket;
 		std::vector<Client> clients;
-		std::vector<Channel> channels;
+		std::vector<Channel *> channels;
 		std::vector <struct pollfd> pollfds;
 		char buffer[BUFFER_SIZE];
 	public :
@@ -66,7 +66,7 @@ class Server
 		void	handle_nickname(Client *user);
 		void	handle_username(Client *user);
 		void	handle_Unknown_command(Client *user);
-		bool 	channeDoesntlExists(std::vector<Channel> haystack, std::string needle);
+		bool 	channeDoesntlExists(std::vector<Channel *> haystack, std::string needle);
 		// cmd construction
 		void 	JoinConstruction(Client *client);
 		void 	InviteConstruction(Client *client);
@@ -74,7 +74,7 @@ class Server
 		void	PartConstruction(Client *client);
 		//cmd utils (oussama)
 		Client& getClientByNick(std::vector<Client> &clients, std::string nickname);
-		std::vector<Channel>  getChannelsInServer();
+		std::vector<Channel *>  &getChannelsInServer();
 		std::vector<Client> getClientsInServer();
 		bool isClientExist(std::vector<Client> clients, std::string nickname);
 		// server utils

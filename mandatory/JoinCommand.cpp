@@ -14,10 +14,10 @@ std::vector<std::string> Splitter(std::string cmd, std::string delimiter)
     result.push_back(cmd);
     return result;
 }
-bool Server::channeDoesntlExists(std::vector<Channel> haystack, std::string needle)
+bool Server::channeDoesntlExists(std::vector<Channel*> haystack, std::string needle)
 {
     for (size_t i = 0; i < haystack.size(); i++)
-        if (haystack[i].getChannelName() == needle)
+        if (haystack[i]->getChannelName() == needle)
             return false;
     return true;
 }
@@ -28,49 +28,117 @@ void SendResponse(Client *client, std::string msg)
         throw std::runtime_error("Failed Send JOIN message to the client"); 
 }
 
-// 
-void Server::JoinConstruction(Client *client) {
-    Channel channel("default");
+// // 
+// void Server::JoinConstruction(Client *client) 
+// {
+//     Channel channel("default");
+//     std::vector<std::string> cmd = client->get_commande();
+
+//     if (cmd.size() < 2 || cmd[1].empty() || !cmd[1][1]) 
+//     {
+//         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
+//         return;
+//     }
+//     std::vector<std::string> channelNames = Splitter(cmd[1], ",");
+//     for (size_t i = 0; i < channelNames.size(); i++) 
+//     {
+//         if (channelNames[i][0] != '#')
+//             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelNames[i], client->get_nickname()));
+//         else if (channeDoesntlExists(channels, channelNames[i])) 
+//         {
+//             // Channel doesn't exist, create new channel and add client
+//             Channel* newChannel = new Channel(channelNames[i]);;
+//             newChannel->addToChannel(client);
+//             channels.push_back(*newChannel);
+//             client->getInvitedChannels().push_back(channelNames[i]);
+//             SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), client->get_hostname(), channelNames[i]));
+//             std::cout << "Channel created: " << channelNames[i] << " with client: " << client->get_nickname() << std::endl;
+//         }
+//         else
+//         {
+//             // Channel exists, add client to the channel
+//             for (size_t j = 0; j < channels.size(); j++) {
+//                 if (channels[j].getChannelName() == channelNames[i])
+//                 {
+//                     channels[j].addToChannel(client);
+//                     client->getInvitedChannels().push_back(channelNames[i]);
+//                     SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), client->get_hostname(), channelNames[i]));
+//                     std::cout << "Client " << client->get_nickname() << " joined existing channel: " << channelNames[i] << std::endl;
+//                 }
+//             }
+//         }
+//     }
+
+//     for (size_t i = 0; i < channels.size(); i++) {
+//         if (!channels[i].GetClientssHouse().empty()) {
+//             for (size_t j = 0; j < channels[i].GetClientssHouse().size(); j++) {
+//                 std::cout << "clients fd : " << channels[i].GetClientssHouse()[j]->get_fd()
+//                 << " operator status : " << channels[i].GetClientssHouse()[j]->getIsOperatorStatus() << std::endl;
+//             }
+//         } else {
+//             std::cout << "No clients in the first channel or no channels available." << std::endl;
+//         }
+//     }
+// }
+
+
+
+
+void Server::JoinConstruction(Client *client) 
+{
     std::vector<std::string> cmd = client->get_commande();
 
-    if (cmd.size() < 2 || cmd[1].empty() || !cmd[1][1]) {
+    if (cmd.size() < 2 || cmd[1].empty() || !cmd[1][1]) 
+    {
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
         return;
     }
 
     std::vector<std::string> channelNames = Splitter(cmd[1], ",");
-    for (size_t i = 0; i < channelNames.size(); i++) {
-        if (channelNames[i][0] != '#') {
-            SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelNames[i], client->get_nickname()));
-        } else if (channeDoesntlExists(channels, channelNames[i])) {
+    for (std::vector<std::string>::iterator it = channelNames.begin(); it != channelNames.end(); ++it) 
+    {
+        std::string channelName = *it;
+        if (channelName[0] != '#')
+        {
+            SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelName, client->get_nickname()));
+            continue;
+        }
+        std::vector<Channel*>::iterator channelIt;
+        for (channelIt = channels.begin(); channelIt != channels.end(); ++channelIt)
+            if ((*channelIt)->getChannelName() == channelName)
+                break;
+
+        if (channelIt == channels.end()) 
+        {
             // Channel doesn't exist, create new channel and add client
-            Channel newChannel(channelNames[i]);
-            newChannel.addToChannel(client);
+            Channel* newChannel = new Channel(channelName);
+            newChannel->addToChannel(client);
             channels.push_back(newChannel);
-            client->getInvitedChannels().push_back(channelNames[i]);
-            SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), client->get_hostname(), channelNames[i]));
-            std::cout << "Channel created: " << channelNames[i] << " with client: " << client->get_nickname() << std::endl;
-        } else {
+            client->getInvitedChannels().push_back(channelName);
+            std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
+        }
+        else
+        {
             // Channel exists, add client to the channel
-            for (size_t j = 0; j < channels.size(); j++) {
-                if (channels[j].getChannelName() == channelNames[i]) {
-                    channels[j].addToChannel(client);
-                    client->getInvitedChannels().push_back(channelNames[i]);
-                    SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), client->get_hostname(), channelNames[i]));
-                    std::cout << "Client " << client->get_nickname() << " joined existing channel: " << channelNames[i] << std::endl;
-                }
-            }
+            (*channelIt)->addToChannel(client);
+            client->getInvitedChannels().push_back(channelName);
+            std::cout << "Client " << client->get_nickname() << " joined existing channel: " << channelName << std::endl;
         }
     }
-
-    for (size_t i = 0; i < channels.size(); i++) {
-        if (!channels[i].GetClientssHouse().empty()) {
-            for (size_t j = 0; j < channels[i].GetClientssHouse().size(); j++) {
-                std::cout << "clients fd : " << channels[i].GetClientssHouse()[j]->get_fd()
-                          << " operator status : " << channels[i].GetClientssHouse()[j]->getIsOperatorStatus() << std::endl;
-            }
-        } else {
-            std::cout << "No clients in the first channel or no channels available." << std::endl;
+    for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) 
+    {
+        std::cout << "Channel: " << (*it)->getChannelName() << std::endl;
+        std::vector<Client*> clientsHouse = (*it)->GetClientssHouse();
+        if (clientsHouse.empty())
+        {
+            std::cout << "No clients in channel: " << (*it)->getChannelName() << std::endl;
+            continue;
+        }
+        for (std::vector<Client*>::iterator clientIt = clientsHouse.begin(); clientIt != clientsHouse.end(); ++clientIt)
+        {
+            std::cout << "Client fd: " << (*clientIt)->get_fd()
+                      << " nickname: " << (*clientIt)->get_nickname()
+                      << " operator status: " << (*clientIt)->getIsOperatorStatus() << std::endl;
         }
     }
 }

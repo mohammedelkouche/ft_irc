@@ -16,8 +16,41 @@ void print(std::vector<int> v)
     std::cout << "-----------------\n";
 }
 
-bool IsClientInChannel(std::vector<Client *> ClientssHouse, int fd)
+// Client NO_OPERATOR;
 
+// Client& Channel::getTheOperator()
+// {
+//     for(size_t i = 0; i < GetClientssHouse().size(); i++)
+//         if(GetClientssHouse()[i]->getIsOperatorStatus())
+//             return (*GetClientssHouse()[i]);
+//     return NO_OPERATOR;
+// }
+
+// void Channel::addToChannel(Client *client)
+// {
+//     if (IsClientInChannel(ClientssHouse, client->get_fd()))
+//     {
+//         SendResponse(client, ERROR_ALREADYREGISTERED(client->get_nickname(), getChannelName()));
+//         return;
+//     }
+
+//     // if the client should be an operator before adding
+//     bool shouldSetOperator = ClientssHouse.empty();
+//     std::cout << "Should set operator: " << shouldSetOperator << std::endl;
+//     ClientssHouse.push_back(client);
+//     // Set operator status
+//     client->setOperatorStatus(shouldSetOperator);
+//     std::cout << "Client " << client->get_nickname() << " added to the channel with operator status: " << client->getIsOperatorStatus() << std::endl;
+//     std::string rpl = REPLY_JOIN(client->get_nickname(), client->get_username(), name, client->get_hostname());
+//     std::cout << rpl;
+//     std::cout << REPLY_NAMREPLY(client->get_hostname(), client->get_nickname(), getChannelName(), client->get_nickname())
+//     << REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), getChannelName()) << std::endl;
+// }
+
+
+Client* NO_OPERATOR=NULL;
+
+bool IsClientInChannel(std::vector<Client *> ClientssHouse, int fd)
 {
     for(size_t i = 0; i < ClientssHouse.size(); i++)
         if(ClientssHouse[i]->get_fd() == fd)
@@ -25,57 +58,60 @@ bool IsClientInChannel(std::vector<Client *> ClientssHouse, int fd)
     return false;
 }
 
-Client NO_OPERATOR;
-
-Client& Channel::getTheOperator()
+Client* Channel::getTheOperator()
 {
     for(size_t i = 0; i < GetClientssHouse().size(); i++)
         if(GetClientssHouse()[i]->getIsOperatorStatus())
-            return (*GetClientssHouse()[i]);
-    return NO_OPERATOR;
+            return (GetClientssHouse()[i]);
+    return NULL;
 }
 
 void Channel::addToChannel(Client *client)
 {
-    if (!IsClientInChannel(ClientssHouse, client->get_fd()))
-    {
-        std::string rpl = REPLY_JOIN(client->get_nickname(), client->get_username(), name, client->get_hostname());
-        // Determine if the client should be an operator
-        bool shouldSetOperator = GetClientssHouse().empty(); // Set as operator if channel is empty
-        if (shouldSetOperator)
-            client->setOperatorStatus(true);
-        else
-            client->setOperatorStatus(false);
-        ClientssHouse.push_back(client);
-        std::cout<< rpl;
-        std::cout << REPLY_NAMREPLY(client->get_hostname(), client->get_nickname(), getChannelName(), client->get_nickname()) \
-        << REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), getChannelName()) << std::endl;
-        // Output reply messages to client
-    }
-    else
+    std::cout << "Attempting to add client: " << client->get_nickname() << std::endl;
+
+    if (IsClientInChannel(ClientssHouse, client->get_fd()))
     {
         SendResponse(client, ERROR_ALREADYREGISTERED(client->get_nickname(), getChannelName()));
+        return;
     }
+    // Determine if the client should be an operator before adding
+    bool shouldSetOperator = ClientssHouse.empty();
+    std::cout << "Channel is empty before adding client: " << shouldSetOperator << std::endl;
+    // Add client to the channel
+    client->setOperatorStatus(shouldSetOperator);
+    Client *newClient = new Client(*client);  // Create a new Client object on the heap
+    ClientssHouse.push_back(newClient);;
+    // Set operator status
+    std::cout << "Client " << newClient->get_nickname() << " added to the channel with operator status: " << newClient->getIsOperatorStatus() << std::endl;
+    // std::string rpl = REPLY_JOIN(client->get_nickname(), client->get_username(), name, client->get_hostname());
+    // std::cout << rpl;
+    // std::cout << REPLY_NAMREPLY(client->get_hostname(), client->get_nickname(), getChannelName(), client->get_nickname())
+    //           << REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), getChannelName()) << std::endl;
 }
 
 void Channel::removeFromChannel(Client *client, std::string comment)
 {
-    Client& Coperator = getTheOperator();
-    if (&Coperator == &NO_OPERATOR)
+    Client *Coperator = getTheOperator();
+    if (Coperator == NO_OPERATOR)
     {
         std::cout << "No operator in the channel" << std::endl;
         return;
     }
     if(IsClientInChannel(ClientssHouse, client->get_fd()))
     {
-        std::string rpl = REPLY_KICK(Coperator.get_nickname(), Coperator.get_username(),\
-        Coperator.get_hostname(), getChannelName(), client->get_nickname(), comment);
-        ClientssHouse.erase(std::remove(ClientssHouse.begin(), ClientssHouse.end(), client), ClientssHouse.end());
-        // delete client;
+        for(size_t i = 0; i < ClientssHouse.size(); i++)
+            if(ClientssHouse[i]->get_fd() == client->get_fd())
+            {
+                ClientssHouse.erase(ClientssHouse.begin() + i);
+                break;
+            }
+        std::string rpl = REPLY_KICK(Coperator->get_nickname(), Coperator->get_username(),\
+        Coperator->get_hostname(), getChannelName(), client->get_nickname(), comment);
         std::cout << rpl;
     }
     else
-        SendResponse(client, ERROR_NOTONCHANNEL(client->get_nickname(), getChannelName()));
+        SendResponse(client, ERROR_NOTONCHANNEL(client->get_nickname(), getChannelName())); 
 }
 
 void Channel::setChannelName(std::string name)

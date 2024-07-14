@@ -27,7 +27,7 @@ class Channel
         // bool clientExists(int clientFd);
         void setChannelName(std::string name);
         std::string getChannelName();
-        Client& getTheOperator();
+        Client* getTheOperator();
         std::vector<Client *> GetClientssHouse();
         std::vector<Client *> GetTheOperators();
     };
