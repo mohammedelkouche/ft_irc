@@ -6,7 +6,7 @@
 /*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 18:03:45 by azgaoua           #+#    #+#             */
-/*   Updated: 2024/08/07 18:41:25 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/08/07 18:51:03 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,17 @@ void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
     }
 }
 
-std::string Channels::get_topic() {
+std::string Channel::get_topic() {
     return (topic);
 }
 
 void Server::DisplayTopic(std::string channel_name, Client *user) {
-    for (size_t i = 0; i < channels.size(); i++) {
-        if (channels[i].getChannelName() == channel_name) {
-            if (channels[i].get_topic().empty())
+    for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) {
+        if ((*it)->getChannelName() == channel_name) {
+            if ((*it)->get_topic().empty())
                 sendToClient(user->get_fd(), RPL_NOTOPIC(user->get_hostname(), channel_name));
             else
-                sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), channel_name, channels[i].get_topic()));
+                sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), channel_name, (*it)->get_topic()));
         }
     }
     sendToClient(user->get_fd(), ERR_NOTONCHANNEL(user->get_hostname(), channel_name, user->get_nickname()));
