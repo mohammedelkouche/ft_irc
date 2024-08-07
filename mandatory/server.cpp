@@ -178,6 +178,13 @@ void	Server::execute_commande(Client *user)
 			InviteConstruction(user);
 		else if  (commande[0] == "kick" || commande[0] == "KICK")
 			KickConstruction(user);
+		else if(commande[0] == "topic" || commande[0] == "TOPIC")
+		{
+			if (commande.size() >= 3)
+				Topic_Command(commande, user);
+			else
+				DisplayTopic(commande[1], user);
+		}
 		// else if (commande[0] == "part" || commande[0] == "PART")
 		// 	PartConstruction(user);
 	}

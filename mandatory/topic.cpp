@@ -36,6 +36,7 @@ void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
                     {
                         sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), Topic[1], full_name_topic));
                         (*it)->set_topic(full_name_topic);
+                        std::cout << "yes ->>" << full_name_topic << std::endl;
                     }
                 }
                 else
@@ -57,7 +58,14 @@ std::string Channel::get_topic() {
     return (topic);
 }
 
+void Channel::set_topic(std::string topic)
+{
+    this->topic = topic;
+}
+
 void Server::DisplayTopic(std::string channel_name, Client *user) {
+    std::vector<Channel*>::iterator k;
+
     for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) {
         if ((*it)->getChannelName() == channel_name) {
             if ((*it)->get_topic().empty())
@@ -65,8 +73,10 @@ void Server::DisplayTopic(std::string channel_name, Client *user) {
             else
                 sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), channel_name, (*it)->get_topic()));
         }
+        k = it;
     }
-    sendToClient(user->get_fd(), ERR_NOTONCHANNEL(user->get_hostname(), channel_name, user->get_nickname()));
+    if (k == channels.end())
+        sendToClient(user->get_fd(), ERR_NOTONCHANNEL(user->get_hostname(), channel_name, user->get_nickname()));
 }
 
 // TOPIC::TOPIC() {
