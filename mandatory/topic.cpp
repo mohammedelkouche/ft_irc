@@ -6,7 +6,7 @@
 /*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 18:03:45 by azgaoua           #+#    #+#             */
-/*   Updated: 2024/08/07 18:51:03 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/08/08 13:57:32 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,18 @@
 
 void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
     std::string full_name_topic;
-
     if (Topic[1][0] == '#') {
-        Topic[1].erase(0, 1);
+        // Topic[1].erase(0, 1);
         for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) {
-            if ((*it)->getChannelName() == Topic[1]) {
+            std::cout << (*it)->getChannelName() << "<<- ->>" << Topic[1] << std::endl;
+            if ((*it)->getChannelName() == Topic[1])
+            {
                 if (Topic[2][0] == ':')
                 {
                     Topic[2].erase(0, 1);
                     for (size_t j = 2; j < Topic.size(); j++)
                         full_name_topic += Topic[j];
+                    std::cout << "yes ->>" << full_name_topic << std::endl;
                     if (full_name_topic.empty())
                     {
                         sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), Topic[1], ""));
@@ -36,7 +38,6 @@ void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
                     {
                         sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), Topic[1], full_name_topic));
                         (*it)->set_topic(full_name_topic);
-                        std::cout << "yes ->>" << full_name_topic << std::endl;
                     }
                 }
                 else
