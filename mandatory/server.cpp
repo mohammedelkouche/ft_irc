@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/07/13 23:27:36 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/07/26 22:42:54 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,8 +178,7 @@ void	Server::execute_commande(Client *user)
 			InviteConstruction(user);
 		else if  (commande[0] == "kick" || commande[0] == "KICK")
 			KickConstruction(user);
-		// else if (commande[0] == "part" || commande[0] == "PART")
-		// 	PartConstruction(user);
+		// else if (commande[0] ==  
 	}
 }
 

@@ -1,6 +1,5 @@
 #include  "../include/server.hpp"
 
-
 // static bool AtleastOneClient()
 // {
 //     Channel channel;

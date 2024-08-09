@@ -96,7 +96,7 @@ void Channel::removeFromChannel(Client *client, std::string comment)
     if (Coperator == NO_OPERATOR)
     {
         std::cout << "No operator in the channel" << std::endl;
-        return;
+        return ;
     }
     if(IsClientInChannel(ClientssHouse, client->get_fd()))
     {
@@ -104,14 +104,14 @@ void Channel::removeFromChannel(Client *client, std::string comment)
             if(ClientssHouse[i]->get_fd() == client->get_fd())
             {
                 ClientssHouse.erase(ClientssHouse.begin() + i);
-                break;
+                break ;
             }
         std::string rpl = REPLY_KICK(Coperator->get_nickname(), Coperator->get_username(),\
         Coperator->get_hostname(), getChannelName(), client->get_nickname(), comment);
         std::cout << rpl;
     }
     else
-        SendResponse(client, ERROR_NOTONCHANNEL(client->get_nickname(), getChannelName())); 
+        SendResponse(client, ERROR_NOTONCHANNEL(client->get_nickname(), getChannelName()));
 }
 
 void Channel::setChannelName(std::string name)
