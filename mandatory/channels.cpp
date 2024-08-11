@@ -78,16 +78,12 @@ void Channel::addToChannel(Client *client)
     // Determine if the client should be an operator before adding
     bool shouldSetOperator = ClientssHouse.empty();
     std::cout << "Channel is empty before adding client: " << shouldSetOperator << std::endl;
-    // Add client to the channel
+    // Set operator status
     client->setOperatorStatus(shouldSetOperator);
     Client *newClient = new Client(*client);  // Create a new Client object on the heap
+    // Add client to the channel
     ClientssHouse.push_back(newClient);;
-    // Set operator status
     std::cout << "Client " << newClient->get_nickname() << " added to the channel with operator status: " << newClient->getIsOperatorStatus() << std::endl;
-    // std::string rpl = REPLY_JOIN(client->get_nickname(), client->get_username(), name, client->get_hostname());
-    // std::cout << rpl;
-    // std::cout << REPLY_NAMREPLY(client->get_hostname(), client->get_nickname(), getChannelName(), client->get_nickname())
-    //           << REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), getChannelName()) << std::endl;
 }
 
 void Channel::removeFromChannel(Client *client)

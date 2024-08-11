@@ -38,7 +38,7 @@ void Server::InviteConstruction(Client *client)
         SendResponse(client, ERROR_NOSUCHNICK(client->get_hostname(),client->get_nickname(), vec[1]));
     else if (getClientByNick(clients, vec[1]).get_fd())
     {
-        std::cout << "InviteConstruction" << std::endl;
+        // std::cout << "InviteConstruction" << std::endl;
         Client& target = getClientByNick(clients, vec[1]);
         Channel invitted(vec[2]);
         invitted.addToChannel(client);
