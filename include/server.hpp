@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/07/13 19:52:40 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/11 19:40:52 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ class Server
 		bool	unique_nickname(std::string nickname);
 		bool	check_valid_nick_name(std::string nick_name);
 		void	success_connect(Client *user);
+		Channel* getChannelByName(std::vector<Channel *> channels, std::string name);
 		// void	check_registration(Client *user);
 
 		//

@@ -90,7 +90,7 @@ void Channel::addToChannel(Client *client)
     //           << REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), getChannelName()) << std::endl;
 }
 
-void Channel::removeFromChannel(Client *client, std::string comment)
+void Channel::removeFromChannel(Client *client)
 {
     Client *Coperator = getTheOperator();
     if (Coperator == NO_OPERATOR)
@@ -101,17 +101,15 @@ void Channel::removeFromChannel(Client *client, std::string comment)
     if(IsClientInChannel(ClientssHouse, client->get_fd()))
     {
         for(size_t i = 0; i < ClientssHouse.size(); i++)
+            //it s okay if the operator kicked himself (no one will be the operator in that chanel)
             if(ClientssHouse[i]->get_fd() == client->get_fd())
             {
                 ClientssHouse.erase(ClientssHouse.begin() + i);
                 break ;
             }
-        std::string rpl = REPLY_KICK(Coperator->get_nickname(), Coperator->get_username(),\
-        Coperator->get_hostname(), getChannelName(), client->get_nickname(), comment);
-        std::cout << rpl;
     }
     else
-        SendResponse(client, ERROR_NOTONCHANNEL(client->get_nickname(), getChannelName()));
+        SendResponse(Coperator, ERROR_NOTONCHANNEL(client->get_nickname(), getChannelName()));
 }
 
 void Channel::setChannelName(std::string name)

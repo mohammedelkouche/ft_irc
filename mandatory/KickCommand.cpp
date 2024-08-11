@@ -1,6 +1,6 @@
 #include "../include/server.hpp"
 
-Channel* getChannelByName(std::vector<Channel *> channels, std::string name)
+Channel* Server::getChannelByName(std::vector<Channel *> channels, std::string name)
 {
     for (size_t i = 0; i < channels.size(); i++)
         if (channels[i]->getChannelName() == name)
@@ -12,12 +12,12 @@ Channel* getChannelByName(std::vector<Channel *> channels, std::string name)
 void Server::KickConstruction(Client *client)
 {
     std::vector<std::string> vec = client->get_commande();
-    if (!client->getIsOperatorStatus()) 
+    if (!client->getIsOperatorStatus())
     {
         SendResponse(client, ERROR_NOPRIVILEGES(client->get_nickname(), client->get_hostname()));
         return;
     }
-    if (vec.size() < 4)
+    if (vec.size() < 3)
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
     else if (vec[1][0] != '#')
         SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), vec[1], client->get_nickname()));
@@ -31,13 +31,14 @@ void Server::KickConstruction(Client *client)
         Channel* channelPtr = getChannelByName(channels, vec[1]);
         if (!channelPtr)
             return ;
+        if (vec.size() == 3)
+            vec.push_back("no comment is given");
         Channel& channel = *channelPtr;
-        channel.removeFromChannel(&target, "KICK");
-        target.getInvitedChannels().push_back(vec[1]);
-        std::string rpl = REPLY_KICK(target.get_nickname(), target.get_username(), target.get_hostname(), vec[2], vec[1], vec[3]);
+        channel.removeFromChannel(&target);
+        std::string rpl = REPLY_KICK(target.get_nickname(), target.get_username(), \
+        target.get_hostname(), channel.getChannelName(), target.get_nickname(), vec[3]);
         SendResponse(&target, rpl);
-        SendResponse(, rpl);
-        std::cout << rpl << std::endl;
+        // target.getInvitedChannels().push_back(vec[1]);
         // REMINDER : should broadcast to all clients in the channel
     }
 
