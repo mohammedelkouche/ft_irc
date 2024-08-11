@@ -6,7 +6,7 @@
 /*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 18:03:45 by azgaoua           #+#    #+#             */
-/*   Updated: 2024/08/11 16:24:15 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/08/11 17:08:31 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int Server::on_channel(std::vector<Client *>  Clnts, Client *nick)
 void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
     std::string full_name_topic;
     if (Topic[1][0] == '#') {
-        // Topic[1].erase(0, 1);
         if (no_suck_channel(Topic) == 1)
         {
             sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), Topic[1], user->get_nickname()));
@@ -114,36 +113,3 @@ void Server::DisplayTopic(std::string channel_name, Client *user) {
     else
         sendToClient(user->get_fd(), ERR_NOTONCHANNEL(user->get_hostname(), channel_name, user->get_nickname()));
 }
-
-// TOPIC::TOPIC() {
-//     _topic_name = "default";
-// }
-
-// TOPIC::TOPIC(const TOPIC &src) {
-//     *this = src;
-// }
-
-// TOPIC &TOPIC::operator=(const TOPIC &src) {
-//     _topic_name = src._topic_name;
-//     return *this;
-// }
-
-// void TOPIC::addTopic(std::string topic) {
-//     _topic_name = topic;
-// }
-
-// void TOPIC::removeTopic(std::string topic) {
-//     _topic_name = topic;
-// }
-
-// void TOPIC::displayTopic() {
-//     std::cout << "Topic: " << _topic_name << std::endl;
-// }
-
-// void TOPIC::displayMessage(std::string topic, std::string message) {
-//     std::cout << "Topic: " << topic << std::endl;
-//     std::cout << "Message: " << message << std::endl;
-// }
-
-// TOPIC::~TOPIC() {
-// }

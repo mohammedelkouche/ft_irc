@@ -6,7 +6,7 @@
 /*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/11 15:55:11 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/08/11 17:23:24 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,14 @@ class Server
 		bool	check_valid_nick_name(std::string nick_name);
 		void	success_connect(Client *user);
 		/*                        AYGAOUA SPEAKING                        */
-
+		/*------------------------TOPIC COMMAND---------------------------*/
 		void	Topic_Command(std::vector<std::string> Topic, Client *user);
 		void	DisplayTopic(std::string channel_name, Client *user);
 		int		no_suck_channel(std::vector<std::string> Topic);
 		int		on_channel(std::vector<Client *>  Clnts, Client *nick);
 		/*----------------------------------------------------------------*/
+		// void	Private_message(Client *user);
+		/*                        AYGAOUA SPEAKING                        */
 		// void	check_registration(Client *user);
 
 		//

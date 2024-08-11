@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/07/13 23:27:36 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/11 17:23:15 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,8 @@ void	Server::execute_commande(Client *user)
 			else
 				DisplayTopic(commande[1], user);
 		}
+		// else if (commande[0] == "PRIVMSG" || commande[0] == "privmsg")
+		// 	Private_message(user);
 		// else if (commande[0] == "part" || commande[0] == "PART")
 		// 	PartConstruction(user);
 	}
