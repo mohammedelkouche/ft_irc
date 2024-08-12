@@ -6,7 +6,7 @@
 /*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 18:03:45 by azgaoua           #+#    #+#             */
-/*   Updated: 2024/08/11 17:08:31 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/08/12 14:19:56 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,23 +93,29 @@ void Channel::set_topic(std::string topic)
     this->topic = topic;
 }
 
-void Server::DisplayTopic(std::string channel_name, Client *user) {
+void Server::DisplayTopic(std::vector<std::string> channel_name, Client *user) {
     std::vector<Channel*>::iterator k;
 
+    if (channel_name.size() == 1)
+    {
+        std::string command = channel_name[0];
+        sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(user->get_nickname(), user->get_hostname()));
+        return ;
+    }
     for (k = channels.begin(); k != channels.end(); ++k) {
-        if ((*k)->getChannelName() == channel_name) {
+        if ((*k)->getChannelName() == channel_name[1]) {
             std::vector<Client *> Clnts = (*k)->GetClientssHouse();
             if (on_channel(Clnts, user) == 0)
                 break ;
             if ((*k)->get_topic().empty())
-                sendToClient(user->get_fd(), RPL_NOTOPIC(user->get_hostname(), channel_name));
+                sendToClient(user->get_fd(), RPL_NOTOPIC(user->get_hostname(), channel_name[1]));
             else
-                sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), channel_name, (*k)->get_topic()));
+                sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), channel_name[1], (*k)->get_topic()));
             return ;
         }
     }
     if (k == channels.end())
-        sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), channel_name, user->get_nickname()));
+        sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), channel_name[1], user->get_nickname()));
     else
-        sendToClient(user->get_fd(), ERR_NOTONCHANNEL(user->get_hostname(), channel_name, user->get_nickname()));
+        sendToClient(user->get_fd(), ERR_NOTONCHANNEL(user->get_hostname(), channel_name[1], user->get_nickname()));
 }
