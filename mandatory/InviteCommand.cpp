@@ -43,9 +43,7 @@ void Server::InviteConstruction(Client *client)
         Channel invitted(vec[2]);
         invitted.addToChannel(client);
         target.getInvitedChannels().push_back(vec[2]);
-        // REPLY_INVITE(client->get_nickname(), client->get_username(), client->get_hostname() ,vec[1], vec[2])
-        std::string rpl = REPLY_INVITE(target.get_nickname(), target.get_username(), target.get_hostname(), vec[1], vec[2]);
-        std::cout << rpl << std::endl;
-        SendResponse(&target, rpl);
+        SendResponse(client , REPLY_INVITING(client->get_hostname(), client->get_nickname(), target.get_nickname(), vec[2]));
+        SendResponse(&target, REPLY_INVITE(target.get_nickname(), target.get_username(), target.get_hostname(), vec[1], vec[2]));
     }
 }

@@ -60,6 +60,7 @@ void Server::JoinConstruction(Client *client)
             newChannel->addToChannel(client);
             channels.push_back(newChannel);
             client->getInvitedChannels().push_back(channelName);
+            SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()));
             std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
         }
         else
@@ -67,10 +68,11 @@ void Server::JoinConstruction(Client *client)
             // Channel exists, add client to the channel
             (*channelIt)->addToChannel(client);
             client->getInvitedChannels().push_back(channelName);
+            SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()));
             std::cout << "Client " << client->get_nickname() << " joined existing channel: " << channelName << std::endl;
         }
     }
-    for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) 
+    for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
     {
         std::cout << "Channel: " << (*it)->getChannelName() << std::endl;
         std::vector<Client*> clientsHouse = (*it)->GetClientssHouse();

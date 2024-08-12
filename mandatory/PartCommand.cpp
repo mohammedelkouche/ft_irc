@@ -29,4 +29,4 @@ void  	Server::PartConstruction(Client *client)
             // REMINDER : should broadcast to all clients in the channel
         }
     }
-}   
+}
