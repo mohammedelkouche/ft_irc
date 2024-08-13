@@ -57,7 +57,8 @@ void Server::JoinConstruction(Client *client)
         {
             // Channel doesn't exist, create new channel and add client
             Channel* newChannel = new Channel(channelName);
-            newChannel->addToChannel(client);
+            if (!newChannel->addToChannel(client))
+                continue ;
             channels.push_back(newChannel);
             client->getInvitedChannels().push_back(channelName);
             SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()));
@@ -66,7 +67,8 @@ void Server::JoinConstruction(Client *client)
         else
         {
             // Channel exists, add client to the channel
-            (*channelIt)->addToChannel(client);
+            if (!(*channelIt)->addToChannel(client))
+                continue ;
             client->getInvitedChannels().push_back(channelName);
             SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()));
             std::cout << "Client " << client->get_nickname() << " joined existing channel: " << channelName << std::endl;

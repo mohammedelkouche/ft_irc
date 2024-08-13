@@ -22,7 +22,7 @@ class Channel
         Channel(std::string name);
         Channel(const Channel& copy);
         ~Channel();
-        void addToChannel(Client *client);
+        bool addToChannel(Client *client);
         void removeFromChannel(Client *client);
         // bool clientExists(int clientFd);
         void setChannelName(std::string name);

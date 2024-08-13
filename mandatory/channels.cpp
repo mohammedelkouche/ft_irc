@@ -66,14 +66,14 @@ Client* Channel::getTheOperator()
     return NULL;
 }
 
-void Channel::addToChannel(Client *client)
+bool Channel::addToChannel(Client *client)
 {
     std::cout << "Attempting to add client: " << client->get_nickname() << std::endl;
 
     if (IsClientInChannel(ClientssHouse, client->get_fd()))
     {
-        SendResponse(client, ERROR_ALREADYREGISTERED(client->get_nickname(), getChannelName()));
-        return;
+        SendResponse(client, ERROR_USERONCHANNEL(client->get_hostname(), getChannelName(), client->get_nickname()));
+        return false;
     }
     // Determine if the client should be an operator before adding
     bool shouldSetOperator = ClientssHouse.empty();
@@ -84,6 +84,7 @@ void Channel::addToChannel(Client *client)
     // Add client to the channel
     ClientssHouse.push_back(newClient);;
     std::cout << "Client " << newClient->get_nickname() << " added to the channel with operator status: " << newClient->getIsOperatorStatus() << std::endl;
+    return true;
 }
 
 void Channel::removeFromChannel(Client *client)
