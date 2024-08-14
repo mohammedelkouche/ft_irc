@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/13 19:34:13 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:25:54 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ void	Server::execute_commande(Client *user)
 		if (user->check_registration(user))
 			success_connect(user);
 	}
+	// else print a message for indicating command not found
 	if (user->is_enregistred())
 	{
 		if (commande[0] == "join" || commande[0] == "JOIN")
