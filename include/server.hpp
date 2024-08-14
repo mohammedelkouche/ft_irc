@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/14 16:33:46 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/14 18:42:25 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ class Server
 		/*------------------------PRIVMSG COMMAND---------------------------*/
 		void	Private_message(std::vector<std::string> commande, Client *user);
 		void	sendToChannel(Client *user, const std::string& message, std::string Chnl);
+		int		no_suck_channel_msg(std::string chnl);
 		/*----------------------------------------------------------------*/
 		/*                        AYGAOUA SPEAKING                        */
 		// void	check_registration(Client *user);
