@@ -1,6 +1,5 @@
 #include  "../include/server.hpp"
 
-
 // static bool AtleastOneClient()
 // {
 //     Channel channel;
@@ -9,13 +8,14 @@
 //     return false;
 // }
 
+Client NO_CLIENT;
 
 Client& Server::getClientByNick(std::vector<Client> &clients, std::string nickname)
 {
     for (size_t i = 0; i < clients.size(); i++)
         if (clients[i].get_nickname() == nickname)
             return (clients[i]);
-   throw std::runtime_error("Client not found");
+   return NO_CLIENT;
 }
 
 bool Server::isClientExist(std::vector<Client> clients, std::string nickname)
@@ -39,14 +39,13 @@ void Server::InviteConstruction(Client *client)
         SendResponse(client, ERROR_NOSUCHNICK(client->get_hostname(),client->get_nickname(), vec[1]));
     else if (getClientByNick(clients, vec[1]).get_fd())
     {
-        std::cout << "InviteConstruction" << std::endl;
+        // std::cout << "InviteConstruction" << std::endl;
         Client& target = getClientByNick(clients, vec[1]);
         Channel invitted(vec[2]);
-        invitted.addToChannel(client);
+        if (!(invitted.addToChannel(client)))
+            return ;
         target.getInvitedChannels().push_back(vec[2]);
-        // REPLY_INVITE(client->get_nickname(), client->get_username(), client->get_hostname() ,vec[1], vec[2])
-        std::string rpl = REPLY_INVITE(target.get_nickname(), target.get_username(), target.get_hostname(), vec[1], vec[2]);
-        std::cout << rpl << std::endl;
-        SendResponse(&target, rpl);
+        SendResponse(client , REPLY_INVITING(client->get_hostname(), client->get_nickname(), target.get_nickname(), vec[2]));
+        SendResponse(&target, REPLY_INVITE(target.get_nickname(), target.get_username(), target.get_hostname(), vec[1], vec[2]));
     }
 }

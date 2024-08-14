@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/07/13 23:27:36 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:36:17 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ void	Server::execute_commande(Client *user)
 		if (user->check_registration(user))
 			success_connect(user);
 	}
+	// else print a message for indicating command not found
 	if (user->is_enregistred())
 	{
 		if (commande[0] == "join" || commande[0] == "JOIN")
@@ -178,6 +179,17 @@ void	Server::execute_commande(Client *user)
 			InviteConstruction(user);
 		else if  (commande[0] == "kick" || commande[0] == "KICK")
 			KickConstruction(user);
+		else if  (commande[0] == "part" || commande[0] == "PART")
+			PartConstruction(user);
+		else if(commande[0] == "topic" || commande[0] == "TOPIC")
+		{
+			if (commande.size() >= 3)
+				Topic_Command(commande, user);
+			else
+				DisplayTopic(commande, user);
+		}
+		else if (commande[0] == "PRIVMSG" || commande[0] == "privmsg")
+			Private_message(commande, user);
 		// else if (commande[0] == "part" || commande[0] == "PART")
 		// 	PartConstruction(user);
 	}

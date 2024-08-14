@@ -149,4 +149,9 @@ MODE channel_name +k another_password// alredy set to channel, khask tdir `MODE 
 case QUIT:  
 QUIT // quit mn server  
 QUIT reason // quit mn server with a reason  
-  
+
+
+**Problem 3end Mohammed**  
+>mli katbghi t authentificati mli katkteb "nick" GHALAT KAYTCRASHA registration kamla  
+>w t handli signal dyal sigpipe  
+>./ircserv 8080 " "  
