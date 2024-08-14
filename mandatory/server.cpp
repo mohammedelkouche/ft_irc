@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/14 16:25:54 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:36:17 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,17 @@ void	Server::execute_commande(Client *user)
 			KickConstruction(user);
 		else if  (commande[0] == "part" || commande[0] == "PART")
 			PartConstruction(user);
+		else if(commande[0] == "topic" || commande[0] == "TOPIC")
+		{
+			if (commande.size() >= 3)
+				Topic_Command(commande, user);
+			else
+				DisplayTopic(commande, user);
+		}
+		else if (commande[0] == "PRIVMSG" || commande[0] == "privmsg")
+			Private_message(commande, user);
+		// else if (commande[0] == "part" || commande[0] == "PART")
+		// 	PartConstruction(user);
 	}
 }
 

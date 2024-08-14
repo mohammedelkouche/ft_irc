@@ -17,6 +17,8 @@ class Channel
         std::string name;
         std::vector<Client *> ClientssHouse;
         std::vector<Client *> Operators;
+        std::string         topic;
+        bool                bool_topic;
     public:
         Channel();
         Channel(std::string name);
@@ -30,5 +32,7 @@ class Channel
         Client* getTheOperator();
         std::vector<Client *> GetClientssHouse();
         std::vector<Client *> GetTheOperators();
+        void set_topic(std::string topic);
+        std::string get_topic();
     };
 #endif
