@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:05:25 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/14 17:12:02 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/14 18:51:33 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,6 @@
 // #define ERROR_NEEDMOREPARAMSOR(nick)  (std::string (":") + " 461 " + nick + std::string(" :Not enough parameters !\r\n"))
 #define ERROR_NEEDMOREPARAMS(nick, hostname) (std::string (":") + hostname + std::string(" 461 ") + nick + " :Not enough parameters !\r\n")
 // #define ERROR_NEEDMOREPARAMSTOPIC(nick, hostname, command) (std::string (":") + hostname + std::string(" 461 ") + nick + std::string(" ") + command + " :Not enough parameters !\r\n")
-
-// #define PART_REPLY(channel, nickname, reason) ":" + channel + " " + nickname + " has left (" + reason + ")\r\n"
-// #define PART_REPLY(channel, nickname, reason) ":" + nickname + " PART " + channel + " (" + reason + ")\r\n"
-//**********************************************************
-// #define PART_REPLY(nickname, username, hostname, channel) ":" + nickname + "!~" + username + "@" + hostname + " PART " + channel + "\r\n"
 
 #define PART_REPLY(nickname, username, hostname, channel) ":" + std::string(nickname) + "!~" + std::string(username) + "@" + std::string(hostname) + " PART " + std::string(channel) + "\r\n"
 
