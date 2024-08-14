@@ -3,15 +3,16 @@ BNAME = ircserv_bonus
 
 SRC = ./mandatory/main.cpp ./mandatory/client.cpp \
 	./mandatory/server.cpp ./mandatory/JoinCommand.cpp ./mandatory/channels.cpp \
-	./mandatory/InviteCommand.cpp ./mandatory/authentication.cpp ./mandatory/utils_authn.cpp
+	./mandatory/InviteCommand.cpp ./mandatory/KickCommand.cpp ./mandatory/PartCommand.cpp ./mandatory/authentication.cpp \
+	./mandatory/utils_authn.cpp ./mandatory/topic.cpp ./mandatory/PrivateMessage.cpp
 
 BONUS = ./bonus/bonus_main.cpp ./bonus/bot_bonus.cpp
 
 OBJ = $(SRC:.cpp=.o)
+ 
+HEADER =  ./include/server.hpp ./include/client.hpp  ./include/channels.hpp ./include/reply.hpp ./include/global.hpp
 
 BOBJ = $(BONUS:.cpp=.o)
-
-HEADER =  ./include/server.hpp ./include/client.hpp  ./include/channels.hpp ./include/reply.hpp
 
 HEADER_bonus =  ./include/bot_bonus.hpp
 

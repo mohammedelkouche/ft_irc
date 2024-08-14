@@ -28,7 +28,7 @@ bool	Server::check_valid_nick_name(std::string nick_name)
 {
 	if (isdigit(nick_name[0]))
 		return false;
-	if (size_t test =  nick_name.find_first_of("#: ") != std::string::npos)
+	if (nick_name.find_first_of("#: ") != std::string::npos)
 		return false;
 	if (nick_name.find("#&") != std::string::npos)
 		return false;

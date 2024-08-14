@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/18 18:57:15 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/06/15 21:39:28 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <iostream>
 
 
-Client::Client() : ipaddress(""), nickname(""), pass_client(""), username ("")
+Client::Client() : ipaddress(""), nickname(""), pass_client(""), username (""), isOperator(false)
 {
 	this->registred = false;
 }
@@ -29,8 +29,11 @@ Client::Client(const Client& copy)
 	username = copy.username;
 	hostname = copy.hostname;
 	registred = copy.registred;
+	isOperator = copy.isOperator;
 	for(size_t i = 0; i < commande.size(); i++)
 		commande[i] = copy.commande[i];
+	for(size_t i = 0; i < invitedChannels.size(); i++)
+		invitedChannels[i] = copy.invitedChannels[i];
 }
 
 void	Client::set_fd(int fd_client)
@@ -74,6 +77,16 @@ void	Client::set_pass_client(std::string password)
 void	Client::set_hostname(std::string host)
 {
 	this->hostname = host;
+}
+
+void	Client::setOperatorStatus(bool status)
+{
+	this->isOperator = status;
+}
+
+bool	Client::getIsOperatorStatus()
+{
+	return this->isOperator;
 }
 
 std::vector<std::string>	Client::get_commande()
@@ -127,6 +140,12 @@ std::string  Client::get_client_host() {
         }
     }
     return "Unknown";
+}
+
+
+std::vector<std::string>& Client::getInvitedChannels()
+{
+	return this->invitedChannels;
 }
 
 Client::~Client()

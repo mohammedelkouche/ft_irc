@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/25 22:01:36 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/14 20:48:49 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,15 +108,6 @@ void	Server::RemoveClient(int fd)
 			break ;
 		}
 	}
-	for (size_t i = 0; i < pollfds.size(); i++)
-	{
-		if (pollfds[i].fd == fd)
-		{
-			pollfds.erase(pollfds.begin() + i);
-			break ;
-		}
-	}
-	partial_messages.erase(fd);  // Remove any stored partial messages for the client
 }
 
 std::vector<std::string>	devide_commande(std::string message, int fd)
@@ -155,13 +146,9 @@ void	Server::execute_commande(Client *user)
 	std::vector <std::string> commande;
 	commande = user->get_commande();
 	if (user->get_commande().empty())
-	{
 		return ;
-	}
 	if (commande[0] == "pass" || commande[0] == "PASS")
-	{
 		handle_pass(user);
-	}
 	else if (commande[0] == "nick" || commande[0] == "NICK")
 	{
 		handle_nickname(user);
@@ -174,30 +161,51 @@ void	Server::execute_commande(Client *user)
 		if (user->check_registration(user))
 			success_connect(user);
 	}
+	// else print a message for indicating command not found
 	if (user->is_enregistred())
 	{
-		// std::cout << "execute other commande" <<std::endl;
-		// handle_Unknown_command(user);
 		if (commande[0] == "join" || commande[0] == "JOIN")
 			JoinConstruction(user);
-		else if(commande[0] == "invite" || commande[0] == "INVITE")
+		else if (commande[0] == "invite" || commande[0] == "INVITE")
 			InviteConstruction(user);
+		else if  (commande[0] == "kick" || commande[0] == "KICK")
+			KickConstruction(user);
+		else if  (commande[0] == "part" || commande[0] == "PART")
+			PartConstruction(user);
+		else if(commande[0] == "topic" || commande[0] == "TOPIC")
+		{
+			if (commande.size() >= 3)
+				Topic_Command(commande, user);
+			else
+				DisplayTopic(commande, user);
+		}
+		else if (commande[0] == "PRIVMSG" || commande[0] == "privmsg")
+			Private_message(commande, user);
+		// else if (commande[0] == "part" || commande[0] == "PART")
+		// 	PartConstruction(user);
 	}
-	// else
-	// 	handle_Unknown_command(user);
 }
 
 void	Server::parse_message(std::string buffer, int fd)
 {
-	Client	*user = get_connect_client(fd);
-	size_t pos = 0;
-    size_t end_pos = 0;
-	while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos) {
-		std::string command = buffer.substr(pos, end_pos - pos);
-		std::vector<std::string> commande = devide_commande(command, fd);
+	std::vector <std::string> commande;
+	std::string message;
+	Client *user = get_connect_client(fd);
+	// size_t	pos = buffer.find_first_of("\r\n");
+	// size_t	pos = buffer.find("ou");
+	// size_t	pos = buffer.find("\n");
+	// size_t	limechat = buffer.find("\r\n");
+	size_t	pos = buffer.find("\r\n");
+	if (pos != std::string::npos)
+	{
+		message = buffer.substr(0, pos);
+		commande = devide_commande(message, fd);
 		user->set_commande(commande);
 		execute_commande(user);
-		pos = end_pos + 2; // Move past "\r\n"
+		// for (std::vector<std::string>::iterator it = commande.begin(); it != commande.end(); ++it)
+		// {
+		// 	std::cout << "it  = <" << *it << ">" << std::endl;
+		// }
 	}
 }
 
@@ -212,6 +220,16 @@ Client* Server::get_connect_client(int fd)
 }
 
 
+std::vector<Client> Server::getClientsInServer()
+{
+	return clients;
+}
+
+std::vector<Channel *>  &Server::getChannelsInServer()
+{
+	return channels;
+}
+
 void	Server::ReceiveClientData(int fd)
 {	
 	char buffer[BUFFER_SIZE];
@@ -222,7 +240,9 @@ void	Server::ReceiveClientData(int fd)
 	size_t bytes_received = recv(fd, buffer, BUFFER_SIZE - 1, 0);
 	if (bytes_received <= 0)
 	{
-		std::cout << "Client fd = '" << fd << "' Disconnected" << std::endl;
+		// quit();
+		// sendToClient(fd, "Client fd = '" << fd << "' Disconnected);
+		std::cout << "[Client fd]= [" << fd << "] [Disconnected]" << std::endl;
         RemoveClient(fd);
         close(fd);
 	}
@@ -243,6 +263,7 @@ void	Server::ReceiveClientData(int fd)
 	}
 }
 
+
 void	Server::initializeServer(int port_nbr,std::string str)
 {
 	this->port = port_nbr;
@@ -252,7 +273,6 @@ void	Server::initializeServer(int port_nbr,std::string str)
 	std::cout << "Server with fd <" << fd_srv_socket << "> Connected" << std::endl;
 	std::cout << "Server started. Listening on port : " << this->port << std::endl;
 	std::cout << "Waiting to accept a connection...\n";
-	
 	while (true)
 	{
 		if (poll(&pollfds[0], pollfds.size(), -1) == -1)

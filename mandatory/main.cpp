@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:30 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/06/02 14:38:00 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/14 20:49:05 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,13 @@ void check_arg(char **argv) {
 	}
 }
 
+
+
 int main(int argc, char **argv) {
 	try 
 	{
 		Server irc;
+		
 		if (argc != 3) {
 			std::cout << "write: executable file  <port> <password>" << std::endl;
 			return 1;
