@@ -66,7 +66,7 @@ void Server::Private_message(std::vector<std::string> commande, Client *user)
                         if (full_message.empty())
                             sendToChannel(user, ERR_NOTEXTTOSEND(user->get_hostname()), (*it)->getChannelName());
                         else
-                            sendToChannel(user, RPL_AWAY(user.get ,(*it)->getChannelName(), user->get_hostname(), full_message), (*it)->getChannelName());
+                            sendToChannel(user, RPL_AWAY(user. ,(*it)->getChannelName(), user->get_hostname(), full_message), (*it)->getChannelName());
                         continue ;
                     }
                     else
