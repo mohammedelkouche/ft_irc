@@ -6,7 +6,7 @@
 /*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 18:03:45 by azgaoua           #+#    #+#             */
-/*   Updated: 2024/08/12 14:19:56 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/08/12 18:47:00 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
             return ;
         }
         for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) {
-            std::cout << (*it)->getChannelName() << "<<- ->>" << Topic[1] << std::endl;
             if ((*it)->getChannelName() == Topic[1])
             {
                 std::vector<Client *> Clnts = (*it)->GetClientssHouse();
@@ -73,7 +72,7 @@ void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
                 else
                 {
                     sendToClient(user->get_fd(), RPL_NOTOPIC(user->get_hostname(), Topic[1]));
-                    std::cout << "Error: No topic (syntax `:`)" << std::endl;
+                    // std::cout << "Error: No topic (syntax `:`)" << std::endl;
                 }
                 return;
             }
