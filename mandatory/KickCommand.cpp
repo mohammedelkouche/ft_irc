@@ -39,7 +39,7 @@ void Server::KickConstruction(Client *client)
                 vec.push_back("no comment is given");
             Channel& channel = *channelPtr;
             channel.removeFromChannel(&target);
-            std::string rpl = REPLY_KICK(target.get_nickname(), target.get_username(), \
+            std::string rpl = REPLY_KICK(client->get_nickname(), client->get_username(), \
             target.get_hostname(), channel.getChannelName(), target.get_nickname(), vec[3]);
             SendResponse(&target, rpl);
             // REMINDER : should broadcast to all clients in the channel

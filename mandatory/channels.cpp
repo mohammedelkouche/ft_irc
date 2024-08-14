@@ -16,40 +16,6 @@ void print(std::vector<int> v)
     std::cout << "-----------------\n";
 }
 
-// Client NO_OPERATOR;
-
-// Client& Channel::getTheOperator()
-// {
-//     for(size_t i = 0; i < GetClientssHouse().size(); i++)
-//         if(GetClientssHouse()[i]->getIsOperatorStatus())
-//             return (*GetClientssHouse()[i]);
-//     return NO_OPERATOR;
-// }
-
-// void Channel::addToChannel(Client *client)
-// {
-//     if (IsClientInChannel(ClientssHouse, client->get_fd()))
-//     {
-//         SendResponse(client, ERROR_ALREADYREGISTERED(client->get_nickname(), getChannelName()));
-//         return;
-//     }
-
-//     // if the client should be an operator before adding
-//     bool shouldSetOperator = ClientssHouse.empty();
-//     std::cout << "Should set operator: " << shouldSetOperator << std::endl;
-//     ClientssHouse.push_back(client);
-//     // Set operator status
-//     client->setOperatorStatus(shouldSetOperator);
-//     std::cout << "Client " << client->get_nickname() << " added to the channel with operator status: " << client->getIsOperatorStatus() << std::endl;
-//     std::string rpl = REPLY_JOIN(client->get_nickname(), client->get_username(), name, client->get_hostname());
-//     std::cout << rpl;
-//     std::cout << REPLY_NAMREPLY(client->get_hostname(), client->get_nickname(), getChannelName(), client->get_nickname())
-//     << REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), getChannelName()) << std::endl;
-// }
-
-
-Client* NO_OPERATOR=NULL;
-
 bool IsClientInChannel(std::vector<Client *> ClientssHouse, int fd)
 {
     for(size_t i = 0; i < ClientssHouse.size(); i++)
@@ -87,14 +53,16 @@ bool Channel::addToChannel(Client *client)
     return true;
 }
 
+Client* NO_OPERATOR = NULL;
+
 void Channel::removeFromChannel(Client *client)
 {
     Client *Coperator = getTheOperator();
-    if (Coperator == NO_OPERATOR)
-    {
-        std::cout << "No operator in the channel" << std::endl;
-        return ;
-    }
+    // if (Coperator == NO_OPERATOR)
+    // {
+    //     std::cout << "No Operator in the channel! " << std::endl;
+    //     return;
+    // }
     if(IsClientInChannel(ClientssHouse, client->get_fd()))
     {
         for(size_t i = 0; i < ClientssHouse.size(); i++)
@@ -129,7 +97,8 @@ Channel::~Channel()
 
 }
 
-Channel::Channel(const Channel& copy) {
+Channel::Channel(const Channel& copy) 
+{
     name = copy.name;
     for(size_t i = 0; i < ClientssHouse.size(); i++)
         ClientssHouse[i] = copy.ClientssHouse[i];

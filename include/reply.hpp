@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:05:25 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/13 18:07:11 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/13 19:22:10 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 //**********************************************************
 // #define PART_REPLY(nickname, username, hostname, channel) ":" + nickname + "!~" + username + "@" + hostname + " PART " + channel + "\r\n"
 
-#define PART_REPLY(nickname, username, hostname, channel) ":" + std::string(nickname) + "!~" + std::string(hostname) + "@" + std::string(username) + " PART " + std::string(channel) + "\r\n"
+#define PART_REPLY(nickname, username, hostname, channel) ":" + std::string(nickname) + "!~" + std::string(username) + "@" + std::string(hostname) + " PART " + std::string(channel) + "\r\n"
 
 #define ERROR_BADCHANNELNAME(nick, hostname, channelname) ":" + hostname + " 476 " + nick + " " + channelname + " :Invalid channel name." + "\r\n"
 #define ERROR_CHANNELISFULL(nick, channelName) (std::string(":") + nick + " 471 " + channelName + " :Cannot join channel (+l)\r\n")
