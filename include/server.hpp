@@ -6,7 +6,7 @@
 /*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/14 18:42:25 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/08/15 23:23:23 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #include "./client.hpp"
 #include "./channels.hpp"
 #include <ctime>
-// #include <map>
+#include <map>
 
 
 #define BUFFER_SIZE 1024
@@ -44,6 +44,7 @@ class Server
 		std::vector<Client> clients;
 		std::vector<Channel *> channels;
 		std::vector <struct pollfd> pollfds;
+		std::map<int, std::string> partial_messages; // To store incomplete messages
 		char buffer[BUFFER_SIZE];
 	public :
 		Server();

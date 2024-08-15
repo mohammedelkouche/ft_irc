@@ -19,6 +19,7 @@ class Channel
         std::vector<Client *> Operators;
         std::string         topic;
         bool                bool_topic;
+        std::string 				topic_setter;
     public:
         Channel();
         Channel(std::string name);
@@ -34,5 +35,7 @@ class Channel
         std::vector<Client *> GetTheOperators();
         void set_topic(std::string topic);
         std::string get_topic();
+		void	set_topic_setter(std::string topicsetter);
+        std::string get_topic_setter();
     };
 #endif
