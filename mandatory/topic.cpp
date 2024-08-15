@@ -6,7 +6,7 @@
 /*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 18:03:45 by azgaoua           #+#    #+#             */
-/*   Updated: 2024/08/12 18:47:00 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/08/15 16:13:27 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,18 +61,31 @@ void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
                     if (full_name_topic.empty())
                     {
                         sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), Topic[1], ""));
+                        // REPLY_TOPICWHOTIME
                         (*it)->set_topic("");
                     }
                     else
                     {
                         sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), Topic[1], full_name_topic));
+                        // REPLY_TOPICWHOTIME
                         (*it)->set_topic(full_name_topic);
                     }
                 }
-                else
+                else if (Topic.size() >= 3)
                 {
-                    sendToClient(user->get_fd(), RPL_NOTOPIC(user->get_hostname(), Topic[1]));
-                    // std::cout << "Error: No topic (syntax `:`)" << std::endl;
+                    full_name_topic += Topic[2];
+                    if (full_name_topic.empty())
+                    {
+                        sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), Topic[1], ""));
+                        // REPLY_TOPICWHOTIME
+                        (*it)->set_topic("");
+                    }
+                    else
+                    {
+                        sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), Topic[1], full_name_topic));
+                        // REPLY_TOPICWHOTIME
+                        (*it)->set_topic(full_name_topic);
+                    }
                 }
                 return;
             }
