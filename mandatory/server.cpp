@@ -6,7 +6,7 @@
 /*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/15 19:05:50 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/08/17 02:31:41 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,8 @@ void	Server::execute_commande(Client *user)
 		}
 		else if (commande[0] == "PRIVMSG" || commande[0] == "privmsg")
 			Private_message(commande, user);
+		else if (commande[0] == "MODE" || commande[0] == "mode")
+			ModeCommande(commande, user);
 		// else if (commande[0] == "part" || commande[0] == "PART")
 		// 	PartConstruction(user);
 	}

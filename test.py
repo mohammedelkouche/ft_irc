@@ -8,4 +8,5 @@ for clinet in range(int(sys.argv[1])):
     filename = "files/infile{0}".format(clinet)
     with open(filename, "w") as fp:
         fp.write(cmd)
-    os.system("nc -c localhost  8080 < '" + filename + "'")
+    os.system("sleep 0.05")
+    os.system("nc -c localhost  5050 < '" + filename + "'")

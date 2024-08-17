@@ -46,7 +46,6 @@ void Server::Private_message(std::vector<std::string> commande, Client *user)
     size_t i;
 
     targets =  split(commande[1], ',');
-
     if (commande.size() <= 2)
     {
         sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(user->get_nickname(), user->get_hostname()));
@@ -58,7 +57,8 @@ void Server::Private_message(std::vector<std::string> commande, Client *user)
         {
             if (no_suck_channel_msg((*it_t)) == 1)
             {
-                sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), (*it_t), user->get_nickname()));
+                sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), \
+                                (*it_t), user->get_nickname()));
                 continue ;
             }
             for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
@@ -78,11 +78,14 @@ void Server::Private_message(std::vector<std::string> commande, Client *user)
                         if (full_message.empty())
                             sendToChannel(user, ERR_NOTEXTTOSEND(user->get_hostname()), (*it)->getChannelName());
                         else
-                            sendToChannel(user, RPL_AWAY(user->get_nickname() , user->get_username(),  user->get_hostname(), full_message, (*it)->getChannelName()), (*it)->getChannelName());
+                            sendToChannel(user, RPL_AWAY(user->get_nickname() , user->get_username(), \
+                                            user->get_hostname(), full_message, (*it)->getChannelName()), \
+                                                (*it)->getChannelName());
                         continue ;
                     }
                     else
-                        sendToClient(user->get_fd(), ERR_NOTONCHANNEL(user->get_hostname(), (*it)->getChannelName(), user->get_nickname()));
+                        sendToClient(user->get_fd(), ERR_NOTONCHANNEL(user->get_hostname(), \
+                                        (*it)->getChannelName(), user->get_nickname()));
                 }
             }
         }
@@ -100,7 +103,9 @@ void Server::Private_message(std::vector<std::string> commande, Client *user)
                         if (full_message.empty())
                             sendToClient(user->get_fd(), ERR_NOTEXTTOSEND(user->get_hostname()));
                         else
-                            sendToClient(clients[i].get_fd(), RPL_AWAY(user->get_nickname(), user->get_username(), user->get_hostname(), full_message, clients[i].get_nickname()));
+                            sendToClient(clients[i].get_fd(), RPL_AWAY(user->get_nickname(), \
+                                            user->get_username(), user->get_hostname(), full_message, \
+                                                clients[i].get_nickname()));
                     }
                     else
                     {
@@ -108,7 +113,9 @@ void Server::Private_message(std::vector<std::string> commande, Client *user)
                         if (full_message.empty())
                             sendToClient(user->get_fd(), ERR_NOTEXTTOSEND(user->get_hostname()));
                         else
-                            sendToClient(clients[i].get_fd(), RPL_AWAY(user->get_nickname(), user->get_username(), user->get_hostname(), full_message, clients[i].get_nickname()));
+                            sendToClient(clients[i].get_fd(), RPL_AWAY(user->get_nickname(), \
+                                            user->get_username(), user->get_hostname(), full_message, \
+                                                clients[i].get_nickname()));
                     }
                     break ;
                 }

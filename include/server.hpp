@@ -6,7 +6,7 @@
 /*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/15 23:23:23 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/08/17 02:33:49 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,10 @@ class Server
 		void	Private_message(std::vector<std::string> commande, Client *user);
 		void	sendToChannel(Client *user, const std::string& message, std::string Chnl);
 		int		no_suck_channel_msg(std::string chnl);
+		/*----------------------------------------------------------------*/
+
+		/*------------------------PRIVMSG COMMAND---------------------------*/
+		void ModeCommande(std::vector<std::string> commande, Client *user);
 		/*----------------------------------------------------------------*/
 		/*                        AYGAOUA SPEAKING                        */
 		// void	check_registration(Client *user);
