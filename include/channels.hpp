@@ -15,10 +15,12 @@ class Channel
 {
     private:
         std::string name;
-        std::vector<Client *> ClientssHouse;
-        std::vector<Client *> Operators;
-        std::string         topic;
-        bool                bool_topic;
+        std::vector<Client *>   ClientssHouse;
+        std::vector<Client *>   Operators;
+        std::string             topic;
+        bool                    bool_topic;
+        // bool                    hasKey;
+        // std::string             key;
     public:
         Channel();
         Channel(std::string name);
@@ -34,5 +36,8 @@ class Channel
         std::vector<Client *> GetTheOperators();
         void set_topic(std::string topic);
         std::string get_topic();
+        std::string getHasKey();
+        void setKey(std::string key);
+        std::string getKey();
     };
 #endif

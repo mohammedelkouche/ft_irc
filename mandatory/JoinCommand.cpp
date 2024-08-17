@@ -29,17 +29,25 @@ void SendResponse(Client *client, std::string msg)
         throw std::runtime_error("Failed Send JOIN message to the client"); 
 }
 
-void Server::JoinConstruction(Client *client) 
+void Server::JoinConstruction(Client *client)
 {
     std::vector<std::string> cmd = client->get_commande();
 
-    if (cmd.size() < 2 || cmd[1].empty() || !cmd[1][1]) 
+    if (cmd.size() < 2 || cmd[1].empty() || !cmd[1][1])
     {
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
         return ;
     }
 
     std::vector<std::string> channelNames = Splitter(cmd[1], ",");
+    // if (cmd.size() == 2)
+    // {
+    //     std::vector<std::string> splittedKeys = Splitter(cmd[2], ",");
+    //     for (std::vector<std::string>::iterator it =  splittedKeys.begin(); it != splittedKeys.begin(); ++it)
+    //     {
+            
+    //     }
+    // }
     for (std::vector<std::string>::iterator it = channelNames.begin(); it != channelNames.end(); ++it)
     {
         std::string channelName = *it;

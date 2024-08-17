@@ -92,9 +92,24 @@ std::string Channel::getChannelName()
     return (name);
 }
 
+// std::string Channel::getHasKey()
+// {
+//     return hasKey;
+// }
+
+// std::string Channel::getKey()
+// {
+//     return key;
+// }
+
+// void Channel::setKey(std::string key)
+// {
+//     this->key = key;
+// }
+
+
 Channel::~Channel()
 {
-
 }
 
 Channel::Channel(const Channel& copy) 
