@@ -154,4 +154,4 @@ QUIT reason // quit mn server with a reason
 **Problem 3end Mohammed**  
 >mli katbghi t authentificati mli katkteb "nick" GHALAT KAYTCRASHA registration kamla  
 >w t handli signal dyal sigpipe  
->./ircserv 8080 " "  
+>./ircserv 8080 " "

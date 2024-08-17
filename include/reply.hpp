@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:05:25 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/14 20:44:05 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:26:59 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,11 @@
 #define ERR_NOTEXTTOSEND(hostname) ":" + hostname + " 412 " + ":No text to send\r\n"
 #define ERR_NOSUCHNICK(hostname, nick) ":" + hostname + " 401 " + nick + " :No such nick\r\n"
 
+// add by mohammed
+#define ERROR_NEEDTOREGISTER(nick, hostname, command) ":" + hostname + " 422 " + nick + " " + command + " :You need to register before you can use that command\r\n"
+#define ERROR_REALNAME(nick, hostname) ":" + hostname + " 423 " + nick + " :Error in realename !\r\n"
+#define ERROR_ALREADYSETPASS(nick, hostname) ":" + hostname + " 424 " + nick + " :You are already set the password !\r\n"
+#define ERROR_TOOMUSHPARAMS(nick, hostname) (std::string (":") + hostname + std::string(" 461 ") + nick + " :too much parameters !\r\n")
 
 // void	ERR_NEEDMOREPARAMS(std::string nick_name, std::string commande)
 // {
