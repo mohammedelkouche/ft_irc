@@ -6,7 +6,7 @@
 /*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/17 02:33:49 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/08/17 19:49:33 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ class Server
 		/*----------------------------------------------------------------*/
 
 		/*------------------------PRIVMSG COMMAND---------------------------*/
-		void ModeCommande(std::vector<std::string> commande, Client *user);
+		// void ModeCommande(std::vector<std::string> commande, Client *user);
 		/*----------------------------------------------------------------*/
 		/*                        AYGAOUA SPEAKING                        */
 		// void	check_registration(Client *user);
