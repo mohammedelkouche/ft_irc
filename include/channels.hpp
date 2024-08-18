@@ -15,29 +15,29 @@ class Channel
 {
     private:
         std::string name;
-        std::vector<Client *>   ClientssHouse;
-        std::vector<Client *>   Operators;
-        std::string             topic;
-        bool                    bool_topic;
-        // bool                    hasKey;
-        // std::string             key;
+        std::vector<Client *> ClientssHouse;
+        std::vector<Client *> Operators;
+        std::string         topic;
+        bool                bool_topic;
+        std::string 				topic_setter;
+        std::string channelKey;
     public:
         Channel();
-        Channel(std::string name);
+        Channel(std::string name, std::string key);
         Channel(const Channel& copy);
         ~Channel();
-        bool addToChannel(Client *client);
-        void removeFromChannel(Client *client);
+        bool                    addToChannel(Client *client, std::string key);
+        void                    removeFromChannel(Client *client);
         // bool clientExists(int clientFd);
-        void setChannelName(std::string name);
-        std::string getChannelName();
-        Client* getTheOperator();
-        std::vector<Client *> GetClientssHouse();
-        std::vector<Client *> GetTheOperators();
-        void set_topic(std::string topic);
-        std::string get_topic();
-        std::string getHasKey();
-        void setKey(std::string key);
-        std::string getKey();
+        void                    setChannelName(std::string name);
+        std::string             getChannelName();
+        Client*                 getTheOperator();
+        std::vector<Client *>   GetClientssHouse();
+        std::vector<Client *>   GetTheOperators();
+        void                    set_topic(std::string topic);
+        std::string             get_topic();
+        void	                set_topic_setter(std::string topicsetter);
+        std::string             get_topic_setter();
+        std::string             getChannelKey();
     };
 #endif

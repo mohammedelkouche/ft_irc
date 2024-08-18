@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/14 16:36:17 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/18 01:37:10 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void	Server::RemoveClient(int fd)
 	// Erase the client from the map
     // clients.erase(fd);
 	
+	
 	// for vector
 	for (size_t i = 0; i < pollfds.size(); i++)
 	{
@@ -116,7 +117,15 @@ void	Server::RemoveClient(int fd)
 			break ;
 		}
 	}
-
+	for (size_t i = 0; i < pollfds.size(); i++)
+	{
+		if (pollfds[i].fd == fd)
+		{
+			pollfds.erase(pollfds.begin() + i);
+			break ;
+		}
+	}
+	partial_messages.erase(fd);  // Remove any stored partial messages for the client
 }
 
 std::vector<std::string>	devide_commande(std::string message, int fd)
@@ -190,6 +199,8 @@ void	Server::execute_commande(Client *user)
 		}
 		else if (commande[0] == "PRIVMSG" || commande[0] == "privmsg")
 			Private_message(commande, user);
+		// else if (commande[0] == "MODE" || commande[0] == "mode")
+		// 	ModeCommande(commande, user);
 		// else if (commande[0] == "part" || commande[0] == "PART")
 		// 	PartConstruction(user);
 	}
@@ -197,24 +208,15 @@ void	Server::execute_commande(Client *user)
 
 void	Server::parse_message(std::string buffer, int fd)
 {
-	std::vector <std::string> commande;
-	std::string message;
-	Client *user = get_connect_client(fd);
-	// size_t	pos = buffer.find_first_of("\r\n");
-	// size_t	pos = buffer.find("ou");
-	// size_t	pos = buffer.find("\n");
-	// size_t	limechat = buffer.find("\r\n");
-	size_t	pos = buffer.find("\r\n");
-	if (pos != std::string::npos)
-	{
-		message = buffer.substr(0, pos);
-		commande = devide_commande(message, fd);
+	Client	*user = get_connect_client(fd);
+	size_t pos = 0;
+    size_t end_pos = 0;
+	while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos) {
+		std::string command = buffer.substr(pos, end_pos - pos);
+		std::vector<std::string> commande = devide_commande(command, fd);
 		user->set_commande(commande);
 		execute_commande(user);
-		// for (std::vector<std::string>::iterator it = commande.begin(); it != commande.end(); ++it)
-		// {
-		// 	std::cout << "it  = <" << *it << ">" << std::endl;
-		// }
+		pos = end_pos + 2; // Move past "\r\n"
 	}
 }
 

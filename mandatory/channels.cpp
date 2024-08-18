@@ -1,11 +1,12 @@
 #include "../include/channels.hpp"
 
-Channel::Channel(std::string name): name(name)
+Channel::Channel(std::string name, std::string key): name(name), channelKey(key)
 {
 }
 
 Channel::Channel()
 {
+    this->channelKey = "";
 }
 
 void print(std::vector<int> v)
@@ -32,7 +33,7 @@ Client* Channel::getTheOperator()
     return NULL;
 }
 
-bool Channel::addToChannel(Client *client)
+bool Channel::addToChannel(Client *client, std::string key)
 {
     std::cout << "Attempting to add client: " << client->get_nickname() << std::endl;
 
@@ -41,6 +42,12 @@ bool Channel::addToChannel(Client *client)
         SendResponse(client, ERROR_USERONCHANNEL(client->get_hostname(), getChannelName(), client->get_nickname()));
         return false;
     }
+    if (!this->channelKey.empty() && this->channelKey != key)
+    {
+        SendResponse(client, ERROR_BADCHANNELKEY(client->get_nickname(), client->get_hostname(), getChannelName()));
+        return false;
+    }
+
     // Determine if the client should be an operator before adding
     bool shouldSetOperator = ClientssHouse.empty();
     std::cout << "Channel is empty before adding client: " << shouldSetOperator << std::endl;
@@ -92,6 +99,11 @@ std::string Channel::getChannelName()
     return (name);
 }
 
+std::string Channel::getChannelKey()
+{
+    return channelKey;
+}
+
 // std::string Channel::getHasKey()
 // {
 //     return hasKey;
@@ -110,11 +122,13 @@ std::string Channel::getChannelName()
 
 Channel::~Channel()
 {
+    
 }
 
 Channel::Channel(const Channel& copy) 
 {
     name = copy.name;
+    channelKey = copy.channelKey;
     for(size_t i = 0; i < ClientssHouse.size(); i++)
         ClientssHouse[i] = copy.ClientssHouse[i];
 }

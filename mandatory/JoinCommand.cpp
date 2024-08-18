@@ -40,17 +40,25 @@ void Server::JoinConstruction(Client *client)
     }
 
     std::vector<std::string> channelNames = Splitter(cmd[1], ",");
-    // if (cmd.size() == 2)
-    // {
-    //     std::vector<std::string> splittedKeys = Splitter(cmd[2], ",");
-    //     for (std::vector<std::string>::iterator it =  splittedKeys.begin(); it != splittedKeys.begin(); ++it)
-    //     {
-            
-    //     }
-    // }
+    std::vector<std::string> splittedKeys;
+    std::vector<std::string>::iterator keyIt;
+    std::string key;
+
+    if (cmd.size() >= 3)
+    {
+        splittedKeys = Splitter(cmd[2], ",");
+        keyIt = splittedKeys.begin();
+    }
     for (std::vector<std::string>::iterator it = channelNames.begin(); it != channelNames.end(); ++it)
     {
         std::string channelName = *it;
+        if (keyIt != splittedKeys.end())
+        {
+            key = *keyIt;
+            ++keyIt;
+        }
+        else
+            key = "";
         if (channelName[0] != '#')
         {
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelName, client->get_nickname()));
@@ -64,8 +72,8 @@ void Server::JoinConstruction(Client *client)
         if (channelIt == channels.end()) 
         {
             // Channel doesn't exist, create new channel and add client
-            Channel* newChannel = new Channel(channelName);
-            if (!newChannel->addToChannel(client))
+            Channel* newChannel = new Channel(channelName, key);
+            if (!newChannel->addToChannel(client, key))
                 continue ;
             channels.push_back(newChannel);
             client->getInvitedChannels().push_back(channelName);
@@ -75,7 +83,7 @@ void Server::JoinConstruction(Client *client)
         else
         {
             // Channel exists, add client to the channel
-            if (!(*channelIt)->addToChannel(client))
+            if (!(*channelIt)->addToChannel(client, key))
                 continue ;
             client->getInvitedChannels().push_back(channelName);
             SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()));

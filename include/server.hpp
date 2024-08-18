@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/14 16:33:46 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/17 02:33:49 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #include "./client.hpp"
 #include "./channels.hpp"
 #include <ctime>
-// #include <map>
+#include <map>
 
 
 #define BUFFER_SIZE 1024
@@ -44,6 +44,7 @@ class Server
 		std::vector<Client> clients;
 		std::vector<Channel *> channels;
 		std::vector <struct pollfd> pollfds;
+		std::map<int, std::string> partial_messages; // To store incomplete messages
 		char buffer[BUFFER_SIZE];
 	public :
 		Server();
@@ -93,6 +94,11 @@ class Server
 		/*------------------------PRIVMSG COMMAND---------------------------*/
 		void	Private_message(std::vector<std::string> commande, Client *user);
 		void	sendToChannel(Client *user, const std::string& message, std::string Chnl);
+		int		no_suck_channel_msg(std::string chnl);
+		/*----------------------------------------------------------------*/
+
+		/*------------------------PRIVMSG COMMAND---------------------------*/
+		void ModeCommande(std::vector<std::string> commande, Client *user);
 		/*----------------------------------------------------------------*/
 		/*                        AYGAOUA SPEAKING                        */
 		// void	check_registration(Client *user);

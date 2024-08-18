@@ -41,8 +41,8 @@ void Server::InviteConstruction(Client *client)
     {
         // std::cout << "InviteConstruction" << std::endl;
         Client& target = getClientByNick(clients, vec[1]);
-        Channel invitted(vec[2]);
-        if (!(invitted.addToChannel(client)))
+        Channel invitted(vec[2], "");
+        if (!(invitted.addToChannel(client, "")))
             return ;
         target.getInvitedChannels().push_back(vec[2]);
         SendResponse(client , REPLY_INVITING(client->get_hostname(), client->get_nickname(), target.get_nickname(), vec[2]));

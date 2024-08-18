@@ -6,7 +6,7 @@
 /*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 18:03:45 by azgaoua           #+#    #+#             */
-/*   Updated: 2024/08/12 18:47:00 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/08/17 02:29:03 by azgaoua          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,12 @@ int Server::on_channel(std::vector<Client *>  Clnts, Client *nick)
 
 void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
     std::string full_name_topic;
-    if (Topic[1][0] == '#') {
+    if (Topic[1][0] == '#') 
+    {
         if (no_suck_channel(Topic) == 1)
         {
-            sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), Topic[1], user->get_nickname()));
+            sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), \
+                            Topic[1], user->get_nickname()));
             return ;
         }
         for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) {
@@ -58,21 +60,36 @@ void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
                     Topic[2].erase(0, 1);
                     for (size_t j = 2; j < Topic.size(); j++)
                         full_name_topic += Topic[j];
+                    (*it)->set_topic_setter(user->get_nickname());
                     if (full_name_topic.empty())
                     {
-                        sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), Topic[1], ""));
+                        sendToChannel(user, REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), ""), Topic[1]);
+                        sendToClient(user->get_fd(), REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), ""));
                         (*it)->set_topic("");
                     }
                     else
                     {
-                        sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), Topic[1], full_name_topic));
+                        sendToChannel(user, REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), full_name_topic), Topic[1]);
+                        sendToClient(user->get_fd(), REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), full_name_topic));
                         (*it)->set_topic(full_name_topic);
                     }
+                    (*it)->set_topic_setter(user->get_nickname());
                 }
-                else
+                else if (Topic.size() >= 3)
                 {
-                    sendToClient(user->get_fd(), RPL_NOTOPIC(user->get_hostname(), Topic[1]));
-                    // std::cout << "Error: No topic (syntax `:`)" << std::endl;
+                    full_name_topic += Topic[2];
+                    if (full_name_topic.empty())
+                    {
+                        sendToChannel(user, REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), ""), Topic[1]);
+                        sendToClient(user->get_fd(), REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), ""));
+                        (*it)->set_topic("");
+                    }
+                    else
+                    {
+                        sendToChannel(user, REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), full_name_topic), Topic[1]);
+                        sendToClient(user->get_fd(), REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), full_name_topic));
+                        (*it)->set_topic(full_name_topic);
+                    }
                 }
                 return;
             }
@@ -80,7 +97,18 @@ void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
         sendToClient(user->get_fd(), ERR_NOTONCHANNEL(user->get_hostname(), Topic[1], user->get_nickname()));
     }
     else
-        std::cerr << "Error: No such channel (syntax `#`)"<< std::endl;
+        sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), \
+                            Topic[1], user->get_nickname()));
+}
+
+void    Channel::set_topic_setter(std::string topicsetter)
+{
+    topic_setter = topicsetter;
+}
+
+std::string    Channel::get_topic_setter()
+{
+    return(topic_setter);
 }
 
 std::string Channel::get_topic() {
@@ -98,7 +126,8 @@ void Server::DisplayTopic(std::vector<std::string> channel_name, Client *user) {
     if (channel_name.size() == 1)
     {
         std::string command = channel_name[0];
-        sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(user->get_nickname(), user->get_hostname()));
+        sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(user->get_nickname(), \
+                        user->get_hostname()));
         return ;
     }
     for (k = channels.begin(); k != channels.end(); ++k) {
@@ -109,7 +138,17 @@ void Server::DisplayTopic(std::vector<std::string> channel_name, Client *user) {
             if ((*k)->get_topic().empty())
                 sendToClient(user->get_fd(), RPL_NOTOPIC(user->get_hostname(), channel_name[1]));
             else
-                sendToClient(user->get_fd(), RPL_TOPIC(user->get_hostname(), channel_name[1], (*k)->get_topic()));
+            {
+                time_t present_time;
+
+                present_time = time(NULL);
+                std::ostringstream oss;
+                oss << present_time;
+                std::string time_now = oss.str();
+                sendToClient(user->get_fd(), REPLY_TOPICDISPLAY(user->get_hostname(), user->get_nickname(),channel_name[1], (*k)->get_topic()));
+                sendToClient(user->get_fd(), REPLY_TOPICWHOTIME((*k)->get_topic_setter(), time_now, \
+                                user->get_nickname(), user->get_hostname(), channel_name[1]));
+            }
             return ;
         }
     }
