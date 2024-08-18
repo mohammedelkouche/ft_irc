@@ -26,7 +26,8 @@ bool Server::channeDoesntlExists(std::vector<Channel*> haystack, std::string nee
 void SendResponse(Client *client, std::string msg)
 {
     if (send(client->get_fd(), msg.c_str(), msg.length(), 0) == -1)
-        throw std::runtime_error("Failed Send JOIN message to the client"); 
+        std::cerr << "send() faild" << std::endl;
+        // throw std::runtime_error("Failed Send JOIN message to the client"); 
 }
 
 void Server::JoinConstruction(Client *client) 

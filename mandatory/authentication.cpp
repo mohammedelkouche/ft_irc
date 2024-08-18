@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/17 21:26:03 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/18 15:55:38 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ void	Server::handle_pass(Client *user)
 void	Server::sendToClient(int fd, const std::string& message)
 {
 	if (send(fd, message.c_str(), message.length(), 0) == -1)
-		throw std::runtime_error("Failed to send message");
+		std::cerr << "send() faild" << std::endl;
+		// throw std::runtime_error("Failed to send message");
 }
 
 void	Server::handle_nickname(Client *user)

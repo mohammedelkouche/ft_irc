@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/17 13:17:34 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/18 21:38:31 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,12 @@
 
 Server::Server() : pass("")
 {
-
+	// add
+	// Set up the SIGINT handler
+    signal(SIGINT, handleSigint);
+    // Ignore SIGPIPE
+    signal(SIGPIPE, SIG_IGN);
+	
 }
 
 	
@@ -201,27 +206,7 @@ void	Server::execute_commande(Client *user)
 }
 
 void	Server::parse_message(std::string buffer, int fd)
-{
-	// std::vector <std::string> commande;
-	// std::string message;
-	// Client *user = get_connect_client(fd);
-	// // size_t	pos = buffer.find_first_of("\r\n");
-	// // size_t	pos = buffer.find("ou");
-	// // size_t	pos = buffer.find("\n");
-	// // size_t	limechat = buffer.find("\r\n");
-	// size_t	pos = buffer.find("\r\n");
-	// if (pos != std::string::npos)
-	// {
-	// 	message = buffer.substr(0, pos);
-	// 	commande = devide_commande(message, fd);
-	// 	user->set_commande(commande);
-	// 	execute_commande(user);
-	// 	// for (std::vector<std::string>::iterator it = commande.begin(); it != commande.end(); ++it)
-	// 	// {
-	// 	// 	std::cout << "it  = <" << *it << ">" << std::endl;
-	// 	// }
-	// }
-	
+{	
 	Client	*user = get_connect_client(fd);
 	size_t pos = 0;
     size_t end_pos = 0;
@@ -269,13 +254,20 @@ void	Server::ReceiveClientData(int fd)
 		// quit();
 		// sendToClient(fd, "Client fd = '" << fd << "' Disconnected);
 		std::cout << "[Client fd]= [" << fd << "] [Disconnected]" << std::endl;
+		
+		Client * client = get_connect_client(fd);
+		for (size_t i = 0; i < channels.size(); i++)
+			channels[i]->removeFromChannel(client);
         RemoveClient(fd);
         close(fd);
 	}
 	else
 	{
-		// std::cout << " bytes_received =  " << bytes_received << std::endl;
-		buffer[bytes_received] = '\0';
+		if (bytes_received < BUFFER_SIZE) {
+            buffer[bytes_received] = '\0';
+        } else {
+            buffer[BUFFER_SIZE - 1] = '\0';
+        }
 		std::cout << "Client fd = '" << fd << "' send : " << buffer;
 		message = buffer;
 		if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
@@ -289,19 +281,26 @@ void	Server::ReceiveClientData(int fd)
 	}
 }
 
+bool Server::stopServer = 0;
+
+void Server::handleSigint(int sig)
+{
+    std::cout << "Caught SIGINT (" << sig << "). Shutting down server gracefully." << std::endl;
+    Server::stopServer = 1; // Set the flag to stop the server loop
+}
 
 void	Server::initializeServer(int port_nbr,std::string str)
 {
 	this->port = port_nbr;
 	this->pass = str;
 	config_server();
-
+	
 	std::cout << "Server with fd <" << fd_srv_socket << "> Connected" << std::endl;
 	std::cout << "Server started. Listening on port : " << this->port << std::endl;
 	std::cout << "Waiting to accept a connection...\n";
-	while (true)
+	while (!stopServer)
 	{
-		if (poll(&pollfds[0], pollfds.size(), -1) == -1)
+		if (poll(&pollfds[0], pollfds.size(), -1) == -1 && !stopServer)
 			throw(std::runtime_error("poll() failed"));
 		for (size_t i = 0; i < pollfds.size(); i++)
 		{

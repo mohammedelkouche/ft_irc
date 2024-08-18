@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/17 12:15:48 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/18 15:24:54 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,9 @@ class Server
 		std::vector<Channel *> channels;
 		std::vector <struct pollfd> pollfds;
 		std::map<int, std::string> partial_messages; // To store incomplete messages
-		char buffer[BUFFER_SIZE];
+		// char buffer[BUFFER_SIZE];
+		// add
+		static bool stopServer;
 	public :
 		Server();
 		Server(const Server &obj);
@@ -86,6 +88,7 @@ class Server
 		Channel* getChannelByName(std::vector<Channel *> channels, std::string name);
 		// add
 		bool	check_valid_realname(std::string realname);
+		static void handleSigint(int sig);
 		/*                        AYGAOUA SPEAKING                        */
 		/*------------------------TOPIC COMMAND---------------------------*/
 		void	Topic_Command(std::vector<std::string> Topic, Client *user);
