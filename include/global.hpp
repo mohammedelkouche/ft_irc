@@ -8,6 +8,7 @@ class Client;
 void SendResponse(Client *client, std::string msg);
 std::vector<std::string> Splitter(std::string cmd, std::string delimiter);
 bool IsClientInChannel(std::vector<Client *> ClientssHouse, int fd);
+std::vector<std::string> split(std::string commande, char delimeter);
 
 
 #endif

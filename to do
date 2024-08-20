@@ -1,0 +1,7 @@
+-> join 0 :
+if the client sends JOIN 0,
+remove them from all channels they are currently in.
+This would involve sending a PART message to all channels they leave.
+
+
+chof chwiya f dik ':' f l key dyal channel

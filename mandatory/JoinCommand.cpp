@@ -26,7 +26,8 @@ bool Server::channeDoesntlExists(std::vector<Channel*> haystack, std::string nee
 void SendResponse(Client *client, std::string msg)
 {
     if (send(client->get_fd(), msg.c_str(), msg.length(), 0) == -1)
-        throw std::runtime_error("Failed Send JOIN message to the client"); 
+        std::cout << " Failed Send JOIN message to the client " << std::endl;
+        // throw std::runtime_error("");
 }
 
 void Server::JoinConstruction(Client *client)
@@ -41,20 +42,35 @@ void Server::JoinConstruction(Client *client)
 
     std::vector<std::string> channelNames = Splitter(cmd[1], ",");
     std::vector<std::string> splittedKeys;
+    bool hasKey = false;
     std::vector<std::string>::iterator keyIt;
+    
     std::string key;
 
-    if (cmd.size() >= 3)
+    if (cmd.size() == 3)
     {
         splittedKeys = Splitter(cmd[2], ",");
         keyIt = splittedKeys.begin();
+        hasKey = true;
     }
+    else if (cmd.size() == 4 && cmd[2] == ":")
+    {
+        splittedKeys = Splitter(cmd[3], ",");
+        keyIt = splittedKeys.begin();
+        hasKey = true;
+    }
+    // for (size_t i = 0 ; i < splittedKeys.size(); i++)
+    //     std::cout << "########### Splitted keys ########### -> " << splittedKeys[i] << std::endl;
     for (std::vector<std::string>::iterator it = channelNames.begin(); it != channelNames.end(); ++it)
     {
         std::string channelName = *it;
-        if (keyIt != splittedKeys.end())
+        if (hasKey && keyIt != splittedKeys.end())
         {
+            std::cout << "Original key: [" << *keyIt << "]" << std::endl;
             key = *keyIt;
+            if (!key.empty() && key[0] == ':')
+                key.erase(0,1);
+            std::cout << "erase: [" << key << "]" << std::endl;
             ++keyIt;
         }
         else

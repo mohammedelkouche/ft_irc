@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/17 02:33:49 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/08/19 19:20:38 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 #include "./channels.hpp"
 #include <ctime>
 #include <map>
+#include "global.hpp"
 
 
 #define BUFFER_SIZE 1024
