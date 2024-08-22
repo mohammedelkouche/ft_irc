@@ -4,4 +4,8 @@ remove them from all channels they are currently in.
 This would involve sending a PART message to all channels they leave.
 
 
-chof chwiya f dik ':' f l key dyal channel
+->chof chwiya f dik ':' f l key dyal channel
+-> l key makayt setta hta kaykon l mode dyal channel +k 
+-> join reply khs l clinet li joina channel i displayi NAMREPLY W JOIN_REPLY w NAMLIST
+ wkhas l operator i prefixa b @ f desplay dyal response
+ 

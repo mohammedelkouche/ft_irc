@@ -17,10 +17,10 @@ class Channel
         std::string name;
         std::vector<Client *> ClientssHouse;
         std::vector<Client *> Operators;
-        std::string         topic;
-        bool                bool_topic;
-        std::string 				topic_setter;
-        std::string channelKey;
+        std::string           topic;
+        bool                  bool_topic;
+        std::string           topic_setter;
+        std::string           channelKey;
     public:
         Channel();
         Channel(std::string name, std::string key);
