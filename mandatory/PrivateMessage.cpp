@@ -29,9 +29,9 @@ void Server::sendToChannel(Client *user, const std::string& message, std::string
     }
 }
 
-std::vector<std::string> split(std::string commande, char delimeter)
+std::vector<std::string> split(std::string command, char delimeter)
 {
-    std::stringstream ss(commande);
+    std::stringstream ss(command);
     std::string item;
     std::vector<std::string> splittedStrings;
     while (std::getline(ss, item, delimeter))
@@ -39,14 +39,14 @@ std::vector<std::string> split(std::string commande, char delimeter)
     return splittedStrings;
 }
 
-void Server::Private_message(std::vector<std::string> commande, Client *user)
+void Server::Private_message(std::vector<std::string> command, Client *user)
 {
     std::vector<std::string> targets;
     std::string full_message;
     size_t i;
 
-    targets =  split(commande[1], ',');
-    if (commande.size() <= 2)
+    targets =  split(command[1], ',');
+    if (command.size() <= 2)
     {
         sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(user->get_nickname(), user->get_hostname()));
         return ;
@@ -67,14 +67,14 @@ void Server::Private_message(std::vector<std::string> commande, Client *user)
                 {
                     if (on_channel((*it)->GetClientssHouse(), user))
                     {
-                        if (commande[2][0] == ':')
+                        if (command[2][0] == ':')
                         {
-                            commande[2].erase(0, 1);
-                            for (size_t j = 2; j < commande.size(); j++)
-                                full_message += commande[j];
+                            command[2].erase(0, 1);
+                            for (size_t j = 2; j < command.size(); j++)
+                                full_message += command[j];
                         }
                         else
-                            full_message += commande[2];
+                            full_message += command[2];
                         if (full_message.empty())
                             sendToChannel(user, ERR_NOTEXTTOSEND(user->get_hostname()), (*it)->getChannelName());
                         else
@@ -95,11 +95,11 @@ void Server::Private_message(std::vector<std::string> commande, Client *user)
             {
                 if (clients[i].get_nickname() == (*it_t))
                 {
-                    if (commande[2][0] == ':')
+                    if (command[2][0] == ':')
                     {
-                        commande[2].erase(0, 1);
-                        for (size_t j = 2; j < commande.size(); j++)
-                            full_message += commande[j];
+                        command[2].erase(0, 1);
+                        for (size_t j = 2; j < command.size(); j++)
+                            full_message += command[j];
                         if (full_message.empty())
                             sendToClient(user->get_fd(), ERR_NOTEXTTOSEND(user->get_hostname()));
                         else
@@ -109,7 +109,7 @@ void Server::Private_message(std::vector<std::string> commande, Client *user)
                     }
                     else
                     {
-                        full_message += commande[2];
+                        full_message += command[2];
                         if (full_message.empty())
                             sendToClient(user->get_fd(), ERR_NOTEXTTOSEND(user->get_hostname()));
                         else

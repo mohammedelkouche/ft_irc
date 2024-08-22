@@ -55,6 +55,22 @@ void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
                 std::vector<Client *> Clnts = (*it)->GetClientssHouse();
                 if (on_channel(Clnts, user) == 0)
                     break ;
+                if ((*it)->get_t() == true)
+                {
+                    for (std::vector<Client *>::iterator it = Clnts.begin(); it != Clnts.end(); ++it)
+                    {
+                        if ((*it)->get_nickname() == user->get_nickname())
+                        {
+                            if ((*it)->getIsOperatorStatus() == 0)
+                            {
+                                sendToClient(user->get_fd(), ERROR_NOPRIVILEGES(user->get_hostname(), Topic[1]));
+                                return ; 
+                            }
+                            else
+                                break;
+                        }
+                    }
+                }
                 if (Topic[2][0] == ':')
                 {
                     Topic[2].erase(0, 1);
@@ -125,7 +141,6 @@ void Server::DisplayTopic(std::vector<std::string> channel_name, Client *user) {
 
     if (channel_name.size() == 1)
     {
-        std::string command = channel_name[0];
         sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(user->get_nickname(), \
                         user->get_hostname()));
         return ;

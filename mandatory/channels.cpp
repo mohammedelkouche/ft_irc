@@ -2,10 +2,12 @@
 
 Channel::Channel(std::string name): name(name)
 {
+    init_modes();
 }
 
 Channel::Channel()
 {
+    init_modes();
 }
 
 void print(std::vector<int> v)
@@ -99,6 +101,7 @@ Channel::~Channel()
 
 Channel::Channel(const Channel& copy) 
 {
+    init_modes();
     name = copy.name;
     for(size_t i = 0; i < ClientssHouse.size(); i++)
         ClientssHouse[i] = copy.ClientssHouse[i];

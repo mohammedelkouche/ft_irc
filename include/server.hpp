@@ -92,13 +92,14 @@ class Server
 		/*----------------------------------------------------------------*/
 
 		/*------------------------PRIVMSG COMMAND---------------------------*/
-		void	Private_message(std::vector<std::string> commande, Client *user);
+		void	Private_message(std::vector<std::string> command, Client *user);
 		void	sendToChannel(Client *user, const std::string& message, std::string Chnl);
 		int		no_suck_channel_msg(std::string chnl);
 		/*----------------------------------------------------------------*/
 
 		/*------------------------PRIVMSG COMMAND---------------------------*/
-		// void ModeCommande(std::vector<std::string> commande, Client *user);
+		void	ModeCommand(std::vector<std::string> command, Client *user);
+		// void DisplayMode(std::vector<std::string> command, Client *user);
 		/*----------------------------------------------------------------*/
 		/*                        AYGAOUA SPEAKING                        */
 		// void	check_registration(Client *user);

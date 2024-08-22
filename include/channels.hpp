@@ -14,12 +14,20 @@ class Client;
 class Channel
 {
     private:
-        std::string name;
-        std::vector<Client *> ClientssHouse;
-        std::vector<Client *> Operators;
-        std::string         topic;
-        bool                bool_topic;
-        std::string 				topic_setter;
+        std::string             name;
+        std::vector<Client *>   ClientssHouse;
+        std::vector<Client *>   Operators;
+        std::string             topic;
+        std::string             topic_setter;
+        int                     mode;
+        int                     limit;
+        std::string             key;
+        bool                    i;
+        bool                    k;
+        bool                    l;
+        bool                    o;
+        bool                    t;
+        
     public:
         Channel();
         Channel(std::string name);
@@ -37,5 +45,23 @@ class Channel
         std::string get_topic();
 		void	set_topic_setter(std::string topicsetter);
         std::string get_topic_setter();
+        void	add_i();
+		void	add_t();
+		void	add_o(std::string nick);
+		void	add_k(std::string key);
+		void	add_l(int limit);
+        void	rm_i();
+		void	rm_t();
+		void	rm_o(std::string nick);
+		void	rm_k(std::string key);
+		void	rm_l();
+        bool	get_i();
+		bool	get_t();
+		bool	get_o();
+		bool	get_k();
+		bool	get_l();
+        void    set_mode(int mode_number);
+        void    init_modes();
+        std::string get_channel_mode();
     };
 #endif
