@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/18 15:55:38 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/22 19:13:58 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@
 void	Server::handle_pass(Client *user)
 {
 	std::vector<std::string> commande = user->get_commande();
+	// std::cout << "alll commande commande <<" << commande << ">> commande " <<  std::endl;
+	// for (size_t i = 0; i < commande.size(); ++i) {
+    //     std::cout << "element <<" << commande[i] << ">>" <<  std::endl;
+    // }
 	std::vector <std::string>::iterator it = std::find(commande.begin(), commande.end(), ":");
 	if (it != commande.end())
 		commande.erase(it);
@@ -43,6 +47,7 @@ void	Server::handle_pass(Client *user)
 			sendToClient(user->get_fd(), ERROR_ALREADYREGISTERED(user->get_nickname(), user->get_hostname()));
 		else
 		{
+			// std::cout <<" commande <<" << commande[1] << ">> commande " <<  std::endl;
 			if (this->pass != commande[1])
 			{
 				if (user->get_correct_pass())
@@ -93,6 +98,7 @@ void	Server::handle_nickname(Client *user)
 	else
 	{
 		// if (!user->get_pass_client().compare(""))
+		// std::cout << " 222 holaaaaaaaa >>"<< user->get_pass_client()<<  "<< holaaaaaaaa " << std::endl;
 		if (!user->get_correct_pass())
 		{
 			// add

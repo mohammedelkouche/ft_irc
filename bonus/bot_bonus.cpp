@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:04:27 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/21 22:03:56 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:32:58 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include<string>
 
 
-Bot::Bot(const std::string  ip, int port) : port(port), server_ip(ip), bot_fd(-1), terminate(false)
+Bot::Bot(const std::string &ip, int port, const std::string &password) : port(port), server_ip(ip), bot_fd(-1), password(password) ,terminate(false)
 {
 	memset(&server_addr, 0, sizeof(server_addr));
 	server_addr.sin_family = AF_INET;
@@ -82,7 +82,7 @@ std::string	Bot::ReceiveMessage()
     
     // add 
     char buffer[1024];
-    size_t bytes_received = recv(bot_fd, buffer, sizeof(buffer) - 1, 0);
+    ssize_t bytes_received = recv(bot_fd, buffer, sizeof(buffer) - 1, 0);
     if (bytes_received <= 0) {
         if (bytes_received == 0) {
             std::cout << "Server closed connection." << std::endl;
@@ -131,6 +131,7 @@ void Bot::signalHandler(int signal)
     if (signal == SIGINT) {
         // Terminate the bot safely
         std::cout << "Termination signal received. Cleaning up." << std::endl;
+        // Cleanup();
         exit(0); // Exit the program after cleanup
     }
 }
@@ -151,98 +152,6 @@ void Bot::signalHandler(int signal)
 // }
 
 
-// void	Bot::PlayGame()
-// {
-// 	std::srand(std::time(0));
-// 	std::string choices[] = {"rock", "paper", "scissors"};
-// 	while (true)
-//     {
-//         std::string client_message = ReceiveMessage();
-//         if (client_message.size() >= 2 && client_message.substr(client_message.size() - 2) == "\r\n") 
-//             client_message.erase(client_message.size() - 2);
-        
-//         std::istringstream iss(client_message);
-    
-//         // Variables to hold the parts of the message
-//         std::string senderdomaine;
-//         std::string command;
-//         std::string receiver;
-//         std::string msgContent;
-        
-//         iss >> senderdomaine;
-//         std::string sender = senderdomaine.substr(1, senderdomaine.find('!') - 1);
-//         iss >> command;
-//         iss >> receiver;
-//         std::getline(iss, msgContent); // Get the rest of the line
-
-
-//         // Remove the leading ': ' from the message content
-//         if (!msgContent.empty() && msgContent[0] == ' ' && msgContent[1] == ':') {
-//             msgContent = msgContent.substr(2);
-//         }
-
-//         std::cout << "msgContent =>>" << msgContent<< "<<=" <<std::endl;
-//             // Check if the command is 'privmsg'
-//             if (command == "PRIVMSG")
-//             {
-//                 if (msgContent == "start")
-//                 {
-//                     PrSendMessage("Game started. Send 'rock', 'paper', or 'scissors'.", sender);
-//                 }
-//                 else if (msgContent == "exit")
-//                 {
-//                     PrSendMessage("Game ended.", sender);
-//                     break;
-//                 }
-//                 else
-//                 {
-//                     int client_choice = ChoiceToInt(msgContent);
-//                     if (client_choice != -1)
-//                     {
-//                         int bot_choice = std::rand() % 3;
-//                         PrSendMessage("Bot chose " + std::string(choices[bot_choice]), sender);
-                        
-//                         switch (client_choice)
-//                         {
-//                         case 0: // client chose rock
-//                             switch (bot_choice)
-//                             {
-//                             case 0: PrSendMessage("It's a tie", sender); break;
-//                             case 1: PrSendMessage("Bot wins!", sender); break;
-//                             case 2: PrSendMessage("You win!", sender); break;
-//                             }
-//                             break;
-//                         case 1: // Client chose paper
-//                             switch (bot_choice)
-//                             {
-//                             case 0: PrSendMessage("You win!", sender); break;
-//                             case 1: PrSendMessage("It's a tie!", sender); break;
-//                             case 2: PrSendMessage("Bot wins!", sender); break;
-//                             }
-//                             break;
-//                         case 2: // Client chose scissors
-//                             switch (bot_choice)
-//                             {
-//                             case 0: PrSendMessage("Bot wins!", sender); break;
-//                             case 1: PrSendMessage("You win!", sender); break;
-//                             case 2: PrSendMessage("It's a tie!", sender); break;
-//                             }
-//                             break;
-//                         }
-//                     }
-//                     else
-//                     {
-//                         PrSendMessage("Invalid input. Send 'rock', 'paper', or 'scissors' to play, or 'exit' to quit.", sender);
-//                     }
-//                 }
-//             }
-//         }
-// }
-
-
-////////// add 
-
-
 void Bot::PlayGame()
 {
     std::srand(std::time(0));
@@ -252,9 +161,9 @@ void Bot::PlayGame()
 
     while (!terminate) {
         std::string client_message = ReceiveMessage();
-        if (client_message.empty()) {
+        if (client_message.empty())
             break; // Exit the loop if connection is closed or termination is requested
-        }
+
         if (client_message.size() >= 2 && client_message.substr(client_message.size() - 2) == "\r\n") 
             client_message.erase(client_message.size() - 2);
         
@@ -273,61 +182,71 @@ void Bot::PlayGame()
         std::getline(iss, msgContent); // Get the rest of the line
 
         // Remove the leading ': ' from the message content
-        if (!msgContent.empty() && msgContent[0] == ' ' && msgContent[1] == ':') {
+        if (!msgContent.empty() && msgContent[0] == ' ' && msgContent[1] == ':')
+        {
             msgContent = msgContent.substr(2);
         }
 
         std::cout << "msgContent =>>" << msgContent << "<<=" << std::endl;
         
-        if (client_in_game.find(sender) == client_in_game.end()) {
+        if (client_in_game.find(sender) == client_in_game.end())
+        {
             client_in_game[sender] = false; 
         }
         
-        if (command == "PRIVMSG") {
-            if (msgContent == "start") {
+        if (command == "PRIVMSG")
+        {
+            if (msgContent == "start")
+            {
                 client_in_game[sender] = true;
                 PrSendMessage("Game started. Send 'rock', 'paper', or 'scissors'.", sender);
             }
-            else if (msgContent == "exit") {
+            else if (msgContent == "exit")
+            {
                 client_in_game[sender] = false;
                 client_in_game.erase(sender);
                 PrSendMessage("Game ended.", sender);
             }
-            else if (client_in_game[sender]) {
+            else if (client_in_game[sender])
+            {
                 int client_choice = ChoiceToInt(msgContent);
-                if (client_choice != -1) {
+                if (client_choice != -1)
+                {
                     int bot_choice = std::rand() % 3;
                     PrSendMessage("Bot chose " + std::string(choices[bot_choice]), sender);
 
                     switch (client_choice) {
                     case 0: // Client chose rock
-                        switch (bot_choice) {
-                        case 0: PrSendMessage("It's a tie", sender); break;
-                        case 1: PrSendMessage("Bot wins!", sender); break;
-                        case 2: PrSendMessage("You win!", sender); break;
+                        switch (bot_choice)
+                        {
+                            case 0: PrSendMessage("It's a tie", sender); break;
+                            case 1: PrSendMessage("Bot wins!", sender); break;
+                            case 2: PrSendMessage("You win!", sender); break;
                         }
                         break;
                     case 1: // Client chose paper
-                        switch (bot_choice) {
-                        case 0: PrSendMessage("You win!", sender); break;
-                        case 1: PrSendMessage("It's a tie!", sender); break;
-                        case 2: PrSendMessage("Bot wins!", sender); break;
+                        switch (bot_choice)
+                        {
+                            case 0: PrSendMessage("You win!", sender); break;
+                            case 1: PrSendMessage("It's a tie!", sender); break;
+                            case 2: PrSendMessage("Bot wins!", sender); break;
                         }
                         break;
                     case 2: // Client chose scissors
-                        switch (bot_choice) {
-                        case 0: PrSendMessage("Bot wins!", sender); break;
-                        case 1: PrSendMessage("You win!", sender); break;
-                        case 2: PrSendMessage("It's a tie!", sender); break;
+                        switch (bot_choice)
+                        {
+                            case 0: PrSendMessage("Bot wins!", sender); break;
+                            case 1: PrSendMessage("You win!", sender); break;
+                            case 2: PrSendMessage("It's a tie!", sender); break;
                         }
                         break;
                     }
-                } else {
+                } 
+                else 
                     PrSendMessage("Invalid input. Send 'rock', 'paper', or 'scissors' to play, or 'exit' to quit.", sender);
-                }
-            } else {
+            } 
+            else
                 PrSendMessage("You must send 'start' to begin the game.", sender);
-            }
         }
     }
     // Cleanup();
@@ -336,21 +255,24 @@ void Bot::PlayGame()
 bool	Bot::Authenticate()
 {
 	std::string nick, user, pass;
-    std::cout << "Enter password: ";
-    std::cin >> pass;
-    std::cout << "Enter nickname: ";
-    std::cin >> nick;
-    std::cout << "Enter username: ";
-    std::cin >> user;
+    // std::cout << "Enter password: ";
+    // std::cin >> pass;
+    // std::cout << "Enter nickname: ";
+    // std::cin >> nick;
+    // std::cout << "Enter username: ";
+    // std::cin >> user;
+    
+    // pass = "h";
+    nick = "bot";
+    user = "ahmed";
 
-    SendMessage("PASS " + pass + "\r\n");
+    SendMessage("PASS " + password + "\r\n");
     SendMessage("NICK " + nick + "\r\n");
     SendMessage("USER " + user + " 0 * " + user + "\r\n");
 
     std::string response = ReceiveMessage();
     std::cout << "Server: " << response << std::endl;
 
-    // Assuming "001" is the successful login code
     if (response.find("001") != std::string::npos)
 	{
         std::cout << "Authentication successful." << std::endl;
@@ -358,83 +280,16 @@ bool	Bot::Authenticate()
     }
 	else
         return false;
-
-    // add test 
-    
-    //  std::string nick, user, pass;
-
-    // struct pollfd fds[1];
-    // fds[0].fd = bot_fd;
-    // fds[0].events = POLLIN;
-
-    // while (!terminate) {
-    //     std::cout << "Enter password: ";
-    //     std::cin >> pass;
-
-    //     int poll_result = poll(fds, 1, 0); // Check the socket for any events with a timeout of 0 (non-blocking)
-    //     if (poll_result > 0) {
-    //         std::string response = ReceiveMessage();
-    //         if (response.empty()) {
-    //             terminate = true;
-    //             break;
-    //         }
-    //     }
-
-    //     std::cout << "Enter nickname: ";
-    //     std::cin >> nick;
-
-    //     poll_result = poll(fds, 1, 0);
-    //     if (poll_result > 0) {
-    //         std::string response = ReceiveMessage();
-    //         if (response.empty()) {
-    //             terminate = true;
-    //             break;
-    //         }
-    //     }
-
-    //     std::cout << "Enter username: ";
-    //     std::cin >> user;
-
-    //     poll_result = poll(fds, 1, 0);
-    //     if (poll_result > 0) {
-    //         std::string response = ReceiveMessage();
-    //         if (response.empty()) {
-    //             terminate = true;
-    //             break;
-    //         }
-    //     }
-
-    //     SendMessage("PASS " + pass + "\r\n");
-    //     SendMessage("NICK " + nick + "\r\n");
-    //     SendMessage("USER " + user + " 0 * " + user + "\r\n");
-
-    //     std::string response = ReceiveMessage();
-    //     std::cout << "Server: " << response << std::endl;
-
-    //     if (terminate) {
-    //         break; // Exit if terminate flag is set
-    //     }
-
-    //     // Assuming "001" is the successful login code
-    //     if (response.find("001") != std::string::npos) {
-    //         std::cout << "Authentication successful." << std::endl;
-    //         return true;
-    //     } else {
-    //         std::cout << "Authentication failed. Please try again." << std::endl;
-    //     }
-    // }
-    // return false;
 }
 
 void	Bot::Run()
 {
 	ConnectToServer();
-	while (!terminate && !Authenticate()) 
-    {
-		std::cout << "Authentication failed. Please try again." << std::endl;
-    }
-    std::cout << "miyyyyyyyyaaaaw" << std::endl;
-    if (!terminate)
+	// while (!terminate && !Authenticate()) 
+    // {
+	// 	std::cout << "Authentication failed. Please try again." << std::endl;
+    // }
+    if (Authenticate())
 	    PlayGame();
 }
 

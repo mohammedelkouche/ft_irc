@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:52:46 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/21 17:12:54 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:15:31 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ void	CheckArg(char **argv)
 
 int main(int argc, char **argv)
 {
-	if (argc != 3)
+	if (argc != 4)
 	{
-		std::cout << "write executable file  <port> <password>" << std::endl;
+		std::cout << "write < executable file > < 127.0.0.1 >  <port>  <pass>" << std::endl;
 		return 1;
 	}
 	try
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
     	// // Set up signal handling for termination
     	// signal(SIGINT, signalHandler);
 		CheckArg(argv);
-		Bot bot(argv[1], std::atoi(argv[2]));
+		Bot bot(argv[1], std::atoi(argv[2]), argv[3]);
 		bot.Run();
 	}
 	catch(const std::exception& e)

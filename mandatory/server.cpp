@@ -6,12 +6,12 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/18 21:38:31 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/22 22:45:58 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/server.hpp"
 #include "../include/client.hpp"
+#include "../include/server.hpp"
 #include "../include/reply.hpp"
 
 

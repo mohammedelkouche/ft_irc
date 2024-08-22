@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 16:13:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/21 21:45:25 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:22:06 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class Bot
 		int port;
 		std::string server_ip;
 		int bot_fd;
+		std::string password;
 		struct sockaddr_in server_addr;
 		bool terminate;
 		void Cleanup();
@@ -39,7 +40,7 @@ class Bot
 		// add
 		// std::vector<int> client_fds;
 	public :
-		Bot(const std::string ip, int port);
+		Bot(const std::string &ip, int port, const std::string &password);
 		void	Run();
 		void	ConnectToServer();
 		bool	Authenticate();
