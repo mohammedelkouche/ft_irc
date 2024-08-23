@@ -30,10 +30,32 @@ void SendResponse(Client *client, std::string msg)
         // throw std::runtime_error("");
 }
 
-std::string selfJoinReply()
+std::string Server::buildNamReply(Channel *channel) 
 {
-    
+    std::string reply;
+    std::vector<Client*> clients = channel->GetClientssHouse();
+    for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it) 
+    {
+        Client* client = *it;
+        if (channel->getTheOperator() == client)
+            reply += "@" + channel->getTheOperator()->get_nickname();
+        else
+            reply += client->get_nickname();
+        
+        if (it + 1 != clients.end())
+            reply += " ";
+    }
+    return reply;
 }
+
+void Server::selfJoinReply(Client *client, Channel *channel)
+{
+    SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channel->getChannelName(), client->get_hostname()));
+    SendResponse(client, REPLY_NAMREPLY(client->get_hostname(), buildNamReply(channel), channel->getChannelName(), client->get_nickname()));
+    SendResponse(client, REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), channel->getChannelName()));
+}
+
+
 
 void Server::JoinConstruction(Client *client)
 {
@@ -104,7 +126,9 @@ void Server::JoinConstruction(Client *client)
                 continue ;
             channels.push_back(newChannel);
             client->getInvitedChannels().push_back(channelName);
-            SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()));
+            ////////////////////////////
+            selfJoinReply(client, newChannel);
+            ////////////////////////////
             for (size_t i = 0; i < channels.size(); i++)
                 sendToChannel(client,REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channels[i]->getChannelName());
             std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
@@ -115,8 +139,12 @@ void Server::JoinConstruction(Client *client)
             if (!(*channelIt)->addToChannel(client, key))
                 continue ;
             client->getInvitedChannels().push_back(channelName);
-
-            SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()));
+            // SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()));
+            // SendResponse(client, REPLY_NAMREPLY(client->get_hostname(), buildNamReply(channel), channel->getChannelName(), client->get_nickname()));
+            // SendResponse(client, REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), channelName));
+            //////////////////////
+            selfJoinReply(client, getChannelByName(channels, channelName));
+            //////////////////////
             for (size_t i = 0; i < channels.size(); i++)
                 sendToChannel(client,REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channels[i]->getChannelName());
             std::cout << "Client " << client->get_nickname() << " joined existing channel: " << channelName << std::endl;
