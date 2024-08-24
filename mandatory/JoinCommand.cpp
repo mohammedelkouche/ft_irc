@@ -34,7 +34,7 @@ std::string Server::buildNamReply(Channel *channel)
 {
     std::string reply;
     std::vector<Client*> clients = channel->GetClientssHouse();
-    for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it) 
+    for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
     {
         Client* client = *it;
         if (channel->getTheOperator() == client)
@@ -113,6 +113,12 @@ void Server::JoinConstruction(Client *client)
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelName, client->get_nickname()));
             continue ;
         }
+        else if (!channelName[1])
+        {
+            std::cout << "laaaynser sidna\n";
+            SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
+            return ;
+        }
         std::vector<Channel*>::iterator channelIt;
         for (channelIt = channels.begin(); channelIt != channels.end(); ++channelIt)
             if ((*channelIt)->getChannelName() == channelName)
@@ -128,9 +134,8 @@ void Server::JoinConstruction(Client *client)
             client->getInvitedChannels().push_back(channelName);
             ////////////////////////////
             selfJoinReply(client, newChannel);
-            ////////////////////////////
-            for (size_t i = 0; i < channels.size(); i++)
-                sendToChannel(client,REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channels[i]->getChannelName());
+            ///////////////////////////
+            sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
             std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
         }
         else
@@ -145,8 +150,7 @@ void Server::JoinConstruction(Client *client)
             //////////////////////
             selfJoinReply(client, getChannelByName(channels, channelName));
             //////////////////////
-            for (size_t i = 0; i < channels.size(); i++)
-                sendToChannel(client,REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channels[i]->getChannelName());
+            sendToChannel(client,REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
             std::cout << "Client " << client->get_nickname() << " joined existing channel: " << channelName << std::endl;
         }
     }
