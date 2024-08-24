@@ -115,9 +115,8 @@ void Server::JoinConstruction(Client *client)
         }
         else if (!channelName[1])
         {
-            std::cout << "laaaynser sidna\n";
             SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
-            return ;
+            continue ;
         }
         std::vector<Channel*>::iterator channelIt;
         for (channelIt = channels.begin(); channelIt != channels.end(); ++channelIt)
