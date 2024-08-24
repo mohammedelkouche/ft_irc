@@ -3,6 +3,12 @@
 #include "../include/channels.hpp"
 
 
+bool is_number(std::string str)
+{
+  size_t found = str.find_first_not_of("0123456789");
+  return (found == std::string::npos);
+}
+
 std::string Channel::get_channel_mode()
 {
 	std::string mode_rtn = "+";
@@ -14,8 +20,6 @@ std::string Channel::get_channel_mode()
 		mode_rtn += "l";
 	if (this->get_t() == true)
 		mode_rtn += "t";
-	if (mode_rtn == "+")
-		return ("no mode is set");
 	return (mode_rtn);
 }
 
@@ -24,8 +28,7 @@ void Channel::init_modes()
 	mode = 0;
 	i = false;
 	k = false;
-	o = false;
-	t = false;
+	t = true;
 	l = false;
 	key = "";
 	limit = -1;
@@ -43,10 +46,7 @@ bool	Channel::get_l()
 {
 	return (l);
 }
-bool	Channel::get_o()
-{
-	return (o);
-}
+
 bool	Channel::get_t()
 {
 	return (t);
@@ -70,7 +70,6 @@ void	Channel::add_l(int limit)
 void	Channel::add_o(std::string nick)
 {
 	std::cout << nick << " should have the +o on this channel" << std::endl;
-	o = true;
 }
 void	Channel::add_t()
 {
@@ -81,12 +80,9 @@ void	Channel::rm_i()
 {
 	i = false;
 }
-void	Channel::rm_k(std::string key)
+void	Channel::rm_k()
 {
-	if (this->key == key)
-		k = false;
-	else
-		std::cout << "invalid key" << std::endl;
+	std::cout << "invalid key" << std::endl;
 }
 void	Channel::rm_l()
 {
@@ -96,7 +92,7 @@ void	Channel::rm_l()
 void	Channel::rm_o(std::string nick)
 {
 	std::cout << "need to check the " << nick << std::endl;
-	o = false;
+	// o = false;
 }
 void	Channel::rm_t()
 {
@@ -117,6 +113,10 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 	int sign = 0;
 	size_t arg_for_mode = 3;
 	size_t	i_i;
+	std::string ryl_mode_enable;
+	std::string ryl_args_p;
+	std::string ryl_mode_desable;
+	std::string ryl_args_m;
 
 	if (command.size() == 1)
 	{
@@ -158,175 +158,199 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							break;
 					}
 				}
-				if (command[2][0] == '+' || command[2][0] == '-')
+				std::string full_mode_add;
+				for (size_t i = 0; i < command[2].size(); i++)
+					full_mode_add += command[2][i];
+				std::cout << "this is full_mode -> " << full_mode_add << std::endl;
+				for (size_t i = 0; i < full_mode_add.size(); i++)
 				{
-					std::string full_mode_add;
-
-					for (size_t i = 0; i < command[2].size(); i++)
-						full_mode_add += command[2][i];
-					std::cout << "this is full_mode -> " << full_mode_add << std::endl;
-					for (size_t i = 0; i < full_mode_add.size(); i++)
+					if (full_mode_add[i] == '+' || full_mode_add[i] == '-')
 					{
-						if (full_mode_add[i] == '+' || full_mode_add[i] == '-')
+						while (full_mode_add[i] == '+' || full_mode_add[i] == '-')
 						{
-							while (full_mode_add[i] == '+' || full_mode_add[i] == '-')
+							while (full_mode_add[i] == '+')
 							{
-								while (full_mode_add[i] == '+')
-								{
-									sign = 1;
-									i++;
-								}
-								while (full_mode_add[i] == '-')
-								{
-									sign = -1;
-									i++;
-								}
+								sign = 1;
+								i++;
+							}
+							while (full_mode_add[i] == '-')
+							{
+								sign = -1;
+								i++;
 							}
 						}
-						if (sign == 0)
-						{
-							std::cout << "```the correct reply should send```\n" << "sign problem" << std::endl;
-							return ;
-						}
-						if (full_mode_add[i] == 'i' && sign == 1)
-						{
-							if ((*it)->get_i() == false)
-							{
-								(*it)->add_i();
-								mode_number += 1;
-							}
-						}
-						else if (full_mode_add[i] == 'k' && sign == 1)
-						{
-							if ((*it)->get_k() == false && command.size() >= (arg_for_mode + 1))
-							{
-								(*it)->add_k(command[arg_for_mode++]);
-								mode_number += 2;
-							}
-							else if (command.size() < (arg_for_mode + 1))
-								sendToClient(user->get_fd(), ERROR_INVALIDMODEPARAM((*it)->getChannelName(), user->get_hostname(), full_mode_add[i]));
-						}
-						else if (full_mode_add[i] == 'o' && sign == 1)
-						{
-							if (command.size() >= (arg_for_mode + 1))
-							{
-								for (i_i = 0; i_i < clients.size(); i_i++)
-								{
-									if ((clients[i_i]).get_nickname() == command[arg_for_mode])
-										break;
-								}
-								if ((i_i) >= clients.size())
-									sendToClient(user->get_fd(), ERR_NOSUCHNICK(user->get_hostname(), command[arg_for_mode]));
-								else
-								{
-									for (std::vector<Client *>::iterator it_c = Clnts.begin(); it_c != Clnts.end(); ++it_c)
-									{
-										if ((*it_c)->get_nickname() == command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == false)
-										{
-											(*it_c)->setOperatorStatus(true);
-											mode_number += 4;
-										}
-										else if ((*it_c)->get_nickname() == command[arg_for_mode])
-											break ;
-										else if ((*it_c) == Clnts[Clnts.size() - 1])
-											sendToClient(user->get_fd(), ERROR_USERNOTINCHANNEL(user->get_hostname(), (*it)->getChannelName()));
-									}
-								}
-								arg_for_mode++;
-							}
-							else
-								sendToClient(user->get_fd(), ERROR_INVALIDMODEPARAM((*it)->getChannelName(), user->get_hostname(), full_mode_add[i]));
-						}
-						else if (full_mode_add[i] == 't' && sign == 1)
-						{
-							if ((*it)->get_t() == false)
-							{
-								(*it)->add_t();
-								mode_number += 8;
-							}
-						}
-						else if (full_mode_add[i] == 'l' && sign == 1)
-						{	
-							if (command.size() >= (arg_for_mode + 1))
-							{
-								(*it)->add_l(std::atoi(command[arg_for_mode].c_str()));
-								sendToClient(user->get_fd(), REPLY_MODEISLIMIT(command[1], user->get_hostname(), "+l", command[arg_for_mode++]));
-								mode_number += 16;
-							}
-							else
-								sendToClient(user->get_fd(), ERROR_INVALIDMODEPARAM((*it)->getChannelName(), user->get_hostname(), full_mode_add[i]));
-						}
-						else if (full_mode_add[i] == 'i' && sign == -1)
-						{
-							if ((*it)->get_i() == true)
-							{
-								(*it)->rm_i();
-								mode_number -= 1;
-							}
-						}
-						else if (full_mode_add[i] == 'k' && sign == -1)
-						{
-							if ((*it)->get_k() == true && command.size() >= (arg_for_mode + 1))
-							{
-								(*it)->rm_k(command[arg_for_mode++]);
-								mode_number -= 2;
-							}
-							else if (command.size() < (arg_for_mode + 1))
-								sendToClient(user->get_fd(), ERROR_INVALIDMODEPARAM((*it)->getChannelName(), user->get_hostname(), full_mode_add[i]));
-						}
-						else if (full_mode_add[i] == 'o' && sign == -1)
-						{
-							if (command.size() >= (arg_for_mode + 1))
-							{
-								for (i_i = 0; i_i < clients.size(); i_i++)
-								{
-									if ((clients[i_i]).get_nickname() == command[arg_for_mode])
-										break;
-								}
-								if ((i_i) >= clients.size())
-									sendToClient(user->get_fd(), ERR_NOSUCHNICK(user->get_hostname(), command[arg_for_mode]));
-								else
-								{
-									for (std::vector<Client *>::iterator it_c = Clnts.begin(); it_c != Clnts.end(); ++it_c)
-									{
-										if ((*it_c)->get_nickname() == command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == true)
-										{
-											(*it_c)->setOperatorStatus(false);
-											mode_number -= 4;
-										}
-										else if ((*it_c)->get_nickname() == command[arg_for_mode])
-											break ;
-										else if ((*it_c) == Clnts[Clnts.size() - 1])
-											sendToClient(user->get_fd(), ERROR_USERNOTINCHANNEL(user->get_hostname(), (*it)->getChannelName()));
-									}
-								}
-								arg_for_mode++;
-							}
-							else
-								sendToClient(user->get_fd(), ERROR_INVALIDMODEPARAM((*it)->getChannelName(), user->get_hostname(), full_mode_add[i]));
-						}
-						else if (full_mode_add[i] == 't' && sign == -1)
-						{
-							if ((*it)->get_t() == true)
-							{
-								(*it)->rm_t();
-								mode_number -= 8;
-							}
-						}
-						else if (full_mode_add[i] == 'l' && sign == -1)
-						{	
-							if ((*it)->get_l() == true)
-							{
-								(*it)->rm_l();
-								mode_number -= 16;
-							}
-						}
-						else
-							sendToClient(user->get_fd(), ERR_UNKNOWNMODE(user->get_hostname(), user->get_nickname(), full_mode_add[i]));
 					}
-					(*it)->set_mode(mode_number);
+					if (full_mode_add[i] == 'i' && sign == 1)
+					{
+						if ((*it)->get_i() == false)
+						{
+							(*it)->add_i();
+							ryl_mode_enable += "i";
+							mode_number += 1;
+						}
+					}
+					else if (full_mode_add[i] == 'k' && sign == 1)
+					{
+						if ((*it)->get_k() == false && command.size() >= (arg_for_mode + 1))
+						{
+							ryl_args_p += command[arg_for_mode] +  " ";
+							(*it)->add_k(command[arg_for_mode++]);
+							ryl_mode_enable += "k";
+							mode_number += 2;
+						}
+					}
+					else if (full_mode_add[i] == 'o' && sign == 1)
+					{
+						if (command.size() >= (arg_for_mode + 1))
+						{
+							for (i_i = 0; i_i < clients.size(); i_i++)
+							{
+								if ((clients[i_i]).get_nickname() == command[arg_for_mode])
+									break;
+							}
+							if ((i_i) >= clients.size())
+								sendToClient(user->get_fd(), ERR_NOSUCHNICK(user->get_hostname(), command[arg_for_mode]));
+							else
+							{
+								for (std::vector<Client *>::iterator it_c = Clnts.begin(); it_c != Clnts.end(); ++it_c)
+								{
+									if ((*it_c)->get_nickname() == command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == false)
+									{
+										(*it_c)->setOperatorStatus(true);
+										mode_number += 4;
+										ryl_args_p += command[arg_for_mode] + " ";
+										ryl_mode_enable += "o";
+										break ;
+									}
+									else if ((*it_c)->get_nickname() == command[arg_for_mode])
+										break ;
+									else if ((*it_c) == Clnts[Clnts.size() - 1])
+										sendToClient(user->get_fd(), ERROR_USERNOTINCHANNEL(user->get_hostname(), (*it)->getChannelName()));
+								}
+							}
+							arg_for_mode++;
+						}
+					}
+					else if (full_mode_add[i] == 't' && sign == 1)
+					{
+						if ((*it)->get_t() == false)
+						{
+							(*it)->add_t();
+							mode_number += 8;
+							ryl_mode_enable += "t";
+						}
+					}
+					else if (full_mode_add[i] == 'l' && sign == 1)
+					{	
+						if (command.size() >= (arg_for_mode + 1) && is_number(command[arg_for_mode]))
+						{
+							ryl_args_p += command[arg_for_mode] + " ";
+							(*it)->add_l(std::atoi(command[arg_for_mode].c_str()));
+							ryl_mode_enable += "l";
+							mode_number += 16;
+						}
+						arg_for_mode++;
+					}
+					else if (full_mode_add[i] == 'i' && sign == -1)
+					{
+						if ((*it)->get_i() == true)
+						{
+							(*it)->rm_i();
+							mode_number -= 1;
+							ryl_mode_desable += "i";
+						}
+					}
+					else if (full_mode_add[i] == 'k' && sign == -1)
+					{
+						if ((*it)->get_k() == true)
+						{
+							(*it)->rm_k();
+							mode_number -= 2;
+						}
+						ryl_args_m += "* "; 
+						arg_for_mode++;
+						ryl_mode_desable += "k";
+					}
+					else if (full_mode_add[i] == 'o' && sign == -1)
+					{
+						if (command.size() >= (arg_for_mode + 1))
+						{
+							for (i_i = 0; i_i < clients.size(); i_i++)
+							{
+								if ((clients[i_i]).get_nickname() == command[arg_for_mode])
+									break;
+							}
+							if ((i_i) >= clients.size())
+								sendToClient(user->get_fd(), ERR_NOSUCHNICK(user->get_hostname(), command[arg_for_mode]));
+							else
+							{
+								for (std::vector<Client *>::iterator it_c = Clnts.begin(); it_c != Clnts.end(); ++it_c)
+								{
+									if ((*it_c)->get_nickname() == command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == true)
+									{
+										(*it_c)->setOperatorStatus(false);
+										ryl_mode_desable += "o";
+										ryl_args_m += command[arg_for_mode] + " ";
+										mode_number -= 4;
+										break ;
+									}
+									else if ((*it_c)->get_nickname() == command[arg_for_mode])
+										break ;
+									else if ((*it_c) == Clnts[Clnts.size() - 1])
+										sendToClient(user->get_fd(), ERROR_USERNOTINCHANNEL(user->get_hostname(), (*it)->getChannelName()));
+								}
+							}
+							arg_for_mode++;
+						}
+					}
+					else if (full_mode_add[i] == 't' && sign == -1)
+					{
+						if ((*it)->get_t() == true)
+						{
+							(*it)->rm_t();
+							ryl_mode_desable += "t";
+							mode_number -= 8;
+						}
+					}
+					else if (full_mode_add[i] == 'l' && sign == -1)
+					{	
+						if ((*it)->get_l() == true)
+						{
+							(*it)->rm_l();
+							mode_number -= 16;
+						}
+						ryl_mode_desable += "l";
+					}
+					else if (full_mode_add[i] != 'l' && full_mode_add[i] != 'i' && full_mode_add[i] != 't' && full_mode_add[i] != 'o' && full_mode_add[i] != 'k')
+						sendToClient(user->get_fd(), ERR_UNKNOWNMODE(user->get_hostname(), user->get_nickname(), full_mode_add[i]));
 				}
-				sendToChannel(user, REPLY_CHANNELMODES(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->get_channel_mode()), (*it)->getChannelName());
+				(*it)->set_mode(mode_number);
+				std::string reply_mode;
+				if (ryl_mode_enable.empty() == false)
+				{
+					reply_mode += "+" + ryl_mode_enable;
+				}
+				if (ryl_mode_desable.empty() == false)
+				{
+					reply_mode += "-" + ryl_mode_desable;
+				}
+				if (ryl_args_p.empty() == false)
+				{
+					reply_mode += " " + ryl_args_p;
+					reply_mode.erase(reply_mode.size() - 1, 1);
+				}
+				if (ryl_args_m.empty() == false)
+				{
+					reply_mode += " " + ryl_args_m;
+					reply_mode.erase(reply_mode.size() - 1, 1);
+				}
+				if (reply_mode.empty() == false)
+				{
+					sendToChannel(user, REPLY_CHANNELMODES(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), reply_mode), (*it)->getChannelName());
+					sendToClient(user->get_fd(), REPLY_CHANNELMODES(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), reply_mode));
+				}
+				else if (command.size() <= 3)
+					sendToClient(user->get_fd(), REPLY_CHANNELMODES(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->get_channel_mode()));
 				//need time of the creation of the channel for making the REPLY_CREATIONTIME	
 				std::cout << "the mode is " << mode_number << std::endl;
 				return ;
@@ -337,117 +361,117 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 	else
         sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), \
                             command[1], user->get_nickname()));
-	// switch (mode_number) {
-	// 	case 1:
-	// 		add_i(user);
-	// 	case 2:
-	// 		add_k(user);
-	// 	case 3:
-	// 		add_i(user);
-	// 		add_k(user);
-	// 	case 4:
-	// 		add_o(user);
-	// 	case 5:
-	// 		add_o(user);
-	// 		add_i(user);
-	// 	case 6:
-	// 		add_k(user);
-	// 		add_o(user);
-	// 	case 7:
-	// 		add_k(user);
-	// 		add_o(user);
-	// 		add_i(user);
-	// 	case 8:
-	// 		add_t(user);
-	// 	case 9:
-	// 		add_t(user);
-	// 		add_i(user);
-	// 	case 10:
-	// 		add_t(user);
-	// 		add_k(user);
-	// 	case 11:
-	// 		add_t(user);
-	// 		add_k(user);
-	// 		add_i(user);
-	// 	case 12:
-	// 		add_t(user);
-	// 		add_o(user);
-	// 	case 13:
-	// 		add_i(user);
-	// 		add_o(user);
-	// 		add_t(user);
-	// 	case 14:
-	// 		add_t(user);
-	// 		add_o(user);
-	// 		add_k(user);
-	// 	case 15:
-	// 		add_i(user);
-	// 		add_t(user);
-	// 		add_o(user);
-	// 		add_k(user);
-	// 	case 16:
-	// 		add_l(user);
-	// 	case 17:
-	// 		add_l(user);
-	// 		add_i(user);
-	// 	case 18:
-	// 		add_l(user);
-	// 		add_k(user);
-	// 	case 19:
-	// 		add_l(user);
-	// 		add_i(user);
-	// 		add_k(user);
-	// 	case 20:
-	// 		add_l(user);
-	// 		add_o(user);
-	// 	case 21:
-	// 		add_l(user);
-	// 		add_o(user);
-	// 		add_i(user);
-	// 	case 22:
-	// 		add_k(user);
-	// 		add_o(user);
-	// 		add_l(user);
-	// 	case 23:
-	// 		add_k(user);
-	// 		add_o(user);
-	// 		add_l(user);
-	// 		add_i(user);
-	// 	case 24:
-	// 		add_t(user);
-	// 		add_l(user);
-	// 	case 25:
-	// 		add_t(user);
-	// 		add_l(user);
-	// 		add_i(user);
-	// 	case 26:
-	// 		add_l(user);
-	// 		add_t(user);
-	// 		add_k(user);
-	// 	case 27:
-	// 		add_l(user);
-	// 		add_t(user);
-	// 		add_k(user);
-	// 		add_i(user);
-	// 	case 28:
-	// 		add_l(user);
-	// 		add_o(user);
-	// 		add_t(user);
-	// 	case 29:
-	// 		add_l(user);
-	// 		add_o(user);
-	// 		add_t(user);
-	// 		add_i(user);
-	// 	case 30:
-	// 		add_l(user);
-	// 		add_o(user);
-	// 		add_k(user);
-	// 		add_t(user);
-	// 	case 31
-	// 		add_l(user);
-	// 		add_o(user);
-	// 		add_k(user);
-	// 		add_t(user);
-	// 		add_i(user);
-	// }
 }
+/*	switch (mode_number) {
+		case 1:
+			add_i(user);
+		case 2:
+			add_k(user);
+		case 3:
+			add_i(user);
+			add_k(user);
+		case 4:
+			add_o(user);
+		case 5:
+			add_o(user);
+			add_i(user);
+		case 6:
+			add_k(user);
+			add_o(user);
+		case 7:
+			add_k(user);
+			add_o(user);
+			add_i(user);
+		case 8:
+			add_t(user);
+		case 9:
+			add_t(user);
+			add_i(user);
+		case 10:
+			add_t(user);
+			add_k(user);
+		case 11:
+			add_t(user);
+			add_k(user);
+			add_i(user);
+		case 12:
+			add_t(user);
+			add_o(user);
+		case 13:
+			add_i(user);
+			add_o(user);
+			add_t(user);
+		case 14:
+			add_t(user);
+			add_o(user);
+			add_k(user);
+		case 15:
+			add_i(user);
+			add_t(user);
+			add_o(user);
+			add_k(user);
+		case 16:
+			add_l(user);
+		case 17:
+			add_l(user);
+			add_i(user);
+		case 18:
+			add_l(user);
+			add_k(user);
+		case 19:
+			add_l(user);
+			add_i(user);
+			add_k(user);
+		case 20:
+			add_l(user);
+			add_o(user);
+		case 21:
+			add_l(user);
+			add_o(user);
+			add_i(user);
+		case 22:
+			add_k(user);
+			add_o(user);
+			add_l(user);
+		case 23:
+			add_k(user);
+			add_o(user);
+			add_l(user);
+			add_i(user);
+		case 24:
+			add_t(user);
+			add_l(user);
+		case 25:
+			add_t(user);
+			add_l(user);
+			add_i(user);
+		case 26:
+			add_l(user);
+			add_t(user);
+			add_k(user);
+		case 27:
+			add_l(user);
+			add_t(user);
+			add_k(user);
+			add_i(user);
+		case 28:
+			add_l(user);
+			add_o(user);
+			add_t(user);
+		case 29:
+			add_l(user);
+			add_o(user);
+			add_t(user);
+			add_i(user);
+		case 30:
+			add_l(user);
+			add_o(user);
+			add_k(user);
+			add_t(user);
+		case 31
+			add_l(user);
+			add_o(user);
+			add_k(user);
+			add_t(user);
+			add_i(user);
+	}*/

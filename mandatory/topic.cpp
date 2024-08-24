@@ -15,6 +15,22 @@
 #include "../include/channels.hpp"
 
 
+void Channel::set_time_ctime()
+{
+    time_t present_time;
+
+    present_time = time(NULL);
+    std::ostringstream oss;
+    oss << present_time;
+    std::string time_now = oss.str();
+    topic_time = time_now;
+}
+
+std::string Channel::get_time_ctime()
+{
+    return (topic_time);
+}
+
 int Server::no_suck_channel(std::vector<std::string> Topic)
 {
     if (channels.size() == 0)
@@ -77,6 +93,7 @@ void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
                     for (size_t j = 2; j < Topic.size(); j++)
                         full_name_topic += Topic[j];
                     (*it)->set_topic_setter(user->get_nickname());
+                    (*it)->set_time_ctime();
                     if (full_name_topic.empty())
                     {
                         sendToChannel(user, REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), ""), Topic[1]);
@@ -154,14 +171,8 @@ void Server::DisplayTopic(std::vector<std::string> channel_name, Client *user) {
                 sendToClient(user->get_fd(), RPL_NOTOPIC(user->get_hostname(), channel_name[1]));
             else
             {
-                time_t present_time;
-
-                present_time = time(NULL);
-                std::ostringstream oss;
-                oss << present_time;
-                std::string time_now = oss.str();
                 sendToClient(user->get_fd(), REPLY_TOPICDISPLAY(user->get_hostname(), user->get_nickname(),channel_name[1], (*k)->get_topic()));
-                sendToClient(user->get_fd(), REPLY_TOPICWHOTIME((*k)->get_topic_setter(), time_now, \
+                sendToClient(user->get_fd(), REPLY_TOPICWHOTIME((*k)->get_topic_setter(), (*k)->get_time_ctime(), \
                                 user->get_nickname(), user->get_hostname(), channel_name[1]));
             }
             return ;
