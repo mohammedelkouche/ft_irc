@@ -83,6 +83,7 @@ void	Channel::rm_i()
 void	Channel::rm_k()
 {
 	std::cout << "invalid key" << std::endl;
+	k = false;
 }
 void	Channel::rm_l()
 {
@@ -92,7 +93,6 @@ void	Channel::rm_l()
 void	Channel::rm_o(std::string nick)
 {
 	std::cout << "need to check the " << nick << std::endl;
-	// o = false;
 }
 void	Channel::rm_t()
 {
