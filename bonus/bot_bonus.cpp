@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:04:27 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/22 16:32:58 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/24 22:42:22 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ Bot::Bot(const std::string &ip, int port, const std::string &password) : port(po
 
     // Set up signal handling for termination
     signal(SIGINT, signalHandler);
+    
+    std::srand(std::time(0)); // Initialize random number generator
 
 }
 
@@ -69,18 +71,6 @@ void	Bot::ConnectToServer()
 
 std::string	Bot::ReceiveMessage()
 {
-	// char buffer[1024];
-
-	// size_t bytes_received = recv(bot_fd, buffer, sizeof(buffer) - 1, 0);
-	// if (bytes_received < 0)
-	// 	throw std::runtime_error("Failed to receive message");
-	// buffer[bytes_received] = '\0';
-	// // std::cout << "Received message: " << buffer << std::endl;
-	// return (std::string (buffer));
-    
-    
-    
-    // add 
     char buffer[1024];
     ssize_t bytes_received = recv(bot_fd, buffer, sizeof(buffer) - 1, 0);
     if (bytes_received <= 0) {
@@ -99,6 +89,7 @@ std::string	Bot::ReceiveMessage()
 
 int	Bot::ChoiceToInt(const std::string &choice)
 {
+    std::cout  << "choice -> <<"  <<  choice << ">>"<< std::endl;
 	if (choice == "rock")
 		return (0);
 	if (choice == "paper")
@@ -117,6 +108,7 @@ void Bot::SendMessage(const std::string &message) {
 // add
 void Bot::PrSendMessage(const std::string &message, const std::string &client_nick)
 {
+    // ine PRIVMSG_FORMAT(senderNick, senderUsername, senderHostname, receiver, message) ":" + senderNick + "!~" + senderUsername + "@" + senderHostname + " PRIVMSG " + receiver + " :" + message + "\r\n"
     std::string formatted_message = "PRIVMSG " + client_nick + " :" + message + "\r\n";
     if (send(bot_fd, formatted_message.c_str(), formatted_message.length(), 0) < 0)
     {
@@ -130,8 +122,15 @@ void Bot::signalHandler(int signal)
 {
     if (signal == SIGINT) {
         // Terminate the bot safely
+    // std::cout << " test test alla h  " << std::endl;
         std::cout << "Termination signal received. Cleaning up." << std::endl;
-        // Cleanup();
+    // if (bot_fd >= 0) {
+    //     close(bot_fd);
+    //     bot_fd = -1;
+    // }
+    // Cleanup(); // Perform cleanup tasks
+    // client_in_game.clear(); // Clear the client_in_game map
+    // Cleanup();
         exit(0); // Exit the program after cleanup
     }
 }
@@ -152,100 +151,126 @@ void Bot::signalHandler(int signal)
 // }
 
 
+void Bot::PlayRoshambo(const std::string &sender)
+{
+    std::string choices[] = {"rock", "paper", "scissors"};
+    PrSendMessage("Send 'rock', 'paper', or 'scissors' to play.", sender);
+    std::string client_message = ReceiveMessage();
+    // std::cout  << "msgContent -> <<"  <<  msgContent << ">>"<< std::endl;
+    if (client_message.size() >= 2 && client_message.substr(client_message.size() - 2) == "\r\n")
+        client_message.erase(client_message.size() - 2);
+    size_t colonPos = client_message.find_last_of(':');
+
+    // If ':' is found, extract the substring after it
+    std::string content;
+    if (colonPos != std::string::npos)
+        content = client_message.substr(colonPos + 1); // Extract everything after the colon
+    
+    content.erase(std::remove(content.begin(), content.end(), ' '), content.end());
+    int client_choice = ChoiceToInt(content);
+    if (client_choice != -1)
+    {
+        int bot_choice = std::rand() % 3;
+        PrSendMessage("Bot chose " + std::string(choices[bot_choice]), sender);
+
+        switch (client_choice)
+        {
+            case 0:
+                switch (bot_choice)
+                {
+                    case 0: PrSendMessage("It's a tie!", sender); break;
+                    case 1: PrSendMessage("Bot wins!", sender); break;
+                    case 2: PrSendMessage("You win!", sender); break;
+                }
+                break;
+            case 1:
+                switch (bot_choice)
+                {
+                    case 0: PrSendMessage("You win!", sender); break;
+                    case 1: PrSendMessage("It's a tie!", sender); break;
+                    case 2: PrSendMessage("Bot wins!", sender); break;
+                }
+                break;
+            case 2:
+                switch (bot_choice)
+                {
+                    case 0: PrSendMessage("Bot wins!", sender); break;
+                    case 1: PrSendMessage("You win!", sender); break;
+                    case 2: PrSendMessage("It's a tie!", sender); break;
+                }
+                break;
+        }
+    }
+    else
+    {
+        std::cout << "pppppppppppppppp" << std::endl;
+        PrSendMessage("Invalid input. Send 'rock', 'paper', or 'scissors' to play.", sender);
+    }
+}
+
+void Bot::PlayNwetat(const std::string &sender) {
+    std::string nwetat_arr[] = 
+    {
+        "galk wlah wmaknti zwen lasybty irc 7da twin",
+        "gals gals rebbi l flals w weklhom lkhobz yabes w t3alem srabss",
+        "tahya khassa l ay 3abdia 7la mn l hendia w b7alha b7al chehdya w machi beldya",
+        "galk li zin zin wakha i3om mn tnin l tnin , wli khayb khayb wakha i3om blma tayb",
+        "tahya khassa l khouya aymen rak 7ader nadr w dareb ndader w katchtef lia 3el lkyader tchanchit w chi maychit",
+        "galk aymane douzi 3ando l insta bach takli l passta , w galk oussama douzi 3ando l facebook atl9ayh dayr f profil rwayda bla slouk ",
+        "galk sel3a slou3 w mohammed mol l bot ga3ma mekhlou3 , tahyati l khouya mohammed lkouk wl kheyzzo me7kouk"
+    };
+
+    std::vector<std::string> sentences(nwetat_arr, nwetat_arr + sizeof(nwetat_arr) / sizeof(nwetat_arr[0]));
+    int random_index = std::rand() % sentences.size();
+    PrSendMessage(sentences[random_index], sender);
+}
+
 void Bot::PlayGame()
 {
-    std::srand(std::time(0));
-    std::string choices[] = {"rock", "paper", "scissors"};
-    
-    // std::map<std::string, bool> client_in_game; // Map to track clients' game status
-
     while (!terminate) {
         std::string client_message = ReceiveMessage();
-        if (client_message.empty())
+        if (client_message.empty()) // like Server closed connection
             break; // Exit the loop if connection is closed or termination is requested
 
         if (client_message.size() >= 2 && client_message.substr(client_message.size() - 2) == "\r\n") 
             client_message.erase(client_message.size() - 2);
-        
+
         std::istringstream iss(client_message);
-    
-        // Variables to hold the parts of the message
+
         std::string senderdomaine;
         std::string command;
         std::string receiver;
         std::string msgContent;
-        
+
         iss >> senderdomaine;
         std::string sender = senderdomaine.substr(1, senderdomaine.find('!') - 1);
         iss >> command;
         iss >> receiver;
-        std::getline(iss, msgContent); // Get the rest of the line
+        std::getline(iss, msgContent);
 
-        // Remove the leading ': ' from the message content
-        if (!msgContent.empty() && msgContent[0] == ' ' && msgContent[1] == ':')
-        {
+        if (!msgContent.empty() && msgContent[0] == ' ' && msgContent[1] == ':') {
             msgContent = msgContent.substr(2);
         }
 
-        std::cout << "msgContent =>>" << msgContent << "<<=" << std::endl;
-        
-        if (client_in_game.find(sender) == client_in_game.end())
-        {
-            client_in_game[sender] = false; 
-        }
-        
         if (command == "PRIVMSG")
         {
             if (msgContent == "start")
             {
+                PrSendMessage("Choose a game: 'Roshambo(rock paper scissors)' or 'Nwetat'. Type 'exit' to quit.", sender);
                 client_in_game[sender] = true;
-                PrSendMessage("Game started. Send 'rock', 'paper', or 'scissors'.", sender);
-            }
-            else if (msgContent == "exit")
+            } 
+            else if (msgContent == "Roshambo" && client_in_game[sender])
+                PlayRoshambo(sender);
+            else if (msgContent == "Nwetat" && client_in_game[sender])
+                PlayNwetat(sender);
+            else if (msgContent == "exit" && client_in_game[sender])
             {
+                PrSendMessage("You have exited the game. Type 'start' to play again.", sender);
                 client_in_game[sender] = false;
-                client_in_game.erase(sender);
-                PrSendMessage("Game ended.", sender);
             }
             else if (client_in_game[sender])
-            {
-                int client_choice = ChoiceToInt(msgContent);
-                if (client_choice != -1)
-                {
-                    int bot_choice = std::rand() % 3;
-                    PrSendMessage("Bot chose " + std::string(choices[bot_choice]), sender);
-
-                    switch (client_choice) {
-                    case 0: // Client chose rock
-                        switch (bot_choice)
-                        {
-                            case 0: PrSendMessage("It's a tie", sender); break;
-                            case 1: PrSendMessage("Bot wins!", sender); break;
-                            case 2: PrSendMessage("You win!", sender); break;
-                        }
-                        break;
-                    case 1: // Client chose paper
-                        switch (bot_choice)
-                        {
-                            case 0: PrSendMessage("You win!", sender); break;
-                            case 1: PrSendMessage("It's a tie!", sender); break;
-                            case 2: PrSendMessage("Bot wins!", sender); break;
-                        }
-                        break;
-                    case 2: // Client chose scissors
-                        switch (bot_choice)
-                        {
-                            case 0: PrSendMessage("Bot wins!", sender); break;
-                            case 1: PrSendMessage("You win!", sender); break;
-                            case 2: PrSendMessage("It's a tie!", sender); break;
-                        }
-                        break;
-                    }
-                } 
-                else 
-                    PrSendMessage("Invalid input. Send 'rock', 'paper', or 'scissors' to play, or 'exit' to quit.", sender);
-            } 
-            else
+                PrSendMessage("Invalid input. Choose 'Roshambo', 'Nwetat', or 'exit'.", sender);
+            else if (!client_in_game[sender])
                 PrSendMessage("You must send 'start' to begin the game.", sender);
         }
     }
@@ -254,15 +279,7 @@ void Bot::PlayGame()
 
 bool	Bot::Authenticate()
 {
-	std::string nick, user, pass;
-    // std::cout << "Enter password: ";
-    // std::cin >> pass;
-    // std::cout << "Enter nickname: ";
-    // std::cin >> nick;
-    // std::cout << "Enter username: ";
-    // std::cin >> user;
-    
-    // pass = "h";
+	std::string nick, user;
     nick = "bot";
     user = "ahmed";
 
@@ -285,12 +302,9 @@ bool	Bot::Authenticate()
 void	Bot::Run()
 {
 	ConnectToServer();
-	// while (!terminate && !Authenticate()) 
-    // {
-	// 	std::cout << "Authentication failed. Please try again." << std::endl;
-    // }
     if (Authenticate())
 	    PlayGame();
+    Cleanup();
 }
 
 void Bot::Cleanup()
@@ -302,6 +316,7 @@ void Bot::Cleanup()
     }
     client_in_game.clear(); // Clear the client_in_game map
 }
+
 
 Bot::~Bot()
 {

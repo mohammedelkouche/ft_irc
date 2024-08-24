@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/22 22:45:58 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/24 14:45:20 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,11 @@ void	Server::AcceptNewClient()
 	// insert a new buffer entry for the new client
 	partial_messages.insert(std::make_pair(fd_client_sock, ""));
 	std::cout << "Client fd = '" << fd_client_sock << "' Connected" << std::endl;
+	std::cout << "******  check the fd   ******" << std::endl;
+	for (size_t i = 0; i < clients.size(); i++)
+	{
+		std::cout << "this this the pass " << clients[i].get_fd() << " -> <<" << clients[i].get_pass_client() << ">> this this the pass" <<std::endl;
+	}
 }
 
 void	Server::RemoveClient(int fd)
@@ -162,6 +167,8 @@ void	Server::execute_commande(Client *user)
 	commande = user->get_commande();
 	if (user->get_commande().empty())
 		return ;
+	if(commande[0] == "pong" || commande[0] == "PONG")
+		return;
 	if (commande[0] == "pass" || commande[0] == "PASS")
 		handle_pass(user);
 	else if (commande[0] == "nick" || commande[0] == "NICK")
@@ -203,6 +210,11 @@ void	Server::execute_commande(Client *user)
 	}
 	else
 		handle_Unknown_command(user);
+	// std::cout << "******  check the fd   ******" << std::endl;
+	// for (size_t i = 0; i < clients.size(); i++)
+	// {
+	// 	std::cout << "this this the pass " << clients[i].get_fd() << " -> <<" << clients[i].get_pass_client() << ">> this this the pass" <<std::endl;
+	// }
 }
 
 void	Server::parse_message(std::string buffer, int fd)
@@ -273,6 +285,7 @@ void	Server::ReceiveClientData(int fd)
 		if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
 		{
 			partial_messages[fd] += message;
+			// std::cout << "partial_messages[fd] =" << partial_messages[fd] << std::endl;
 			parse_message(partial_messages[fd],fd);
 			partial_messages[fd].clear();
 		}
@@ -298,6 +311,7 @@ void	Server::initializeServer(int port_nbr,std::string str)
 	std::cout << "Server with fd <" << fd_srv_socket << "> Connected" << std::endl;
 	std::cout << "Server started. Listening on port : " << this->port << std::endl;
 	std::cout << "Waiting to accept a connection...\n";
+	
 	while (!stopServer)
 	{
 		if (poll(&pollfds[0], pollfds.size(), -1) == -1 && !stopServer)

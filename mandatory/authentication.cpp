@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/22 19:13:58 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/24 14:40:11 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	Server::handle_pass(Client *user)
 	// for (size_t i = 0; i < commande.size(); ++i) {
     //     std::cout << "element <<" << commande[i] << ">>" <<  std::endl;
     // }
+	
 	std::vector <std::string>::iterator it = std::find(commande.begin(), commande.end(), ":");
 	if (it != commande.end())
 		commande.erase(it);
@@ -50,6 +51,7 @@ void	Server::handle_pass(Client *user)
 			// std::cout <<" commande <<" << commande[1] << ">> commande " <<  std::endl;
 			if (this->pass != commande[1])
 			{
+					std::cout << "bnimllal" << std::endl;
 				if (user->get_correct_pass())
 					sendToClient(user->get_fd(), ERROR_ALREADYSETPASS("*", user->get_hostname()));
 				else
@@ -58,9 +60,13 @@ void	Server::handle_pass(Client *user)
 			else
 			{ 
 				if (user->get_correct_pass())
+				{
+					std::cout << "khouribga" << std::endl;
 					sendToClient(user->get_fd(), ERROR_ALREADYSETPASS("*", user->get_hostname()));
+				}
 				else
 				{
+					std::cout << "casablanca" << std::endl;
 					user->set_pass_client(commande[1]);
 					user->set_correct_pass(true);
 				}
