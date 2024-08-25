@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/24 14:40:11 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/25 13:26:07 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	Server::handle_pass(Client *user)
 			// std::cout <<" commande <<" << commande[1] << ">> commande " <<  std::endl;
 			if (this->pass != commande[1])
 			{
-					std::cout << "bnimllal" << std::endl;
 				if (user->get_correct_pass())
 					sendToClient(user->get_fd(), ERROR_ALREADYSETPASS("*", user->get_hostname()));
 				else
@@ -61,12 +60,10 @@ void	Server::handle_pass(Client *user)
 			{ 
 				if (user->get_correct_pass())
 				{
-					std::cout << "khouribga" << std::endl;
 					sendToClient(user->get_fd(), ERROR_ALREADYSETPASS("*", user->get_hostname()));
 				}
 				else
 				{
-					std::cout << "casablanca" << std::endl;
 					user->set_pass_client(commande[1]);
 					user->set_correct_pass(true);
 				}
@@ -163,7 +160,6 @@ void	Server::handle_username(Client *user)
 	{
 		if (!user->get_correct_pass())
 		{
-			std::cout << "this is the pass of client -> " << user->get_pass_client() << "" << std::endl;
 			sendToClient(user->get_fd(), ERROR_NOTREGISTERED(" * ", user->get_hostname()));
 		}
 		else if (user->is_enregistred())

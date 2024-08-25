@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/24 14:39:49 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/25 13:26:43 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ Client::Client() : ipaddress(""), nickname(""), pass_client(""), username (""), 
 Client::Client(const Client& copy)
 {
 	fd = copy.fd;
+	pass_client = copy.pass_client;
 	ipaddress = copy.ipaddress;
 	nickname = copy.nickname;
 	username = copy.username;
@@ -128,13 +129,9 @@ bool	Client::get_correct_pass()
 
 bool	Client::check_registration(Client *user)
 {
-	std::cout << "user->get_pass_client() <<" << user->get_pass_client()  << ">>" << std::endl;
-	std::cout << "user->get_nickname() <<" << user->get_nickname()  << ">>" << std::endl;
-	std::cout << "user->get_username() <<" << user->get_username()  << ">>" << std::endl;
-	std::cout << "-----------------------------------------" << std::endl;
+
 	if (!user->registred && user->get_pass_client().compare("")   && user->get_nickname().compare("") && user->get_username().compare(""))
 	{
-		std::cout << "-----------  yesssssss   isssss registreeeeed   ------------" << std::endl;
 		user->registred = true;
 		return true;
 	}

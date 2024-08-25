@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/25 10:50:37 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/25 14:55:57 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "../include/reply.hpp"
 
 
+// Server::Server()
 Server::Server() : pass("")
 {
 	// add
@@ -31,7 +32,7 @@ Server::Server(const Server &obj)
 	port = obj.port;
 	pass = obj.pass;
 	fd_srv_socket = obj.fd_srv_socket;
-	*this = obj;
+	// *this = obj;
 	for(size_t i = 0; i < clients.size(); i++)
         	clients[i] = obj.clients[i];
 	for(size_t i = 0; i < channels.size(); i++)
@@ -119,11 +120,6 @@ void	Server::AcceptNewClient()
 	// insert a new buffer entry for the new client
 	partial_messages.insert(std::make_pair(fd_client_sock, ""));
 	std::cout << "Client fd = '" << fd_client_sock << "' Connected" << std::endl;
-	std::cout << "******  check the fd   ******" << std::endl;
-	for (size_t i = 0; i < clients.size(); i++)
-	{
-		std::cout << "this this the pass " << clients[i].get_fd() << " -> <<" << clients[i].get_pass_client() << ">> this this the pass" <<std::endl;
-	}
 }
 
 void	Server::RemoveClient(int fd)
@@ -201,7 +197,6 @@ void	Server::execute_commande(Client *user)
 		if (user->check_registration(user))
 			success_connect(user);
 	}
-	// else print a message for indicating command not found
 	if (user->is_enregistred())
 	{
 		if (commande[0] == "join" || commande[0] == "JOIN")
@@ -223,8 +218,6 @@ void	Server::execute_commande(Client *user)
 			Private_message(commande, user);
 		else
 			handle_Unknown_command(user);
-		// else if (commande[0] == "part" || commande[0] == "PART")
-		// 	PartConstruction(user);
 	}
 	else
 		handle_Unknown_command(user);
@@ -320,6 +313,21 @@ void Server::handleSigint(int sig)
     Server::stopServer = 1; // Set the flag to stop the server loop
 }
 
+void	Server::close_all_fds()
+{
+	for (size_t i = 0; i < clients.size(); i++)
+	{
+		std::cout << "client << " << clients[i].get_fd() << " <<  disconnect" <<  std::endl;
+		close(clients[i].get_fd());
+	}
+	if (fd_srv_socket != -1)
+	{
+		std::cout << "server << " << fd_srv_socket << "<< disconnect" <<  std::endl;
+		close(fd_srv_socket);
+	}
+}
+
+
 void	Server::initializeServer(int port_nbr,std::string str)
 {
 	this->port = port_nbr;
@@ -346,6 +354,7 @@ void	Server::initializeServer(int port_nbr,std::string str)
 			}
 		}
 	}
+	close_all_fds();
 }
 
 

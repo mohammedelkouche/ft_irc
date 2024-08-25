@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/25 10:50:31 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/25 14:53:17 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ class Server
 		// void	sendToClient(int fd, const std::string message);
 		void	sendToClient(int fd, const std::string& message);
 		// void	CloseConnections();
+		void	close_all_fds();
 		
 		// handel cmd
 		void	handle_pass(Client *user);
