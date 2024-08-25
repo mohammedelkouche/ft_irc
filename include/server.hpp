@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/22 17:29:12 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/25 10:50:31 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,13 @@ class Server
 		// char buffer[BUFFER_SIZE];
 		// add
 		static bool stopServer;
+		struct sockaddr_in server_addr;
+		struct sockaddr_in client_addr;
+		struct pollfd client_poll_fd;
 	public :
 		Server();
 		Server(const Server &obj);
-		// Server& operator = (const Server &obj);
+		Server& operator = (const Server &other);
 		~Server();
 		void	initializeServer(int port_nbr,std::string str);
 		void	config_server();

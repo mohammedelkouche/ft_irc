@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/24 14:45:20 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/25 10:50:37 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,30 @@ Server::Server(const Server &obj)
 	port = obj.port;
 	pass = obj.pass;
 	fd_srv_socket = obj.fd_srv_socket;
+	*this = obj;
 	for(size_t i = 0; i < clients.size(); i++)
         	clients[i] = obj.clients[i];
 	for(size_t i = 0; i < channels.size(); i++)
         	channels[i] = obj.channels[i];
 }
 
+Server &Server::operator=(Server const &other){
+	if (this != &other){
+		this->fd_srv_socket = other.fd_srv_socket;
+		this->port = other.port;
+		this->pass = other.pass;
+		this->clients = other.clients;
+		this->pollfds = other.pollfds;
+		this->channels = other.channels;
+	}
+	return *this;
+}
+
 
 void	Server::config_server()
 {
 	int enable = 1;
-	struct sockaddr_in server_addr;
+	// struct sockaddr_in server_addr;
 	
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(this->port);
@@ -59,11 +72,16 @@ void	Server::config_server()
 	if (listen(fd_srv_socket, SOMAXCONN) == -1)
 		throw(std::runtime_error("listen() failed"));
 	
-	struct pollfd server_poll_fd;
-	server_poll_fd.fd = fd_srv_socket;
-	server_poll_fd.events = POLLIN;
-	server_poll_fd.revents = 0;
-	pollfds.push_back(server_poll_fd);
+	// struct pollfd server_poll_fd;
+	// server_poll_fd.fd = fd_srv_socket;
+	// server_poll_fd.events = POLLIN;
+	// server_poll_fd.revents = 0;
+	// add 
+	client_poll_fd.fd = fd_srv_socket;
+	client_poll_fd.events = POLLIN;
+	client_poll_fd.revents = 0;
+	pollfds.push_back(client_poll_fd);
+	// pollfds.push_back(server_poll_fd);
 }
 
 void	Server::AcceptNewClient()
@@ -71,7 +89,7 @@ void	Server::AcceptNewClient()
 	Client	newclient;
 	std::string	host;
 
-	struct sockaddr_in client_addr;
+	// struct sockaddr_in client_addr;
 	socklen_t addresslenght = sizeof(client_addr);
 
 	int fd_client_sock = accept(fd_srv_socket, (sockaddr *)&client_addr, &addresslenght);
@@ -86,7 +104,7 @@ void	Server::AcceptNewClient()
         return;
 	}
 	
-	struct pollfd client_poll_fd;
+	// struct pollfd client_poll_fd;
 	client_poll_fd.fd = fd_client_sock;
 	client_poll_fd.events = POLLIN;
 	client_poll_fd.revents = 0;
@@ -310,7 +328,7 @@ void	Server::initializeServer(int port_nbr,std::string str)
 	
 	std::cout << "Server with fd <" << fd_srv_socket << "> Connected" << std::endl;
 	std::cout << "Server started. Listening on port : " << this->port << std::endl;
-	std::cout << "Waiting to accept a connection...\n";
+	std::cout << "Waiting to accept a connection..." << std::endl;
 	
 	while (!stopServer)
 	{
