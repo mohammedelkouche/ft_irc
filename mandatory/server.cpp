@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/25 14:55:57 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/26 22:05:44 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ Server::Server(const Server &obj)
 	port = obj.port;
 	pass = obj.pass;
 	fd_srv_socket = obj.fd_srv_socket;
-	// *this = obj;
 	for(size_t i = 0; i < clients.size(); i++)
         	clients[i] = obj.clients[i];
 	for(size_t i = 0; i < channels.size(); i++)
@@ -55,7 +54,6 @@ Server &Server::operator=(Server const &other){
 void	Server::config_server()
 {
 	int enable = 1;
-	// struct sockaddr_in server_addr;
 	
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(this->port);
@@ -73,16 +71,10 @@ void	Server::config_server()
 	if (listen(fd_srv_socket, SOMAXCONN) == -1)
 		throw(std::runtime_error("listen() failed"));
 	
-	// struct pollfd server_poll_fd;
-	// server_poll_fd.fd = fd_srv_socket;
-	// server_poll_fd.events = POLLIN;
-	// server_poll_fd.revents = 0;
-	// add 
 	client_poll_fd.fd = fd_srv_socket;
 	client_poll_fd.events = POLLIN;
 	client_poll_fd.revents = 0;
 	pollfds.push_back(client_poll_fd);
-	// pollfds.push_back(server_poll_fd);
 }
 
 void	Server::AcceptNewClient()
@@ -90,7 +82,6 @@ void	Server::AcceptNewClient()
 	Client	newclient;
 	std::string	host;
 
-	// struct sockaddr_in client_addr;
 	socklen_t addresslenght = sizeof(client_addr);
 
 	int fd_client_sock = accept(fd_srv_socket, (sockaddr *)&client_addr, &addresslenght);
@@ -105,7 +96,6 @@ void	Server::AcceptNewClient()
         return;
 	}
 	
-	// struct pollfd client_poll_fd;
 	client_poll_fd.fd = fd_client_sock;
 	client_poll_fd.events = POLLIN;
 	client_poll_fd.revents = 0;
@@ -221,11 +211,6 @@ void	Server::execute_commande(Client *user)
 	}
 	else
 		handle_Unknown_command(user);
-	// std::cout << "******  check the fd   ******" << std::endl;
-	// for (size_t i = 0; i < clients.size(); i++)
-	// {
-	// 	std::cout << "this this the pass " << clients[i].get_fd() << " -> <<" << clients[i].get_pass_client() << ">> this this the pass" <<std::endl;
-	// }
 }
 
 void	Server::parse_message(std::string buffer, int fd)
@@ -296,7 +281,6 @@ void	Server::ReceiveClientData(int fd)
 		if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
 		{
 			partial_messages[fd] += message;
-			// std::cout << "partial_messages[fd] =" << partial_messages[fd] << std::endl;
 			parse_message(partial_messages[fd],fd);
 			partial_messages[fd].clear();
 		}
@@ -322,7 +306,7 @@ void	Server::close_all_fds()
 	}
 	if (fd_srv_socket != -1)
 	{
-		std::cout << "server << " << fd_srv_socket << "<< disconnect" <<  std::endl;
+		std::cout << "server << " << fd_srv_socket << " << disconnect" <<  std::endl;
 		close(fd_srv_socket);
 	}
 }

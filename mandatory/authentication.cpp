@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/25 13:26:07 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/26 22:08:17 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,16 @@
 // begin with a ':' character MUST be sent with a preceding ':'; in other
 //   cases the use of a preceding ':' on the final parameter is OPTIONAL.
 
-
-
-// Optionally, a literal asterisk character ('*', 0x2A) to indicate that the user is a server operator.
 void	Server::handle_pass(Client *user)
 {
+	std::cout << "this->pass -> <<" << this->pass << ">>" << std::endl;
+	std::cout << "this->pass -> <<" << this->pass << ">>" << std::endl;
 	std::vector<std::string> commande = user->get_commande();
-	// std::cout << "alll commande commande <<" << commande << ">> commande " <<  std::endl;
-	// for (size_t i = 0; i < commande.size(); ++i) {
-    //     std::cout << "element <<" << commande[i] << ">>" <<  std::endl;
-    // }
 	
 	std::vector <std::string>::iterator it = std::find(commande.begin(), commande.end(), ":");
+
 	if (it != commande.end())
-		commande.erase(it);
+			commande.erase(it);
 	if (commande.size() == 1)
 	{
 		if (user->is_enregistred())
@@ -48,7 +44,6 @@ void	Server::handle_pass(Client *user)
 			sendToClient(user->get_fd(), ERROR_ALREADYREGISTERED(user->get_nickname(), user->get_hostname()));
 		else
 		{
-			// std::cout <<" commande <<" << commande[1] << ">> commande " <<  std::endl;
 			if (this->pass != commande[1])
 			{
 				if (user->get_correct_pass())
@@ -77,7 +72,6 @@ void	Server::sendToClient(int fd, const std::string& message)
 {
 	if (send(fd, message.c_str(), message.length(), 0) == -1)
 		std::cerr << "send() faild" << std::endl;
-		// throw std::runtime_error("Failed to send message");
 }
 
 void	Server::handle_nickname(Client *user)
@@ -100,14 +94,8 @@ void	Server::handle_nickname(Client *user)
 	}
 	else
 	{
-		// if (!user->get_pass_client().compare(""))
-		// std::cout << " 222 holaaaaaaaa >>"<< user->get_pass_client()<<  "<< holaaaaaaaa " << std::endl;
 		if (!user->get_correct_pass())
-		{
-			// add
-			std::cout << "this is the pass of client -> " << user->get_pass_client() << "" << std::endl;
 			sendToClient(user->get_fd(), ERROR_NOTREGISTERED(" * ", user->get_hostname()));
-		}
 		else if (!user->is_enregistred())
 		{
 			if (check_valid_nick_name(commande[1]))
@@ -155,7 +143,6 @@ void	Server::handle_username(Client *user)
 		else
 			sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(" * ", user->get_hostname()));
 	}
-	// else if (!user->get_pass_client().compare(""))
 	else if (commande.size() == 5)
 	{
 		if (!user->get_correct_pass())

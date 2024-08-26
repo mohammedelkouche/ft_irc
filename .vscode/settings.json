@@ -63,9 +63,6 @@
         "typeinfo": "cpp",
         "unordered_map": "cpp",
         "utility": "cpp",
-        "vector": "cpp",
-        "__functional_03": "cpp",
-        "memory_resource": "cpp",
-        "csignal": "cpp"
+        "vector": "cpp"
     }
 }

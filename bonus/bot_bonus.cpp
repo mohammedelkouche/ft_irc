@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:04:27 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/24 22:42:22 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/26 22:05:23 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ Bot::Bot(const std::string &ip, int port, const std::string &password) : port(po
 	if (inet_pton(AF_INET, server_ip.c_str(), &server_addr.sin_addr) <= 0)
 		throw std::runtime_error("Invalid address/ Address not supported");
     
-     // Ignore SIGPIPE signals
+    // Ignore SIGPIPE signals
     signal(SIGPIPE, SIG_IGN);
 
     // Set up signal handling for termination
@@ -51,21 +51,13 @@ void	Bot::ConnectToServer()
 	bot_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (bot_fd < 0)
 		throw std::runtime_error("Socket creation error");
-
-    // add test 
-
-    // setNonBlocking(bot_fd);
     
-	// if (connect(bot_fd, (struct sockaddr *)&server_addr, sizeof(server_addr) < 0))
 	if (connect(bot_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0)
 	{
 		close(bot_fd);
-		// throw std::runtime_error("Connection Failed");
 		throw std::runtime_error("Connection failed: " + std::string(strerror(errno)));
-
 	}
-	// std::cout << "Connected to the server" << std::endl;
-	std::cout << "Connected to server on port " << port << std::endl; // Use the port field here
+	std::cout << "Connected to server on port " << port << std::endl;
 
 }
 
@@ -105,11 +97,11 @@ void Bot::SendMessage(const std::string &message) {
     }
 }
 
-// add
+// old
 void Bot::PrSendMessage(const std::string &message, const std::string &client_nick)
 {
-    // ine PRIVMSG_FORMAT(senderNick, senderUsername, senderHostname, receiver, message) ":" + senderNick + "!~" + senderUsername + "@" + senderHostname + " PRIVMSG " + receiver + " :" + message + "\r\n"
     std::string formatted_message = "PRIVMSG " + client_nick + " :" + message + "\r\n";
+    
     if (send(bot_fd, formatted_message.c_str(), formatted_message.length(), 0) < 0)
     {
         // RemoveClient(client_nick); // Remove client if sending fails
@@ -117,21 +109,12 @@ void Bot::PrSendMessage(const std::string &message, const std::string &client_ni
     }
 }
 
-// add
 void Bot::signalHandler(int signal)
 {
-    if (signal == SIGINT) {
-        // Terminate the bot safely
-    // std::cout << " test test alla h  " << std::endl;
+    if (signal == SIGINT)
+    {
         std::cout << "Termination signal received. Cleaning up." << std::endl;
-    // if (bot_fd >= 0) {
-    //     close(bot_fd);
-    //     bot_fd = -1;
-    // }
-    // Cleanup(); // Perform cleanup tasks
-    // client_in_game.clear(); // Clear the client_in_game map
-    // Cleanup();
-        exit(0); // Exit the program after cleanup
+        exit(0);
     }
 }
 
@@ -156,7 +139,6 @@ void Bot::PlayRoshambo(const std::string &sender)
     std::string choices[] = {"rock", "paper", "scissors"};
     PrSendMessage("Send 'rock', 'paper', or 'scissors' to play.", sender);
     std::string client_message = ReceiveMessage();
-    // std::cout  << "msgContent -> <<"  <<  msgContent << ">>"<< std::endl;
     if (client_message.size() >= 2 && client_message.substr(client_message.size() - 2) == "\r\n")
         client_message.erase(client_message.size() - 2);
     size_t colonPos = client_message.find_last_of(':');
@@ -172,7 +154,6 @@ void Bot::PlayRoshambo(const std::string &sender)
     {
         int bot_choice = std::rand() % 3;
         PrSendMessage("Bot chose " + std::string(choices[bot_choice]), sender);
-
         switch (client_choice)
         {
             case 0:
@@ -202,13 +183,11 @@ void Bot::PlayRoshambo(const std::string &sender)
         }
     }
     else
-    {
-        std::cout << "pppppppppppppppp" << std::endl;
         PrSendMessage("Invalid input. Send 'rock', 'paper', or 'scissors' to play.", sender);
-    }
 }
 
-void Bot::PlayNwetat(const std::string &sender) {
+void Bot::PlayNwetat(const std::string &sender)
+{
     std::string nwetat_arr[] = 
     {
         "galk wlah wmaknti zwen lasybty irc 7da twin",
@@ -230,20 +209,18 @@ void Bot::PlayGame()
     while (!terminate) {
         std::string client_message = ReceiveMessage();
         if (client_message.empty()) // like Server closed connection
-            break; // Exit the loop if connection is closed or termination is requested
+            break;
 
         if (client_message.size() >= 2 && client_message.substr(client_message.size() - 2) == "\r\n") 
             client_message.erase(client_message.size() - 2);
-
+        
         std::istringstream iss(client_message);
-
         std::string senderdomaine;
         std::string command;
         std::string receiver;
         std::string msgContent;
 
         iss >> senderdomaine;
-        std::string sender = senderdomaine.substr(1, senderdomaine.find('!') - 1);
         iss >> command;
         iss >> receiver;
         std::getline(iss, msgContent);
@@ -254,6 +231,7 @@ void Bot::PlayGame()
 
         if (command == "PRIVMSG")
         {
+            std::string sender = senderdomaine.substr(1, senderdomaine.find('!') - 1);
             if (msgContent == "start")
             {
                 PrSendMessage("Choose a game: 'Roshambo(rock paper scissors)' or 'Nwetat'. Type 'exit' to quit.", sender);
@@ -304,7 +282,7 @@ void	Bot::Run()
 	ConnectToServer();
     if (Authenticate())
 	    PlayGame();
-    Cleanup();
+    // Cleanup();
 }
 
 void Bot::Cleanup()
@@ -314,7 +292,7 @@ void Bot::Cleanup()
         close(bot_fd);
         bot_fd = -1;
     }
-    client_in_game.clear(); // Clear the client_in_game map
+    client_in_game.clear();
 }
 
 

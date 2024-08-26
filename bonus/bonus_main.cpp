@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:52:46 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/24 12:13:08 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/26 22:08:57 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,6 @@ void	CheckArg(char **argv)
 		throw std::invalid_argument("Error: Invalid ip_address");
 	
 }
-// void signalHandler(int signal)
-// {
-//     if (signal == SIGINT) {
-//         // Terminate the bot safely
-//         std::cout << "Termination signal received. Cleaning up." << std::endl;
-//         exit(0); // Exit the program after cleanup
-//     }
-// }
 
 int main(int argc, char **argv)
 {
@@ -51,11 +43,6 @@ int main(int argc, char **argv)
 	}
 	try
 	{
-		//  // Ignore SIGPIPE signals
-    	// signal(SIGPIPE, SIG_IGN);
-
-    	// // Set up signal handling for termination
-    	// signal(SIGINT, signalHandler);
 		CheckArg(argv);
 		Bot bot(argv[1], std::atoi(argv[2]), argv[3]);
 		bot.Run();
