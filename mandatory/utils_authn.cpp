@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:30:20 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/17 14:48:03 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:49:51 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ bool	Server::check_valid_nick_name(std::string nick_name)
 
 void	Server::success_connect(Client *user)
 {
-	// REPLY_WELCOME(nick, hostname)
 	sendToClient(user->get_fd(), REPLY_WELCOME(user->get_nickname(), user->get_hostname()));
 	
 	//     

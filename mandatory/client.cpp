@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/25 13:26:43 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:49:23 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	Client::setOperatorStatus(bool status)
 {
 	this->isOperator = status;
 }
-// add
+
 void	Client::set_correct_pass(bool stat_pass)
 {
 	this->correct_pass = stat_pass;
@@ -145,7 +145,7 @@ bool	Client::check_registration(Client *user)
 // is running.
 
 std::string  Client::get_client_host() {
-    char hostname[256]; // Buffer to hold the hostname
+    char hostname[256];
     if (gethostname(hostname, sizeof(hostname)) == 0) {
         struct hostent* hostInfo = gethostbyname(hostname);
         if (hostInfo != NULL) {

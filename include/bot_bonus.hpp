@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 16:13:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/26 22:09:16 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:46:53 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ class Bot
 		int		ChoiceToInt(const std::string &choice);
 		void	SendMessage(const std::string &message);
 		void	PrSendMessage(const std::string &message, const std::string &client_nick);
-		void	setNonBlocking(int fd);
 		void	PlayNwetat(const std::string &sender);
     	void	PlayRoshambo(const std::string &sender);
 		~Bot();

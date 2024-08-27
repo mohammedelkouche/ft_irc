@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 17:11:32 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/17 18:42:29 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:48:18 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ class   Client
 		std::vector<std::string> invitedChannels;
 		bool	registred;
 		bool	isOperator;
-		// add 
 		bool correct_pass;
 	public :
 		Client();
@@ -46,7 +45,6 @@ class   Client
 		void	set_ipAddress(std::string ip);
 		void	set_hostname(std::string host);
 		void	setOperatorStatus(bool status);
-		// add 
 		void	set_correct_pass(bool stat_pass);
 		
 		bool	is_enregistred();
@@ -60,7 +58,6 @@ class   Client
 		bool		getIsOperatorStatus();
 		std::vector<std::string>	getAccessedChannels();
 		bool		check_registration(Client *user);
-		// add 
 		bool		get_correct_pass();
 		// Client	*get_connect_client(int fd);
 		//oussama added a vector of channels accessible by the client

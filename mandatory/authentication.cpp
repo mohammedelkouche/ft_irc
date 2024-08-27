@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/26 22:08:17 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:43:23 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,8 @@
 #include "../include/client.hpp"
 #include "../include/reply.hpp"
 
-
-// (':', 0x3A) character, in which case that character is stripped and
-// the rest of the message is treated as the final parameter, including 
-// any spaces it contains. Parameters that contain spaces, are empty, or
-// begin with a ':' character MUST be sent with a preceding ':'; in other
-//   cases the use of a preceding ':' on the final parameter is OPTIONAL.
-
 void	Server::handle_pass(Client *user)
 {
-	std::cout << "this->pass -> <<" << this->pass << ">>" << std::endl;
-	std::cout << "this->pass -> <<" << this->pass << ">>" << std::endl;
 	std::vector<std::string> commande = user->get_commande();
 	
 	std::vector <std::string>::iterator it = std::find(commande.begin(), commande.end(), ":");

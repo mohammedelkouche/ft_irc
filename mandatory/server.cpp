@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/26 22:05:44 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:42:56 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 #include "../include/reply.hpp"
 
 
-// Server::Server()
 Server::Server() : pass("")
 {
-	// add
 	// Set up the SIGINT handler
     signal(SIGINT, handleSigint);
     // Ignore SIGPIPE

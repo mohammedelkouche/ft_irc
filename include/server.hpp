@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/25 14:53:17 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:50:50 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ class Server
 		std::vector <struct pollfd> pollfds;
 		std::map<int, std::string> partial_messages; // To store incomplete messages
 		// char buffer[BUFFER_SIZE];
-		// add
 		static bool stopServer;
 		struct sockaddr_in server_addr;
 		struct sockaddr_in client_addr;
@@ -66,7 +65,6 @@ class Server
 		void	execute_commande(Client *user);
 		// void	sendToClient(int fd, const std::string message);
 		void	sendToClient(int fd, const std::string& message);
-		// void	CloseConnections();
 		void	close_all_fds();
 		
 		// handel cmd

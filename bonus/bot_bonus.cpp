@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:04:27 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/26 22:05:23 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:47:52 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,17 @@
 
 Bot::Bot(const std::string &ip, int port, const std::string &password) : port(port), server_ip(ip), bot_fd(-1), password(password) ,terminate(false)
 {
+    if (server_ip == "LOCALHOST")
+    {
+        for (std::size_t i = 0; i < server_ip.length(); ++i)
+            server_ip[i] = std::tolower(server_ip[i]);
+    }
+    if (server_ip == "localhost")        
+        server_ip = "127.0.0.1";
+
 	memset(&server_addr, 0, sizeof(server_addr));
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(port);
-	// server_addr.sin_addr.s_addr = inet_addr(address.c_str());
 	if (inet_pton(AF_INET, server_ip.c_str(), &server_addr.sin_addr) <= 0)
 		throw std::runtime_error("Invalid address/ Address not supported");
     
@@ -33,18 +40,6 @@ Bot::Bot(const std::string &ip, int port, const std::string &password) : port(po
     std::srand(std::time(0)); // Initialize random number generator
 
 }
-
-// add test 
-void Bot::setNonBlocking(int fd) {
-    int flags = fcntl(fd, F_GETFL, 0);
-    if (flags == -1) {
-        throw std::runtime_error("Failed to get socket flags");
-    }
-    if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1) {
-        throw std::runtime_error("Failed to set socket to non-blocking");
-    }
-}
-
 
 void	Bot::ConnectToServer()
 {
@@ -72,7 +67,6 @@ std::string	Bot::ReceiveMessage()
             std::cerr << "Receive error: " << strerror(errno) << std::endl;
         }
         terminate = true;
-        std::cerr << "hhhhhhhhhh controoooool ccccccccc: " << strerror(errno) << std::endl;
         return "";
     }
     buffer[bytes_received] = '\0';
@@ -117,22 +111,6 @@ void Bot::signalHandler(int signal)
         exit(0);
     }
 }
-
-
-
-// void Bot::RemoveClient(int client_fd) {
-//     close(client_fd);
-//     connected_clients.erase(client_fd);
-//     std::cout << "Client " << client_fd << " disconnected and removed from the list." << std::endl;
-// }
-
-
-// void Bot::RemoveClient(int client_fd)
-// {
-//     close(client_fd);
-//     client_fds.erase(std::remove(client_fds.begin(), client_fds.end(), client_fd), client_fds.end());
-// }
-
 
 void Bot::PlayRoshambo(const std::string &sender)
 {
@@ -252,7 +230,6 @@ void Bot::PlayGame()
                 PrSendMessage("You must send 'start' to begin the game.", sender);
         }
     }
-    // Cleanup();
 }
 
 bool	Bot::Authenticate()
@@ -287,7 +264,6 @@ void	Bot::Run()
 
 void Bot::Cleanup()
 {
-    std::cout << " test test alla h  " << std::endl;
     if (bot_fd >= 0) {
         close(bot_fd);
         bot_fd = -1;
@@ -298,6 +274,5 @@ void Bot::Cleanup()
 
 Bot::~Bot()
 {
-    std::cout << " hooooooo lallalllll  " << std::endl;
     Cleanup();
 }
