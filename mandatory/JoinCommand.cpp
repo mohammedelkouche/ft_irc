@@ -55,31 +55,20 @@ void Server::selfJoinReply(Client *client, Channel *channel)
     SendResponse(client, REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), channel->getChannelName()));
 }
 
-
-
 void Server::JoinConstruction(Client *client)
 {
     std::vector<std::string> cmd = client->get_commande();
-
-    // if(cmd[0] && cmd[1] == "0")
-    // {
-        //if the client sends JOIN 0,
-        // remove them from all channels they are currently in.
-        // This would involve sending a PART message to all channels they leave.
-    // }
 
     if (cmd.size() < 2 || cmd[1].empty() || !cmd[1][1])
     {
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
         return ;
     }
-
     std::vector<std::string> channelNames = Splitter(cmd[1], ",");
     std::vector<std::string> splittedKeys;
-    bool hasKey = false;
     std::vector<std::string>::iterator keyIt;
-    
     std::string key_var;
+    bool hasKey = false;
 
     if (cmd.size() == 3)
     {
@@ -93,8 +82,7 @@ void Server::JoinConstruction(Client *client)
         keyIt = splittedKeys.begin();
         hasKey = true;
     }
-    // for (size_t i = 0 ; i < splittedKeys.size(); i++)
-    //     std::cout << "########### Splitted key_vars ########### -> " << splittedKeys[i] << std::endl;
+    
     for (std::vector<std::string>::iterator it = channelNames.begin(); it != channelNames.end(); ++it)
     {
         std::string channelName = *it;
@@ -122,7 +110,6 @@ void Server::JoinConstruction(Client *client)
         for (channelIt = channels.begin(); channelIt != channels.end(); ++channelIt)
             if ((*channelIt)->getChannelName() == channelName)
                 break;
-
         if (channelIt == channels.end()) 
         {
             // Channel doesn't exist, create new channel and add client
@@ -131,9 +118,7 @@ void Server::JoinConstruction(Client *client)
                 continue ;
             channels.push_back(newChannel);
             client->getInvitedChannels().push_back(channelName);
-            ////////////////////////////
             selfJoinReply(client, newChannel);
-            ///////////////////////////
             sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
             std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
         }
@@ -143,16 +128,11 @@ void Server::JoinConstruction(Client *client)
             if (!(*channelIt)->addToChannel(client, key_var))
                 continue ;
             client->getInvitedChannels().push_back(channelName);
-            // SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()));
-            // SendResponse(client, REPLY_NAMREPLY(client->get_hostname(), buildNamReply(channel), channel->getChannelName(), client->get_nickname()));
-            // SendResponse(client, REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), channelName));
-            //////////////////////
             selfJoinReply(client, getChannelByName(channels, channelName));
-            //////////////////////
             sendToChannel(client,REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
             std::cout << "Client " << client->get_nickname() << " joined existing channel: " << channelName << std::endl;
         }
-    }
+0    }
     for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
     {
         std::cout << "Channel: " << (*it)->getChannelName() << std::endl;
