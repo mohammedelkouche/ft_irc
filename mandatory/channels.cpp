@@ -1,12 +1,14 @@
 #include "../include/channels.hpp"
 
-Channel::Channel(std::string name, std::string key): name(name), channelKey(key)
+Channel::Channel(std::string name, std::string key): name(name), key(key)
 {
+    init_modes();
 }
 
 Channel::Channel()
 {
-    this->channelKey = "";
+    this->key = "";
+    init_modes();
 }
 
 void print(std::vector<int> v)
@@ -42,7 +44,7 @@ bool Channel::addToChannel(Client *client, std::string key)
         SendResponse(client, ERROR_USERONCHANNEL(client->get_hostname(), getChannelName(), client->get_nickname()));
         return false;
     }
-    if (!this->channelKey.empty() && this->channelKey != key)
+    if (!this->key.empty() && this->key != key)
     {
         SendResponse(client, ERROR_BADCHANNELKEY(client->get_nickname(), client->get_hostname(), getChannelName()));
         return false;
@@ -101,7 +103,7 @@ std::string Channel::getChannelName()
 
 std::string Channel::getChannelKey()
 {
-    return channelKey;
+    return key;
 }
 
 // std::string Channel::getHasKey()
@@ -127,8 +129,9 @@ Channel::~Channel()
 
 Channel::Channel(const Channel& copy) 
 {
+    init_modes();
     name = copy.name;
-    channelKey = copy.channelKey;
+    key = copy.key;
     for(size_t i = 0; i < ClientssHouse.size(); i++)
         ClientssHouse[i] = copy.ClientssHouse[i];
 }

@@ -79,7 +79,7 @@ void Server::JoinConstruction(Client *client)
     bool hasKey = false;
     std::vector<std::string>::iterator keyIt;
     
-    std::string key;
+    std::string key_var;
 
     if (cmd.size() == 3)
     {
@@ -94,20 +94,20 @@ void Server::JoinConstruction(Client *client)
         hasKey = true;
     }
     // for (size_t i = 0 ; i < splittedKeys.size(); i++)
-    //     std::cout << "########### Splitted keys ########### -> " << splittedKeys[i] << std::endl;
+    //     std::cout << "########### Splitted key_vars ########### -> " << splittedKeys[i] << std::endl;
     for (std::vector<std::string>::iterator it = channelNames.begin(); it != channelNames.end(); ++it)
     {
         std::string channelName = *it;
         if (hasKey && keyIt != splittedKeys.end())
         {
-            key = *keyIt;
-            if (!key.empty() && key[0] == ':')
-                key.erase(0,1);
-            std::cout << "erase: [" << key << "]" << std::endl;
+            key_var = *keyIt;
+            if (!key_var.empty() && key_var[0] == ':')
+                key_var.erase(0,1);
+            std::cout << "erase: [" << key_var << "]" << std::endl;
             ++keyIt;
         }
         else  
-            key = "";
+            key_var = "";
         if (channelName[0] != '#')
         {
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelName, client->get_nickname()));
@@ -126,8 +126,8 @@ void Server::JoinConstruction(Client *client)
         if (channelIt == channels.end()) 
         {
             // Channel doesn't exist, create new channel and add client
-            Channel* newChannel = new Channel(channelName, key);
-            if (!newChannel->addToChannel(client, key))
+            Channel* newChannel = new Channel(channelName, key_var);
+            if (!newChannel->addToChannel(client, key_var))
                 continue ;
             channels.push_back(newChannel);
             client->getInvitedChannels().push_back(channelName);
@@ -140,7 +140,7 @@ void Server::JoinConstruction(Client *client)
         else
         {
             // Channel exists, add client to the channel
-            if (!(*channelIt)->addToChannel(client, key))
+            if (!(*channelIt)->addToChannel(client, key_var))
                 continue ;
             client->getInvitedChannels().push_back(channelName);
             // SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()));

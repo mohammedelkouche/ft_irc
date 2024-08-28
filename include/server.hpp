@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/23 20:46:32 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/28 20:55:23 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,12 @@ class Server
 		std::vector<Channel *>  &getChannelsInServer();
 		std::vector<Client> getClientsInServer();
 		bool isClientExist(std::vector<Client> clients, std::string nickname);
-		std::string buildNamReply(Channel *channel);
-		void selfJoinReply(Client *client, Channel *channel);
+		std::string 	buildNamReply(Channel *channel);
+		void 			selfJoinReply(Client *client, Channel *channel);
 		// server utils
-		bool	unique_nickname(std::string nickname);
-		bool	check_valid_nick_name(std::string nick_name);
-		void	success_connect(Client *user);
+		bool			unique_nickname(std::string nickname);
+		bool			check_valid_nick_name(std::string nick_name);
+		void			success_connect(Client *user);
 		Channel* getChannelByName(std::vector<Channel *> channels, std::string name);
 		/*                        AYGAOUA SPEAKING                        */
 		/*------------------------TOPIC COMMAND---------------------------*/
@@ -95,13 +95,14 @@ class Server
 		/*----------------------------------------------------------------*/
 
 		/*------------------------PRIVMSG COMMAND---------------------------*/
-		void	Private_message(std::vector<std::string> commande, Client *user);
+		void	Private_message(std::vector<std::string> command, Client *user);
 		void	sendToChannel(Client *user, const std::string& message, std::string Chnl);
 		int		no_suck_channel_msg(std::string chnl);
 		/*----------------------------------------------------------------*/
 
 		/*------------------------PRIVMSG COMMAND---------------------------*/
-		void ModeCommande(std::vector<std::string> commande, Client *user);
+		void	ModeCommand(std::vector<std::string> command, Client *user);
+		// void DisplayMode(std::vector<std::string> command, Client *user);
 		/*----------------------------------------------------------------*/
 		/*                        AYGAOUA SPEAKING                        */
 		// void	check_registration(Client *user);

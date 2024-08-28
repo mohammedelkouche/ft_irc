@@ -101,7 +101,7 @@
 // #define RPL_AWAY(nick_resever, hostname, message) ":" + hostname +  " " + nick_resever + " :" + message + "\r\n"
 #define ERR_NOTEXTTOSEND(hostname) ":" + hostname + " 412 " + ":No text to send\r\n"
 #define ERR_NOSUCHNICK(hostname, nick) ":" + hostname + " 401 " + nick + " :No such nick\r\n"
-
+#define ERR_UNKNOWNMODE(hostname, nick, modechar) ":" + hostname + " 472 " + nick + " " + modechar + " :is unknown mode char to me\r\n"
 
 // void	ERR_NEEDMOREPARAMS(std::string nick_name, std::string commande)
 // {

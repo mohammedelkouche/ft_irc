@@ -14,13 +14,20 @@ class Client;
 class Channel
 {
     private:
-        std::string name;
-        std::vector<Client *> ClientssHouse;
-        std::vector<Client *> Operators;
-        std::string           topic;
-        bool                  bool_topic;
-        std::string           topic_setter;
-        std::string           channelKey;
+        std::string             name;
+        std::vector<Client *>   ClientssHouse;
+        std::vector<Client *>   Operators;
+        std::string             topic;
+        std::string             topic_setter;
+        std::string             topic_time;
+        int                     mode;
+        int                     limit;
+        std::string             key; //channelKey0
+        bool                    i;
+        bool                    k;
+        bool                    l;
+        bool                    t;
+        
     public:
         Channel();
         Channel(std::string name, std::string key);
@@ -28,16 +35,34 @@ class Channel
         ~Channel();
         bool                    addToChannel(Client *client, std::string key);
         void                    removeFromChannel(Client *client);
-        // bool clientExists(int clientFd);
         void                    setChannelName(std::string name);
         std::string             getChannelName();
         Client*                 getTheOperator();
+        std::string             getChannelKey();
         std::vector<Client *>   GetClientssHouse();
         std::vector<Client *>   GetTheOperators();
         void                    set_topic(std::string topic);
         std::string             get_topic();
-        void	                set_topic_setter(std::string topicsetter);
+		void	                set_topic_setter(std::string topicsetter);
         std::string             get_topic_setter();
-        std::string             getChannelKey();
+        void                    set_time_ctime();
+        std::string             get_time_ctime();
+        void	                add_i();
+		void	                add_t();
+		void	                add_o(std::string nick);
+		void	                add_k(std::string key);
+		void	                add_l(int limit);
+        void	                rm_i();
+		void	                rm_t();
+		void	                rm_o(std::string nick);
+		void	                rm_k();
+		void	                rm_l();
+        bool	                get_i();
+		bool	                get_t();
+		bool	                get_k();
+		bool	                get_l();
+        void                    set_mode(int mode_number);
+        void                    init_modes();
+        std::string             get_channel_mode();
     };
 #endif
