@@ -35,7 +35,6 @@ class Channel
         ~Channel();
         bool addToChannel(Client *client);
         void removeFromChannel(Client *client);
-        // bool clientExists(int clientFd);
         void setChannelName(std::string name);
         std::string getChannelName();
         Client* getTheOperator();
