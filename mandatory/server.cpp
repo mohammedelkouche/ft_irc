@@ -6,18 +6,22 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/28 20:57:49 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/28 21:29:17 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/server.hpp"
 #include "../include/client.hpp"
+#include "../include/server.hpp"
 #include "../include/reply.hpp"
 
 
 Server::Server() : pass("")
 {
-
+	// Set up the SIGINT handler
+    signal(SIGINT, handleSigint);
+    // Ignore SIGPIPE
+    signal(SIGPIPE, SIG_IGN);
+	
 }
 
 	
@@ -32,11 +36,22 @@ Server::Server(const Server &obj)
         	channels[i] = obj.channels[i];
 }
 
+Server &Server::operator=(Server const &other){
+	if (this != &other){
+		this->fd_srv_socket = other.fd_srv_socket;
+		this->port = other.port;
+		this->pass = other.pass;
+		this->clients = other.clients;
+		this->pollfds = other.pollfds;
+		this->channels = other.channels;
+	}
+	return *this;
+}
+
 
 void	Server::config_server()
 {
 	int enable = 1;
-	struct sockaddr_in server_addr;
 	
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(this->port);
@@ -54,15 +69,10 @@ void	Server::config_server()
 	if (listen(fd_srv_socket, SOMAXCONN) == -1)
 		throw(std::runtime_error("listen() failed"));
 	
-	struct pollfd server_poll_fd;
-	server_poll_fd.fd = fd_srv_socket;
-	server_poll_fd.events = POLLIN;
-	// clearing any previous events that might have been stored in that member.
-	// ensuring that it doesn't carry over any previous events from previous
-	// poll() calls. This prepares it to store the new events detected by
-	// the next poll() call.
-	server_poll_fd.revents = 0;
-	pollfds.push_back(server_poll_fd);
+	client_poll_fd.fd = fd_srv_socket;
+	client_poll_fd.events = POLLIN;
+	client_poll_fd.revents = 0;
+	pollfds.push_back(client_poll_fd);
 }
 
 void	Server::AcceptNewClient()
@@ -70,7 +80,6 @@ void	Server::AcceptNewClient()
 	Client	newclient;
 	std::string	host;
 
-	struct sockaddr_in client_addr;
 	socklen_t addresslenght = sizeof(client_addr);
 
 	int fd_client_sock = accept(fd_srv_socket, (sockaddr *)&client_addr, &addresslenght);
@@ -85,7 +94,6 @@ void	Server::AcceptNewClient()
         return;
 	}
 	
-	struct pollfd client_poll_fd;
 	client_poll_fd.fd = fd_client_sock;
 	client_poll_fd.events = POLLIN;
 	client_poll_fd.revents = 0;
@@ -94,11 +102,11 @@ void	Server::AcceptNewClient()
 	newclient.set_fd(fd_client_sock);
 	host = newclient.get_client_host();
 	newclient.set_hostname(host);
-	// for vector
-	// clients.insert(std::make_pair(fd_client_sock, newclient));
 	
 	clients.push_back(newclient);
 	pollfds.push_back(client_poll_fd);
+	// insert a new buffer entry for the new client
+	partial_messages.insert(std::make_pair(fd_client_sock, ""));
 	std::cout << "Client fd = '" << fd_client_sock << "' Connected" << std::endl;
 }
 
@@ -165,6 +173,8 @@ void	Server::execute_commande(Client *user)
 	commande = user->get_commande();
 	if (user->get_commande().empty())
 		return ;
+	if(commande[0] == "pong" || commande[0] == "PONG")
+		return;
 	if (commande[0] == "pass" || commande[0] == "PASS")
 		handle_pass(user);
 	else if (commande[0] == "nick" || commande[0] == "NICK")
@@ -179,7 +189,6 @@ void	Server::execute_commande(Client *user)
 		if (user->check_registration(user))
 			success_connect(user);
 	}
-	// else print a message for indicating command not found
 	if (user->is_enregistred())
 	{
 		if (commande[0] == "join" || commande[0] == "JOIN")
@@ -201,9 +210,11 @@ void	Server::execute_commande(Client *user)
 			Private_message(commande, user);
 		else if (commande[0] == "MODE" || commande[0] == "mode")
 			ModeCommand(commande, user);
-		// else if (commande[0] == "part" || commande[0] == "PART")
-		// 	PartConstruction(user);
+		else
+			handle_Unknown_command(user);
 	}
+	else
+		handle_Unknown_command(user);
 }
 
 void	Server::parse_message(std::string buffer, int fd)
@@ -218,6 +229,7 @@ void	Server::parse_message(std::string buffer, int fd)
 		execute_commande(user);
 		pos = end_pos + 2; // Move past "\r\n"
 	}
+
 }
 
 Client* Server::get_connect_client(int fd)
@@ -242,22 +254,64 @@ std::vector<Channel *>  &Server::getChannelsInServer()
 }
 
 void	Server::ReceiveClientData(int fd)
-{
+{	
+	char buffer[BUFFER_SIZE];
+	std::string message;
 	memset(buffer, 0 , BUFFER_SIZE);
+	size_t pos = 0;
+    size_t end_pos = 0;
 	size_t bytes_received = recv(fd, buffer, BUFFER_SIZE - 1, 0);
 	if (bytes_received <= 0)
 	{
 		// quit();
 		// sendToClient(fd, "Client fd = '" << fd << "' Disconnected);
 		std::cout << "[Client fd]= [" << fd << "] [Disconnected]" << std::endl;
+		
+		Client * client = get_connect_client(fd);
+		for (size_t i = 0; i < channels.size(); i++)
+			channels[i]->removeFromChannel(client);
         RemoveClient(fd);
         close(fd);
 	}
 	else
 	{
-		buffer[bytes_received] = '\0';
-		std::cout << "[Client fd]= '["<< fd << "]' ==> [sent msg] : " << buffer;
-		parse_message(buffer,fd);
+		if (bytes_received < BUFFER_SIZE) {
+            buffer[bytes_received] = '\0';
+        } else {
+            buffer[BUFFER_SIZE - 1] = '\0';
+        }
+		std::cout << "Client fd = '" << fd << "' send : " << buffer;
+		message = buffer;
+		if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
+		{
+			partial_messages[fd] += message;
+			parse_message(partial_messages[fd],fd);
+			partial_messages[fd].clear();
+		}
+		else if (message.find("\n", pos) == std::string::npos)
+			partial_messages[fd] += message;
+	}
+}
+
+bool Server::stopServer = 0;
+
+void Server::handleSigint(int sig)
+{
+    std::cout << "Caught SIGINT (" << sig << "). Shutting down server gracefully." << std::endl;
+    Server::stopServer = 1; // Set the flag to stop the server loop
+}
+
+void	Server::close_all_fds()
+{
+	for (size_t i = 0; i < clients.size(); i++)
+	{
+		std::cout << "client << " << clients[i].get_fd() << " <<  disconnect" <<  std::endl;
+		close(clients[i].get_fd());
+	}
+	if (fd_srv_socket != -1)
+	{
+		std::cout << "server << " << fd_srv_socket << " << disconnect" <<  std::endl;
+		close(fd_srv_socket);
 	}
 }
 
@@ -267,13 +321,14 @@ void	Server::initializeServer(int port_nbr,std::string str)
 	this->port = port_nbr;
 	this->pass = str;
 	config_server();
-
+	
 	std::cout << "Server with fd <" << fd_srv_socket << "> Connected" << std::endl;
 	std::cout << "Server started. Listening on port : " << this->port << std::endl;
-	std::cout << "Waiting to accept a connection...\n";
-	while (true)
+	std::cout << "Waiting to accept a connection..." << std::endl;
+	
+	while (!stopServer)
 	{
-		if (poll(&pollfds[0], pollfds.size(), -1) == -1)
+		if (poll(&pollfds[0], pollfds.size(), -1) == -1 && !stopServer)
 			throw(std::runtime_error("poll() failed"));
 		for (size_t i = 0; i < pollfds.size(); i++)
 		{
@@ -287,9 +342,12 @@ void	Server::initializeServer(int port_nbr,std::string str)
 			}
 		}
 	}
+	close_all_fds();
 }
 
 
 Server::~Server()
 {
-}  
+}
+
+

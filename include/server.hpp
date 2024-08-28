@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/28 20:55:23 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/28 21:27:47 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,15 @@ class Server
 		std::vector<Channel *> channels;
 		std::vector <struct pollfd> pollfds;
 		std::map<int, std::string> partial_messages; // To store incomplete messages
-		char buffer[BUFFER_SIZE];
+		// char buffer[BUFFER_SIZE];
+		static bool stopServer;
+		struct sockaddr_in server_addr;
+		struct sockaddr_in client_addr;
+		struct pollfd client_poll_fd;
 	public :
 		Server();
 		Server(const Server &obj);
-		Server& operator = (const Server &obj);
+		Server& operator = (const Server &other);
 		~Server();
 		void	initializeServer(int port_nbr,std::string str);
 		void	config_server();
@@ -60,8 +64,9 @@ class Server
 		void	parse_message(std::string buffer, int fd);
 		Client	*get_connect_client(int fd);
 		void	execute_commande(Client *user);
+		// void	sendToClient(int fd, const std::string message);
 		void	sendToClient(int fd, const std::string& message);
-		void	CloseConnections();
+		void	close_all_fds();
 		
 		// handel cmd
 		void	handle_pass(Client *user);
@@ -86,6 +91,9 @@ class Server
 		bool			check_valid_nick_name(std::string nick_name);
 		void			success_connect(Client *user);
 		Channel* getChannelByName(std::vector<Channel *> channels, std::string name);
+		// add
+		bool	check_valid_realname(std::string realname);
+		static void handleSigint(int sig);
 		/*                        AYGAOUA SPEAKING                        */
 		/*------------------------TOPIC COMMAND---------------------------*/
 		void	Topic_Command(std::vector<std::string> Topic, Client *user);

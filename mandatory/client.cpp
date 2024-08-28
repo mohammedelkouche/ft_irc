@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/06/15 21:39:28 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:49:23 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <iostream>
 
 
-Client::Client() : ipaddress(""), nickname(""), pass_client(""), username (""), isOperator(false)
+Client::Client() : ipaddress(""), nickname(""), pass_client(""), username (""), isOperator(false),correct_pass(false)
 {
 	this->registred = false;
 }
@@ -24,12 +24,14 @@ Client::Client() : ipaddress(""), nickname(""), pass_client(""), username (""), 
 Client::Client(const Client& copy)
 {
 	fd = copy.fd;
+	pass_client = copy.pass_client;
 	ipaddress = copy.ipaddress;
 	nickname = copy.nickname;
 	username = copy.username;
 	hostname = copy.hostname;
 	registred = copy.registred;
 	isOperator = copy.isOperator;
+	correct_pass = copy.correct_pass;
 	for(size_t i = 0; i < commande.size(); i++)
 		commande[i] = copy.commande[i];
 	for(size_t i = 0; i < invitedChannels.size(); i++)
@@ -84,6 +86,11 @@ void	Client::setOperatorStatus(bool status)
 	this->isOperator = status;
 }
 
+void	Client::set_correct_pass(bool stat_pass)
+{
+	this->correct_pass = stat_pass;
+}
+
 bool	Client::getIsOperatorStatus()
 {
 	return this->isOperator;
@@ -114,9 +121,15 @@ std::string	Client::get_hostname()
 	return this->hostname;
 }
 
+// add
+bool	Client::get_correct_pass()
+{
+	return this->correct_pass;
+}
 
 bool	Client::check_registration(Client *user)
 {
+
 	if (!user->registred && user->get_pass_client().compare("")   && user->get_nickname().compare("") && user->get_username().compare(""))
 	{
 		user->registred = true;
@@ -132,7 +145,7 @@ bool	Client::check_registration(Client *user)
 // is running.
 
 std::string  Client::get_client_host() {
-    char hostname[256]; // Buffer to hold the hostname
+    char hostname[256];
     if (gethostname(hostname, sizeof(hostname)) == 0) {
         struct hostent* hostInfo = gethostbyname(hostname);
         if (hostInfo != NULL) {
@@ -147,6 +160,8 @@ std::vector<std::string>& Client::getInvitedChannels()
 {
 	return this->invitedChannels;
 }
+
+
 
 Client::~Client()
 {

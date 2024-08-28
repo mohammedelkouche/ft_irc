@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   bonus_main.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/04 17:08:30 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/14 20:49:05 by mel-kouc         ###   ########.fr       */
+/*   Created: 2024/05/24 15:52:46 by mel-kouc          #+#    #+#             */
+/*   Updated: 2024/08/27 11:38:43 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../include/bot_bonus.hpp"
 
-#include "../include/server.hpp"
-
-
-void check_arg(char **argv) {
-	std::string portstr(argv[1]);
+void	CheckArg(char **argv)
+{
+	int port;
+	std::string ip_address(argv[1]);
+	std::string portstr(argv[2]);
 	size_t portPos = portstr.find_first_not_of("0123456789");
 	if (portPos != std::string::npos) {
 		throw std::invalid_argument("Error: Invalid characters in port");
 	}
-	int port;
 	std::stringstream portstream(portstr);
 	portstream >> port;
 	// if (portstream.fail()) {
@@ -29,42 +29,27 @@ void check_arg(char **argv) {
 	if (port < 1024 || port > 65535) {
 		throw std::out_of_range("Error: Invalid port number");
 	}
-	if (std::strlen(argv[2]) == 0) {
-		throw std::invalid_argument("Error: Empty password");
-	}
+	if (ip_address != "localhost" && ip_address != "LOCALHOST" && ip_address != "127.0.0.1")
+		throw std::invalid_argument("Error: Invalid ip_address");
+	
 }
 
-
-
-int main(int argc, char **argv) {
-	try 
+int main(int argc, char **argv)
+{
+	if (argc != 4)
 	{
-		Server irc;
-		
-		if (argc != 3) {
-			std::cout << "write: executable file  <port> <password>" << std::endl;
-			return 1;
-		}
-		check_arg(argv);
-		irc.initializeServer(std::atoi(argv[1]), argv[2]);
+		std::cout << "write < executable file > < 127.0.0.1 >  <port>  <pass>" << std::endl;
+		return 1;
 	}
-	catch (const std::invalid_argument& e) 
+	try
 	{
-		std::cerr << e.what() << std::endl;
-		return 1;
+		CheckArg(argv);
+		Bot bot(argv[1], std::atoi(argv[2]), argv[3]);
+		bot.Run();
 	}
-	catch (const std::out_of_range& e) {
-		std::cerr << e.what() << std::endl;
-		return 1;
-	}
-	catch (const std::runtime_error& e) {
-		std::cerr << e.what() << std::endl;
-		return 1;
-	}
-	catch (const char *error_message)
+	catch(const std::exception& e)
 	{
-		std::cerr << error_message << std::endl;
-		return 1;
+		std::cerr << e.what() << '\n';
 	}
-	return 0;
+	
 }

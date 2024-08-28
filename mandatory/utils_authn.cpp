@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:30:20 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/05/17 23:47:54 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:49:51 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ bool	Server::check_valid_nick_name(std::string nick_name)
 
 void	Server::success_connect(Client *user)
 {
-	// REPLY_WELCOME(nick, hostname)
 	sendToClient(user->get_fd(), REPLY_WELCOME(user->get_nickname(), user->get_hostname()));
 	
 	//     
@@ -56,4 +55,11 @@ void	Server::success_connect(Client *user)
     std::string formatted_time = buffer;
 	sendToClient(user->get_fd(), REPLY_YOURHOST(user->get_nickname(), user->get_hostname()));
 	sendToClient(user->get_fd(), REPLY_CREATED(user->get_nickname(), user->get_hostname(), formatted_time));
+}
+
+bool	Server::check_valid_realname(std::string realname)
+{
+	if (realname.find_first_of("0123456789") != std::string::npos)
+		return false;
+	return true;
 }

@@ -67,11 +67,11 @@ Client* NO_OPERATOR = NULL;
 void Channel::removeFromChannel(Client *client)
 {
     Client *Coperator = getTheOperator();
-    // if (Coperator == NO_OPERATOR)
-    // {
-    //     std::cout << "No Operator in the channel! " << std::endl;
-    //     return;
-    // }
+    if (Coperator == NO_OPERATOR)
+    {
+        std::cout << "No Operator in the channel! " << std::endl;
+        return;
+    }
     if(IsClientInChannel(ClientssHouse, client->get_fd()))
     {
         for(size_t i = 0; i < ClientssHouse.size(); i++)

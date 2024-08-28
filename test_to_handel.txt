@@ -1,6 +1,11 @@
 // 1  controle D
-
 pass^D
+
+
+
+// remove ->   devide_commande function i have to delete fd i don't use it 
+
+
 
 // 2 send multi lign
 
@@ -9,6 +14,30 @@ pass hello test
             returns the name "danp"
             ; User gets registered with username
 
+
+pass hello test Ident contacted and returns the thing ident multicommande in one lign
+
+///////////
+
+pass hello 
+test
+Ident
+server
+gets
+contacted
+and
+returns
+the
+same
+thing
+
+
+
+
+pass hello
+test
+ident
+
 // 3 send multicommande in one lign (using script)
 
 pass asd \r\n nick ahmed \r\n user mel-kouc 0 * realname \r\n
@@ -16,3 +45,17 @@ pass asd \r\n nick ahmed \r\n user mel-kouc 0 * realname \r\n
 // 4 is user mel-kouc 0 * realname \r\n necessaire ?
 
 // when we have to remove client
+
+void	Server::parse_message(std::string buffer, int fd)
+{
+	Client	*user = get_connect_client(fd);
+	size_t pos = 0;
+    size_t end_pos = 0;
+	while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos) {
+		std::string command = buffer.substr(pos, end_pos - pos);
+		std::vector<std::string> commande = devide_commande(command, fd);
+		user->set_commande(commande);
+		execute_commande(user);
+		pos = end_pos + 2; // Move past "\r\n"
+	}
+}
