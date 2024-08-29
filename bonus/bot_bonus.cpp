@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:04:27 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/27 11:47:52 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/29 15:06:19 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ Bot::Bot(const std::string &ip, int port, const std::string &password) : port(po
 	if (inet_pton(AF_INET, server_ip.c_str(), &server_addr.sin_addr) <= 0)
 		throw std::runtime_error("Invalid address/ Address not supported");
     
-    // Ignore SIGPIPE signals
     signal(SIGPIPE, SIG_IGN);
-
-    // Set up signal handling for termination
     signal(SIGINT, signalHandler);
     
     std::srand(std::time(0)); // Initialize random number generator
@@ -60,12 +57,12 @@ std::string	Bot::ReceiveMessage()
 {
     char buffer[1024];
     ssize_t bytes_received = recv(bot_fd, buffer, sizeof(buffer) - 1, 0);
-    if (bytes_received <= 0) {
-        if (bytes_received == 0) {
+    if (bytes_received <= 0)
+    {
+        if (bytes_received == 0)
             std::cout << "Server closed connection." << std::endl;
-        } else {
+        else
             std::cerr << "Receive error: " << strerror(errno) << std::endl;
-        }
         terminate = true;
         return "";
     }
@@ -75,7 +72,6 @@ std::string	Bot::ReceiveMessage()
 
 int	Bot::ChoiceToInt(const std::string &choice)
 {
-    std::cout  << "choice -> <<"  <<  choice << ">>"<< std::endl;
 	if (choice == "rock")
 		return (0);
 	if (choice == "paper")
@@ -86,9 +82,8 @@ int	Bot::ChoiceToInt(const std::string &choice)
 }
 
 void Bot::SendMessage(const std::string &message) {
-    if (send(bot_fd, message.c_str(), message.length(), 0) < 0) {
+    if (send(bot_fd, message.c_str(), message.length(), 0) < 0)
         std::cerr << "Failed to send message " << std::endl;
-    }
 }
 
 // old
@@ -112,26 +107,15 @@ void Bot::signalHandler(int signal)
     }
 }
 
-void Bot::PlayRoshambo(const std::string &sender)
+void Bot::PlayRoshambo(const std::string &sender, const std::string &content)
 {
     std::string choices[] = {"rock", "paper", "scissors"};
-    PrSendMessage("Send 'rock', 'paper', or 'scissors' to play.", sender);
-    std::string client_message = ReceiveMessage();
-    if (client_message.size() >= 2 && client_message.substr(client_message.size() - 2) == "\r\n")
-        client_message.erase(client_message.size() - 2);
-    size_t colonPos = client_message.find_last_of(':');
-
-    // If ':' is found, extract the substring after it
-    std::string content;
-    if (colonPos != std::string::npos)
-        content = client_message.substr(colonPos + 1); // Extract everything after the colon
-    
-    content.erase(std::remove(content.begin(), content.end(), ' '), content.end());
     int client_choice = ChoiceToInt(content);
     if (client_choice != -1)
     {
         int bot_choice = std::rand() % 3;
         PrSendMessage("Bot chose " + std::string(choices[bot_choice]), sender);
+
         switch (client_choice)
         {
             case 0:
@@ -159,6 +143,8 @@ void Bot::PlayRoshambo(const std::string &sender)
                 }
                 break;
         }
+
+        PrSendMessage("Send 'rock', 'paper', or 'scissors' to play again, or 'exit' to quit.", sender);
     }
     else
         PrSendMessage("Invalid input. Send 'rock', 'paper', or 'scissors' to play.", sender);
@@ -203,10 +189,11 @@ void Bot::PlayGame()
         iss >> receiver;
         std::getline(iss, msgContent);
 
-        if (!msgContent.empty() && msgContent[0] == ' ' && msgContent[1] == ':') {
+        if (!msgContent.empty() && msgContent[0] == ' ' && msgContent[1] == ':')
             msgContent = msgContent.substr(2);
-        }
-
+        
+        msgContent.erase(std::remove(msgContent.begin(), msgContent.end(), ' '), msgContent.end());
+        
         if (command == "PRIVMSG")
         {
             std::string sender = senderdomaine.substr(1, senderdomaine.find('!') - 1);
@@ -214,18 +201,34 @@ void Bot::PlayGame()
             {
                 PrSendMessage("Choose a game: 'Roshambo(rock paper scissors)' or 'Nwetat'. Type 'exit' to quit.", sender);
                 client_in_game[sender] = true;
-            } 
+                current_game[sender] = "";  // Initialize to no game selected
+            }
             else if (msgContent == "Roshambo" && client_in_game[sender])
-                PlayRoshambo(sender);
+            {
+                PrSendMessage("You chose Roshambo! Send 'rock', 'paper', or 'scissors' to play.", sender);
+                current_game[sender] = "Roshambo";
+            }
             else if (msgContent == "Nwetat" && client_in_game[sender])
+            {
+                PrSendMessage("You chose Nwetat!", sender);
+                current_game[sender] = "Nwetat";
                 PlayNwetat(sender);
+            }
             else if (msgContent == "exit" && client_in_game[sender])
             {
                 PrSendMessage("You have exited the game. Type 'start' to play again.", sender);
                 client_in_game[sender] = false;
+                current_game[sender] = "";
             }
             else if (client_in_game[sender])
-                PrSendMessage("Invalid input. Choose 'Roshambo', 'Nwetat', or 'exit'.", sender);
+            {
+                if (current_game[sender] == "Roshambo")
+                    PlayRoshambo(sender, msgContent);
+                else if (current_game[sender] == "Nwetat")
+                    PlayNwetat(sender);
+                else
+                    PrSendMessage("Invalid input. Choose 'Roshambo', 'Nwetat', or 'exit'.", sender);
+            }
             else if (!client_in_game[sender])
                 PrSendMessage("You must send 'start' to begin the game.", sender);
         }
@@ -259,7 +262,6 @@ void	Bot::Run()
 	ConnectToServer();
     if (Authenticate())
 	    PlayGame();
-    // Cleanup();
 }
 
 void Bot::Cleanup()
