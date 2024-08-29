@@ -82,7 +82,6 @@ void	Channel::rm_i()
 }
 void	Channel::rm_k()
 {
-	std::cout << "invalid key" << std::endl;
 	k = false;
 }
 void	Channel::rm_l()
@@ -161,7 +160,6 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 				std::string full_mode_add;
 				for (size_t i = 0; i < command[2].size(); i++)
 					full_mode_add += command[2][i];
-				std::cout << "this is full_mode -> " << full_mode_add << std::endl;
 				for (size_t i = 0; i < full_mode_add.size(); i++)
 				{
 					if (full_mode_add[i] == '+' || full_mode_add[i] == '-')
@@ -351,8 +349,7 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 				}
 				else if (command.size() <= 3)
 					sendToClient(user->get_fd(), REPLY_CHANNELMODES(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->get_channel_mode()));
-				//need time of the creation of the channel for making the REPLY_CREATIONTIME	
-				std::cout << "the mode is " << mode_number << std::endl;
+					//need time of the creation of the channel for making the REPLY_CREATIONTIME	
 				return ;
 			}
 		}
