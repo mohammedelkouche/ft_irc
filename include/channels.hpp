@@ -22,7 +22,7 @@ class Channel
         std::string             topic_time;
         std::string             channelTime;
         int                     mode;
-        int                     limit;
+        size_t                  limit;
         std::string             key;
         bool                    i;
         bool                    k;
@@ -54,7 +54,7 @@ class Channel
 		void	                add_t();
 		void	                add_o(std::string nick);
 		void	                add_k(std::string key);
-		void	                add_l(int limit);
+		void	                add_l(size_t limit);
         void	                rm_i();
 		void	                rm_t();
 		void	                rm_o(std::string nick);

@@ -61,7 +61,7 @@ void	Channel::add_k(std::string key)
 	k = true;
 	this->key = key;
 }
-void	Channel::add_l(int limit)
+void	Channel::add_l(size_t limit)
 {
 	l = true;
 	this->limit = limit;
@@ -242,7 +242,7 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 						if (command.size() >= (arg_for_mode + 1) && is_number(command[arg_for_mode]))
 						{
 							ryl_args_p += command[arg_for_mode] + " ";
-							(*it)->add_l(std::atoi(command[arg_for_mode].c_str()));
+							(*it)->add_l(std::atol(command[arg_for_mode].c_str()));
 							ryl_mode_enable += "l";
 							mode_number += 16;
 						}
