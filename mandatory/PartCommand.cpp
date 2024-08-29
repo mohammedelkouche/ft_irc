@@ -5,12 +5,18 @@ void  	Server::PartConstruction(Client *client)
     std::vector<std::string> vec = client->get_commande();
     std::vector<std::string> splittedChannels = Splitter(vec[1], ",");
     if (vec.size() < 2)
+    {
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
+        return ;
+    }
     for (std::vector<std::string>::iterator it = splittedChannels.begin(); it != splittedChannels.end(); ++it)
     {
         std::string eachChannel = *it;
         if (eachChannel[0] != '#')
+        {
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
+            continue ;
+        }
         else if (channeDoesntlExists(channels, eachChannel))
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
         else

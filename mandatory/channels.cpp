@@ -3,6 +3,7 @@
 Channel::Channel(std::string name, std::string key): name(name), key(key)
 {
     init_modes();
+    setTheChannelTimeCreated();
 }
 
 Channel::Channel()
@@ -17,6 +18,21 @@ void print(std::vector<int> v)
     for (size_t i = 0; i < v.size(); i++)
         std::cout << v[i] << std::endl;
     std::cout << "-----------------\n";
+}
+
+void Channel::setTheChannelTimeCreated()
+{
+    time_t present_time;
+    present_time = time(NULL);
+    std::ostringstream oss;
+    oss << present_time;
+    std::string time_now = oss.str();
+    this->channelTime = time_now;
+}
+
+std::string Channel::getTheChannelTimeCreated()
+{
+    return channelTime;
 }
 
 bool IsClientInChannel(std::vector<Client *> ClientssHouse, int fd)
@@ -44,12 +60,16 @@ bool Channel::addToChannel(Client *client, std::string key)
         SendResponse(client, ERROR_USERONCHANNEL(client->get_hostname(), getChannelName(), client->get_nickname()));
         return false;
     }
-    if (!this->key.empty() && this->key != key)
+    std::cout << "getChannelKey-->" << getChannelKey() << "  key----> "<<  key << std::endl;
+    std::cout << " k status "<< get_k()<< std::endl ;
+    if(get_k() == true)
     {
-        SendResponse(client, ERROR_BADCHANNELKEY(client->get_nickname(), client->get_hostname(), getChannelName()));
-        return false;
+        if (!this->key.empty() && getChannelKey() != key)
+        {
+            SendResponse(client, ERROR_BADCHANNELKEY(client->get_nickname(), client->get_hostname(), getChannelName()));
+            return false;
+        }
     }
-
     // Determine if the client should be an operator before adding
     bool shouldSetOperator = ClientssHouse.empty();
     std::cout << "Channel is empty before adding client: " << shouldSetOperator << std::endl;
@@ -57,7 +77,7 @@ bool Channel::addToChannel(Client *client, std::string key)
     client->setOperatorStatus(shouldSetOperator);
     Client *newClient = new Client(*client);  // Create a new Client object on the heap
     // Add client to the channel
-    ClientssHouse.push_back(newClient);;
+    ClientssHouse.push_back(newClient);
     std::cout << "Client " << newClient->get_nickname() << " added to the channel with operator status: " << newClient->getIsOperatorStatus() << std::endl;
     return true;
 }
