@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/28 21:27:47 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/29 22:11:45 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ class Server
 		bool isClientExist(std::vector<Client> clients, std::string nickname);
 		std::string 	buildNamReply(Channel *channel);
 		void 			selfJoinReply(Client *client, Channel *channel);
+		void 			updateClientsOnTheChannel(Client *client, std::string newNick);
 		// server utils
 		bool			unique_nickname(std::string nickname);
 		bool			check_valid_nick_name(std::string nick_name);

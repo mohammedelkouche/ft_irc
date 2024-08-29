@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/29 21:12:22 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/29 22:11:11 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,21 @@ void	Server::sendToClient(int fd, const std::string& message)
 		std::cerr << "send() faild" << std::endl;
 }
 
+void Server::updateClientsOnTheChannel(Client *user, std::string newNick)
+{
+	for(size_t i = 0; i < channels.size(); i++)
+		{
+			for(size_t j = 0; j < channels[i]->GetClientssHouse().size(); j++)
+			{
+				if(channels[i]->GetClientssHouse()[j]->get_nickname() == user->get_nickname())
+				{
+					channels[i]->GetClientssHouse()[j]->set_nickname(newNick);
+					break ;			
+				}
+			}
+		}
+}
+
 void	Server::handle_nickname(Client *user)
 {
 	std::vector<std::string> commande = user->get_commande();
@@ -112,8 +127,8 @@ void	Server::handle_nickname(Client *user)
 				else
 				{
 					sendToClient(user->get_fd(), REPLY_NICKCHANGE(user->get_nickname(), commande[1], user->get_hostname()));
-					//should update the nickname 
 					user->set_nickname(commande[1]);
+					updateClientsOnTheChannel(user, commande[1]);
 				}
 			}
 			else
