@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 16:13:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/27 11:46:53 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/29 14:31:16 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ class Bot
 		bool terminate;
 		void Cleanup();
 		std::map<std::string, bool> client_in_game;
+		std::map<std::string, std::string> current_game; // Tracks the current game of each client
 	public :
 		static void signalHandler(int signal);
 		Bot(const std::string &ip, int port, const std::string &password);
@@ -50,8 +51,16 @@ class Bot
 		void	SendMessage(const std::string &message);
 		void	PrSendMessage(const std::string &message, const std::string &client_nick);
 		void	PlayNwetat(const std::string &sender);
-    	void	PlayRoshambo(const std::string &sender);
+    	// void	PlayRoshambo(const std::string &sender);
+    	void	PlayRoshambo(const std::string &sender, const std::string &content);
+		
 		~Bot();
 };
 
 #endif
+
+// privmsg bot paper
+// privmsg bot paper
+// :bot!~ahmed@e3r9p11.1337.ma PRIVMSG ew :Bot chose paper
+// :bot!~ahmed@e3r9p11.1337.ma PRIVMSG ew :It's a tie!
+// :bot!~ahmed@e3r9p11.1337.ma PRIVMSG ew :Send 'rock', 'paper', or 'scissors' to play again, or 'exit' to quit.

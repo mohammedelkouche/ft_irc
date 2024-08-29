@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/28 21:29:17 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/08/29 16:54:11 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,8 @@
 
 Server::Server() : pass("")
 {
-	// Set up the SIGINT handler
     signal(SIGINT, handleSigint);
-    // Ignore SIGPIPE
     signal(SIGPIPE, SIG_IGN);
-	
 }
 
 	
@@ -37,7 +34,8 @@ Server::Server(const Server &obj)
 }
 
 Server &Server::operator=(Server const &other){
-	if (this != &other){
+	if (this != &other)
+	{
 		this->fd_srv_socket = other.fd_srv_socket;
 		this->port = other.port;
 		this->pass = other.pass;
@@ -112,10 +110,7 @@ void	Server::AcceptNewClient()
 
 void	Server::RemoveClient(int fd)
 {
-	// Erase the client from the map
-    // clients.erase(fd);
-	
-	
+
 	// for vector
 	for (size_t i = 0; i < pollfds.size(); i++)
 	{
@@ -305,12 +300,12 @@ void	Server::close_all_fds()
 {
 	for (size_t i = 0; i < clients.size(); i++)
 	{
-		std::cout << "client << " << clients[i].get_fd() << " <<  disconnect" <<  std::endl;
+		std::cout << "client << [" << clients[i].get_fd() << "] << [disconnect]" <<  std::endl;
 		close(clients[i].get_fd());
 	}
 	if (fd_srv_socket != -1)
 	{
-		std::cout << "server << " << fd_srv_socket << " << disconnect" <<  std::endl;
+		std::cout << "server << [" << fd_srv_socket << "] << [disconnect]" <<  std::endl;
 		close(fd_srv_socket);
 	}
 }
