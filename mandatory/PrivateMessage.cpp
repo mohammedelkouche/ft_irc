@@ -93,7 +93,7 @@ void Server::Private_message(std::vector<std::string> command, Client *user)
         {
             for (i = 0; i < clients.size(); i++)
             {
-                if (clients[i].get_nickname() == (*it_t))
+                if (clients[i].get_nickname() == (*it_t) && clients[i].is_enregistred())
                 {
                     if (command[2][0] == ':')
                     {
