@@ -116,7 +116,7 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 	std::string ryl_args_p;
 	std::string ryl_mode_desable;
 	std::string ryl_args_m;
-
+	
 	if (command.size() == 1)
 	{
 		sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(user->get_nickname(), \

@@ -94,7 +94,7 @@ void Server::JoinConstruction(Client *client)
             std::cout << "erase: [" << key_var << "]" << std::endl;
             ++keyIt;
         }
-        else  
+        else
             key_var = "";
         if (channelName[0] != '#')
         {

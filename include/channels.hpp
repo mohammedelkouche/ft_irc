@@ -50,6 +50,7 @@ class Channel
         void                    setTheChannelTimeCreated();
         std::string             getTheChannelTimeCreated();
         std::string             get_time_ctime();
+        int                     getChannelLimitNum();
         void	                add_i();
 		void	                add_t();
 		void	                add_o(std::string nick);

@@ -126,6 +126,12 @@ std::string Channel::getChannelKey()
     return key;
 }
 
+int Channel::getChannelLimitNum()
+{
+    return limit;
+}
+
+
 // std::string Channel::getHasKey()
 // {
 //     return hasKey;
