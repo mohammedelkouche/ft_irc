@@ -132,7 +132,7 @@ void Server::JoinConstruction(Client *client)
             sendToChannel(client,REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
             std::cout << "Client " << client->get_nickname() << " joined existing channel: " << channelName << std::endl;
         }
-0    }
+    }
     for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
     {
         std::cout << "Channel: " << (*it)->getChannelName() << std::endl;

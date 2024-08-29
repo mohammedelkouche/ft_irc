@@ -1,4 +1,4 @@
--> make the time of creation of the channel attribut (check set_time_ctime() in topic.cpp file)
+-> make the time of creation of the channel attribute (check set_time_ctime() in topic.cpp file)
 -> the key of the channel should not set on the creation of it (join #c kk)
 -> should check the limit attri.
 -> diplay the mode of the channel when join it

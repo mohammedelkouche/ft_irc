@@ -22,7 +22,7 @@ class Channel
         std::string             topic_time;
         int                     mode;
         int                     limit;
-        std::string             key; //channelKey0
+        std::string             key;
         bool                    i;
         bool                    k;
         bool                    l;

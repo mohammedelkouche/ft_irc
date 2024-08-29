@@ -30,7 +30,6 @@ void Channel::init_modes()
 	k = false;
 	t = true;
 	l = false;
-	key = "";
 	limit = -1;
 }
 
@@ -111,7 +110,7 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 {
 	int mode_number = 0;
 	int sign = 0;
-	size_t arg_for_mode = 3;
+	size_t arg_for_mode = 3;     
 	size_t	i_i;
 	std::string ryl_mode_enable;
 	std::string ryl_args_p;
