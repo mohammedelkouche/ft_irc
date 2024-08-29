@@ -137,7 +137,7 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 				if (command.size() == 2)
 				{
 					sendToClient(user->get_fd(), REPLY_CHANNELMODES(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->get_channel_mode()));
-					//need time of the creation of the channel for making the REPLY_CREATIONTIME
+					sendToClient(user->get_fd(), REPLY_CREATIONTIME(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->getTheChannelTimeCreated()));
 					return ;
 				}
 				std::vector<Client *> Clnts = (*it)->GetClientssHouse();
@@ -347,8 +347,10 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 					sendToClient(user->get_fd(), REPLY_CHANNELMODES(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), reply_mode));
 				}
 				else if (command.size() <= 3)
+				{
 					sendToClient(user->get_fd(), REPLY_CHANNELMODES(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->get_channel_mode()));
-					//need time of the creation of the channel for making the REPLY_CREATIONTIME	
+					sendToClient(user->get_fd(), REPLY_CREATIONTIME(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->getTheChannelTimeCreated()));
+				}
 				return ;
 			}
 		}
