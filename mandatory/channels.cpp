@@ -3,6 +3,7 @@
 Channel::Channel(std::string name, std::string key): name(name), key(key)
 {
     init_modes();
+    setTheChannelTimeCreated();
 }
 
 Channel::Channel()
@@ -17,6 +18,21 @@ void print(std::vector<int> v)
     for (size_t i = 0; i < v.size(); i++)
         std::cout << v[i] << std::endl;
     std::cout << "-----------------\n";
+}
+
+void Channel::setTheChannelTimeCreated()
+{
+    time_t present_time;
+    present_time = time(NULL);
+    std::ostringstream oss;
+    oss << present_time;
+    std::string time_now = oss.str();
+    this->channelTime = time_now;
+}
+
+std::string Channel::getTheChannelTimeCreated()
+{
+    return channelTime;
 }
 
 bool IsClientInChannel(std::vector<Client *> ClientssHouse, int fd)

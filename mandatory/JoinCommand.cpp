@@ -114,6 +114,7 @@ void Server::JoinConstruction(Client *client)
         {
             // Channel doesn't exist, create new channel and add client
             Channel* newChannel = new Channel(channelName, key_var);
+            std::cout << "hada howa time ----------------> " << newChannel->getTheChannelTimeCreated() << std::endl;
             if (!newChannel->addToChannel(client, key_var))
                 continue ;
             channels.push_back(newChannel);

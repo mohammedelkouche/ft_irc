@@ -20,6 +20,7 @@ class Channel
         std::string             topic;
         std::string             topic_setter;
         std::string             topic_time;
+        std::string             channelTime;
         int                     mode;
         int                     limit;
         std::string             key;
@@ -46,6 +47,8 @@ class Channel
 		void	                set_topic_setter(std::string topicsetter);
         std::string             get_topic_setter();
         void                    set_time_ctime();
+        void                    setTheChannelTimeCreated();
+        std::string             getTheChannelTimeCreated();
         std::string             get_time_ctime();
         void	                add_i();
 		void	                add_t();
