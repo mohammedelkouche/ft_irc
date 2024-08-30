@@ -5,8 +5,10 @@
 
 bool is_number(std::string str)
 {
-  size_t found = str.find_first_not_of("0123456789");
-  return (found == std::string::npos);
+	size_t found = str.find_first_not_of("0123456789");
+	if (found == std::string::npos && std::atol(str.c_str()) <= 9223372036854775807)
+		return (true);
+	return (false);
 }
 
 std::string Channel::get_channel_mode()
@@ -202,7 +204,7 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 						{
 							for (i_i = 0; i_i < clients.size(); i_i++)
 							{
-								if ((clients[i_i]).get_nickname() == command[arg_for_mode])
+								if ((clients[i_i]).get_nickname() == command[arg_for_mode] || (clients[i_i]).get_nickname() == "@" + command[arg_for_mode])
 									break;
 							}
 							if ((i_i) >= clients.size())
@@ -211,7 +213,8 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							{
 								for (std::vector<Client *>::iterator it_c = Clnts.begin(); it_c != Clnts.end(); ++it_c)
 								{
-									if ((*it_c)->get_nickname() == command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == false)
+									if (((*it_c)->get_nickname() == command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == false) || \
+											((*it_c)->get_nickname() == "@" + command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == false))
 									{
 										(*it_c)->setOperatorStatus(true);
 										mode_number += 4;
@@ -274,7 +277,7 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 						{
 							for (i_i = 0; i_i < clients.size(); i_i++)
 							{
-								if ((clients[i_i]).get_nickname() == command[arg_for_mode])
+								if ((clients[i_i]).get_nickname() == command[arg_for_mode] || (clients[i_i]).get_nickname() == "@" + command[arg_for_mode])
 									break;
 							}
 							if ((i_i) >= clients.size())
@@ -283,7 +286,8 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							{
 								for (std::vector<Client *>::iterator it_c = Clnts.begin(); it_c != Clnts.end(); ++it_c)
 								{
-									if ((*it_c)->get_nickname() == command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == true)
+									if (((*it_c)->get_nickname() == command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == true) || \
+										((*it_c)->get_nickname() == "@" + command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == true))
 									{
 										(*it_c)->setOperatorStatus(false);
 										ryl_mode_desable += "o";
