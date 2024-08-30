@@ -138,6 +138,11 @@ void Server::JoinConstruction(Client *client)
         {
             // Channel exists, check key requirement
             Channel* existingChannel = *channelIt;
+            if (existingChannel->get_l() && existingChannel->GetClientssHouse().size() >= existingChannel->getChannelLimitNum())
+            {
+                SendResponse(client, ERROR_CHANNELISFULL(client->get_nickname(), existingChannel->getChannelName()));
+                continue;
+            }
             if (existingChannel->get_k() && existingChannel->getChannelKey().empty()) //ila kan l flag m setti wmkynch l key (should review aymane s code to not double check)
                 continue;
             if (!existingChannel->addToChannel(client, key_var))
