@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:04:27 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/29 15:06:19 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/08/30 10:53:05 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,7 @@ void Bot::PlayGame()
             {
                 if (current_game[sender] == "Roshambo")
                     PlayRoshambo(sender, msgContent);
-                else if (current_game[sender] == "Nwetat")
+                else if (current_game[sender] == "Nwetat" && msgContent == "Nwetat")
                     PlayNwetat(sender);
                 else
                     PrSendMessage("Invalid input. Choose 'Roshambo', 'Nwetat', or 'exit'.", sender);
