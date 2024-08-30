@@ -274,7 +274,7 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 						{
 							for (i_i = 0; i_i < clients.size(); i_i++)
 							{
-								if ((clients[i_i]).get_nickname() == command[arg_for_mode])
+								if (clients[i_i].get_nickname() == command[arg_for_mode])
 									break;
 							}
 							if ((i_i) >= clients.size())

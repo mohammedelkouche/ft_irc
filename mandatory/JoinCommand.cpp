@@ -37,11 +37,10 @@ std::string Server::buildNamReply(Channel *channel)
     for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
     {
         Client* client = *it;
-        if (channel->getTheOperator() == client)
-            reply += "@" + channel->getTheOperator()->get_nickname();
-        else
+        // if (channel->getTheOperator() == client)
+        //     reply += "@" + channel->getTheOperator()->get_nickname();
+        // else
             reply += client->get_nickname();
-        
         if (it + 1 != clients.end())
             reply += " ";
     }
