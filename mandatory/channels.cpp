@@ -77,12 +77,12 @@ bool Channel::addToChannel(Client *client, std::string key)
     client->setOperatorStatus(shouldSetOperator);
     Client *newClient = new Client(*client);  // Create a new Client object on the heap
     // Add client to the channel
-    if(newClient->getIsOperatorStatus())
-    {
-        newClient->set_nickname("@" + newClient->get_nickname());
-        ClientssHouse.push_back(newClient);
-    }
-    else
+    // if(newClient->getIsOperatorStatus())
+    // {
+    //     newClient->set_nickname("@" + newClient->get_nickname());
+    //     ClientssHouse.push_back(newClient);
+    // }
+    // else
         ClientssHouse.push_back(newClient);
     std::cout << "Client " << newClient->get_nickname() << " added to the channel with operator status: " << newClient->getIsOperatorStatus() << std::endl;
     return true;

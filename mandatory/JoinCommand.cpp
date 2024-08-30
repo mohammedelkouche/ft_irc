@@ -37,12 +37,23 @@ std::string Server::buildNamReply(Channel *channel)
     for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
     {
         Client* client = *it;
+        if(client->getIsOperatorStatus()) {
+            if (reply.empty())
+                reply += "@" + client->get_nickname();
+            else
+                reply += " @" + client->get_nickname();
+        }
+        else
+            if (reply.empty())
+                reply += client->get_nickname();
+            else
+                reply += " " + client->get_nickname();
+
+        // Client* client = *it;
         // if (channel->getTheOperator() == client)
-        //     reply += "@" + channel->getTheOperator()->get_nickname();
         // else
-            reply += client->get_nickname();
-        if (it + 1 != clients.end())
-            reply += " ";
+        //     reply += client->get_nickname();
+        // if (it + 1 != clients.end())
     }
     return reply;
 }
@@ -50,6 +61,7 @@ std::string Server::buildNamReply(Channel *channel)
 void Server::selfJoinReply(Client *client, Channel *channel)
 {
     SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channel->getChannelName(), client->get_hostname()));
+    std::cout << buildNamReply(channel) << std::endl;
     SendResponse(client, REPLY_NAMREPLY(client->get_hostname(), buildNamReply(channel), channel->getChannelName(), client->get_nickname()));
     SendResponse(client, REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), channel->getChannelName()));
 }
