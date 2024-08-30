@@ -124,25 +124,31 @@ void Server::JoinConstruction(Client *client)
         if (channelIt == channels.end()) 
         {
             // Channel doesn't exist, create new channel and add client
-            Channel* newChannel = new Channel(channelName, key_var);
-            std::cout << "hada howa time ----------------> " << newChannel->getTheChannelTimeCreated() << std::endl;
-            if (!newChannel->addToChannel(client, key_var))
+            if(!key_var.empty())
                 continue ;
+            else
+            {
+                Channel* newChannel = new Channel(channelName, "");
+                if (!newChannel->addToChannel(client, ""))
+                    continue ;
             channels.push_back(newChannel);
             client->getInvitedChannels().push_back(channelName);
             selfJoinReply(client, newChannel);
             sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
             std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
+            }
         }
-        else
+         else
         {
-            // Channel exists, add client to the channel
-            if (!(*channelIt)->addToChannel(client, key_var))
+            // Channel exists, check key requirement
+            Channel* existingChannel = *channelIt;
+            if (existingChannel->get_k() && existingChannel->getChannelKey().empty()) //ila kan l flag m setti wmkynch l key (should review aymane s code to not double check)
+                continue;
+            if (!existingChannel->addToChannel(client, key_var))
                 continue ;
             client->getInvitedChannels().push_back(channelName);
-            selfJoinReply(client, getChannelByName(channels, channelName));
-            sendToChannel(client,REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
-            std::cout << "Client " << client->get_nickname() << " joined existing channel: " << channelName << std::endl;
+            selfJoinReply(client, existingChannel);
+            sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
         }
     }
     for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)

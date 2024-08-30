@@ -60,10 +60,11 @@ bool Channel::addToChannel(Client *client, std::string key)
         SendResponse(client, ERROR_USERONCHANNEL(client->get_hostname(), getChannelName(), client->get_nickname()));
         return false;
     }
-    std::cout << "getChannelKey-->" << getChannelKey() << "  key----> "<<  key << std::endl;
-    std::cout << " k status "<< get_k()<< std::endl ;
     if(get_k() == true)
     {
+        std::cout << "####### KEY STATUS ####### => "<< this->key.empty() << std::endl;
+        std::cout << "####### getChannelKey() ####### => "<< getChannelKey() << std::endl;
+        std::cout << "####### key ####### => "<< key << std::endl;
         if (!this->key.empty() && getChannelKey() != key)
         {
             SendResponse(client, ERROR_BADCHANNELKEY(client->get_nickname(), client->get_hostname(), getChannelName()));
@@ -75,15 +76,8 @@ bool Channel::addToChannel(Client *client, std::string key)
     std::cout << "Channel is empty before adding client: " << shouldSetOperator << std::endl;
     // Set operator status
     client->setOperatorStatus(shouldSetOperator);
-    Client *newClient = new Client(*client);  // Create a new Client object on the heap
-    // Add client to the channel
-    // if(newClient->getIsOperatorStatus())
-    // {
-    //     newClient->set_nickname("@" + newClient->get_nickname());
-    //     ClientssHouse.push_back(newClient);
-    // }
-    // else
-        ClientssHouse.push_back(newClient);
+    Client *newClient = new Client(*client);
+    ClientssHouse.push_back(newClient);
     std::cout << "Client " << newClient->get_nickname() << " added to the channel with operator status: " << newClient->getIsOperatorStatus() << std::endl;
     return true;
 }
@@ -136,23 +130,6 @@ size_t Channel::getChannelLimitNum()
 {
     return limit;
 }
-
-
-// std::string Channel::getHasKey()
-// {
-//     return hasKey;
-// }
-
-// std::string Channel::getKey()
-// {
-//     return key;
-// }
-
-// void Channel::setKey(std::string key)
-// {
-//     this->key = key;
-// }
-
 
 Channel::~Channel()
 {
