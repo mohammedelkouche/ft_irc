@@ -79,7 +79,7 @@ bool Channel::addToChannel(Client *client, std::string key)
     // Add client to the channel
     if(newClient->getIsOperatorStatus())
     {
-        newClient->set_nickname("@" + newClient->get_nickname())
+        newClient->set_nickname("@" + newClient->get_nickname());
         ClientssHouse.push_back(newClient);
     }
     else
