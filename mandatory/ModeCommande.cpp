@@ -106,9 +106,6 @@ void	Channel::set_mode(int mode_number)
 	mode = mode_number;
 }
 
-//ERROR_INVALIDMODEPARAM
-//ERR_INVALIDKEY ******to do******
-
 void Server::ModeCommand(std::vector<std::string> command, Client *user)
 {
 	int sign = 0;
