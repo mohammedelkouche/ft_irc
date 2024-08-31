@@ -49,7 +49,8 @@ int Server::on_channel(std::vector<Client *>  Clnts, Client *nick)
         return (0);
     for (std::vector<Client *>::iterator it = Clnts.begin(); it != Clnts.end(); ++it)
     {
-        if (((*it)->get_nickname() == nick->get_nickname()) || ((*it)->get_nickname() == "@" + nick->get_nickname()))
+        if (((*it)->get_nickname() == nick->get_nickname()) || \
+            ((*it)->get_nickname() == "@" + nick->get_nickname()))
             return(1);
     }
     return (0);
