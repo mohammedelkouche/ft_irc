@@ -347,16 +347,8 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 				}
 				if (reply_mode.empty() == false)
 				{
-					////////////////////////////////
-					//should be like :
-					// :aa!a MODE #zz +o oo
-					// :xx!~u@qk3i8byd6tfyg.irc MODE #3amo +o gg
-					// sendToChannel(user, REPLY_CHANNELMODES(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), reply_mode), (*it)->getChannelName());
-					////////////////////////////////
-					std::string reply = ":" + user->get_nickname() +  "!" + user->get_username() + " MODE " + (*it)->getChannelName() + " +o " + command[3] + "\r\n";
-					sendToChannel(user,reply , (*it)->getChannelName());
-					// sendToClient(user->get_fd(), REPLY_CHANNELMODES(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), reply_mode));
-					sendToClient(user->get_fd(), reply);
+					sendToChannel(user, REPLY_CHANNELMODES__(user->get_username(), (*it)->getChannelName(), user->get_nickname(), reply_mode), (*it)->getChannelName());
+					sendToClient(user->get_fd(), REPLY_CHANNELMODES__(user->get_username(), (*it)->getChannelName(), user->get_nickname(), reply_mode));
 				}
 				else if (command.size() <= 3)
 				{

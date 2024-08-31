@@ -64,6 +64,7 @@
 
 #define REPLY_CREATIONTIME(hostname, channelName, nick, channel_time) ":" + hostname + " 329 " + nick + " " + channelName + " " + channel_time + "\r\n"
 #define REPLY_CHANNELMODES(hostname, channelName, nick, channelmode) ":" + hostname + " 324 " + nick + " " + channelName + " " + channelmode + "\r\n"
+#define REPLY_CHANNELMODES__(username, channelName, nick, channelmode) ":" + nick + "!~" + username + " MODE " + " " + channelName + " " + channelmode + "\r\n"
 
 #define REPLY_INVITING(hostname, inviting, invited, channel) ":" + hostname + " 341 " + inviting + " " + invited + " " + channel + " :Inviting " + invited + " to " + channel + "\r\n"
 #define REPLY_INVITE(nick, username, clienthostname, invited, channel) ":" + nick + "!" + username + "@" + clienthostname + " INVITE " + invited + " :" + channel + "\r\n"
