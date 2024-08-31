@@ -19,30 +19,35 @@ void Server::KickConstruction(Client *client)
     }
     if (vec.size() < 3)
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
-    else if (vec[1][0] != '#')
-        SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), vec[1], client->get_nickname()));
-    else if(channeDoesntlExists(channels, vec[1]))
-        SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), vec[1], client->get_nickname()));
-    std::vector<std::string> splittedUsers = Splitter(vec[2], ",");
-    for (std::vector<std::string>::iterator it = splittedUsers.begin(); it != splittedUsers.end(); ++it)
+    std::vector<std::string> splittedChannels = Splitter(vec[1], ",");
+    for(std::vector<std::string>::iterator iterate = splittedChannels.begin() ; iterate != splittedChannels.end(); ++iterate)
     {
-        std::string eachUser = *it;
-        if (!isClientExist(clients, eachUser))
-            SendResponse(client, ERROR_NOSUCHNICK(client->get_hostname(),client->get_nickname(), eachUser));
-        else if (getClientByNick(clients, eachUser).get_fd())
+        std::string eachChannel = *iterate;
+        if (eachChannel[0] != '#')
+            SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
+        else if(channeDoesntlExists(channels, eachChannel))
+            SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
+        std::vector<std::string> splittedUsers = Splitter(vec[2], ",");
+        for (std::vector<std::string>::iterator it = splittedUsers.begin(); it != splittedUsers.end(); ++it)
         {
-            Client& target = getClientByNick(clients, eachUser);
-            Channel* channelPtr = getChannelByName(channels, vec[1]);
-            if (!channelPtr)
-                return ;
-            if (vec.size() == 3)
-                vec.push_back("no comment is given");
-            Channel& channel = *channelPtr;
-            channel.removeFromChannel(&target);
-            std::string rpl = REPLY_KICK(client->get_nickname(), client->get_username(), \
-            target.get_hostname(), channel.getChannelName(), target.get_nickname(), vec[3]);
-            SendResponse(&target, rpl);
-            // REMINDER : should broadcast to all clients in the channel
+            std::string eachUser = *it;
+            if (!isClientExist(clients, eachUser))
+                SendResponse(client, ERROR_NOSUCHNICK(client->get_hostname(),client->get_nickname(), eachUser));
+            else if (getClientByNick(clients, eachUser).get_fd())
+            {
+                Client& target = getClientByNick(clients, eachUser);
+                Channel* channelPtr = getChannelByName(channels, eachChannel);
+                if (!channelPtr)
+                    return ;
+                if (vec.size() == 3)
+                    vec.push_back("no comment is given");
+                Channel& channel = *channelPtr;
+                channel.removeFromChannel(&target);
+                std::string rpl = REPLY_KICK(client->get_nickname(), client->get_username(), \
+                target.get_hostname(), channel.getChannelName(), target.get_nickname(), vec[3]);
+                SendResponse(&target, rpl);
+                // REMINDER : should broadcast to all clients in the channel
+            }
         }
     }
     for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) 
