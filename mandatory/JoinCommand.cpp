@@ -71,6 +71,7 @@ void Server::JoinConstruction(Client *client)
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
         return ;
     }
+
     std::vector<std::string> channelNames = Splitter(cmd[1], ",");
     std::vector<std::string> splittedKeys;
     std::vector<std::string>::iterator keyIt;
@@ -127,11 +128,11 @@ void Server::JoinConstruction(Client *client)
                 Channel* newChannel = new Channel(channelName, "");
                 if (!newChannel->addToChannel(client, ""))
                     continue ;
-            channels.push_back(newChannel);
-            client->getInvitedChannels().push_back(channelName);
-            selfJoinReply(client, newChannel);
-            sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
-            std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
+                channels.push_back(newChannel);
+                client->getInvitedChannels().push_back(channelName);
+                selfJoinReply(client, newChannel);
+                sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
+                std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
             }
         }
          else
