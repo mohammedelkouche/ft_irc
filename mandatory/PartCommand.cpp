@@ -28,6 +28,16 @@ void  	Server::PartConstruction(Client *client)
             Channel& channel = *channelPtr;
             channel.removeFromChannel(client);
             SendResponse(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), eachChannel));
+            for (std::vector<Channel *>::iterator itrem = channels.begin(); itrem != channels.end(); ++itrem)
+            {
+                Channel* tmp = *itrem;
+                if (tmp == &channel && channel.GetClientssHouse().size() == 0)
+                {
+                    channels.erase(itrem);
+                    break;
+                }
+            }
         }
     }
+    
 }

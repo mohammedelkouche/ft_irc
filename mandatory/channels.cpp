@@ -98,7 +98,6 @@ void Channel::removeFromChannel(Client *client)
                 break ;
             }
     }
-    
     if (Coperator == NO_OPERATOR)
     {
         std::cout << "No Operator in the channel! " << std::endl;

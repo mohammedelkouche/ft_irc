@@ -47,6 +47,15 @@ void Server::KickConstruction(Client *client)
                 target.get_hostname(), channel.getChannelName(), target.get_nickname(), vec[3]);
                 SendResponse(&target, rpl);
                 // REMINDER : should broadcast to all clients in the channel
+                for (std::vector<Channel *>::iterator itrem = channels.begin(); itrem != channels.end(); ++itrem)
+                {
+                    Channel* tmp = *itrem;
+                    if (tmp == &channel && channel.GetClientssHouse().size() == 0)
+                    {
+                        channels.erase(itrem);
+                        break;
+                    }
+                }
             }
         }
     }
