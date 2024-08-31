@@ -121,9 +121,6 @@
 // 	std::cout << "461 " <<  nick_name << " " << commande <<  " : Not enough parameters" << std::endl;
 // }
 
-/*
-467     ERR_KEYSET --> "<channel> :Channel key already set"
-*/
 #define ERR_KEYSET(hostname, channelname) ":" + hostname  + " 467 "+ channelname + " :Channel key already set\r\n"
 
 
