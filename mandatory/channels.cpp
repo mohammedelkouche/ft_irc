@@ -98,8 +98,6 @@ void Channel::removeFromChannel(Client *client)
                 break ;
             }
     }
-    else
-        SendResponse(Coperator, ERROR_NOTONCHANNEL(client->get_nickname(), getChannelName()));
     
     if (Coperator == NO_OPERATOR)
     {
