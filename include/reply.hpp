@@ -50,6 +50,10 @@
 #define REPLY_JOIN(nick, username, channelname, ipaddress) ":" + nick + "!~" + username + "@" + ipaddress + " JOIN " + channelname + "\r\n"
 #define REPLY_TOPICDISPLAY(hostname, nick, channel, topic) ":" + hostname + " 332 " + nick + " " + channel + " :" + topic + "\r\n"
 #define REPLY_TOPIC(hostname, nick, channel, setter, topic) ":" + hostname + " 332 " + nick + " " + channel + " :" + setter + " has set a new topic: " + topic + "\r\n"
+/*
+:aygaoua!~u@qk3i8byd6tfyg.irc TOPIC #cc :viva drari
+*/
+
 
 #define REPLY_TOPICWHOTIME(topicsetter, topic_time, nick, hostname, channelName) ":" + hostname + " 333 " + nick + " " + channelName + " " + topicsetter + "!~" + topicsetter + "@" + hostname + " " + topic_time + "\r\n"
 #define REPLY_NAMREPLY(hostname, clients, channelname, nick) ":" + hostname + " 353 " + nick + " = " + channelname + " :" + clients + "\r\n"
@@ -77,7 +81,11 @@
 
 #define REPLY_VIEWTOPIC(hostname, nick, channel, topic) ":" + hostname + " 332 " + nick + " " + channel + " :" + topic + "\r\n"
 #define REPLY_VIEWTIME(hostname, nick, channel, time) ":" + hostname + " 333 " + nick + " " + channel + " " + nick + " " + time + "\r\n"
-#define REPLY_SETTOPIC(nick, hostname, channel, topic) ":" + nick + "!" + nick + "@" + hostname + " TOPIC " + channel + " :" + topic + "\r\n"
+#define REPLY_SETTOPIC(nick, uname, hostname, channel, setter, topic) ":" + nick + "!~" + uname + "@" + hostname + " TOPIC " + channel+ " :" + setter + " : " + topic + "\r\n"
+
+/*
+":" + hostname + " 332 " + nick + " " + channel + " :" + setter + " has set a new topic: " + topic + "\r\n"
+*/
 
 #define REPLY_BOT(hostname, nick, message) ":" + hostname + " 001 " + nick + " Dad joke: " + message + "\r\n"
 #define ERROR_BOT(hostname, nick) ":" + hostname + " 450 " + nick + "enter [BOT generate] to generate a joke" + "\r\n"
@@ -112,5 +120,11 @@
 // {
 // 	std::cout << "461 " <<  nick_name << " " << commande <<  " : Not enough parameters" << std::endl;
 // }
+
+/*
+467     ERR_KEYSET --> "<channel> :Channel key already set"
+*/
+#define ERR_KEYSET(hostname, channelname) ":" + hostname  + " 467 "+ channelname + " :Channel key already set\r\n"
+
 
 #endif

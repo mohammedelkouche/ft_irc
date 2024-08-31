@@ -59,7 +59,7 @@ class Channel
         void	                rm_i();
 		void	                rm_t();
 		void	                rm_o(std::string nick);
-		void	                rm_k();
+		void	                rm_k(std::string old_key);
 		void	                rm_l();
         bool	                get_i();
 		bool	                get_t();

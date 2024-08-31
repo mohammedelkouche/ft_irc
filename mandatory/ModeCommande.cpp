@@ -81,9 +81,11 @@ void	Channel::rm_i()
 {
 	i = false;
 }
-void	Channel::rm_k()
+void	Channel::rm_k(std::string old_key)
 {
-	k = false;
+	if (getChannelKey() == old_key)
+		k = false;
+
 }
 void	Channel::rm_l()
 {
@@ -264,12 +266,17 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 					{
 						if ((*it)->get_k() == true)
 						{
-							(*it)->rm_k();
+							(*it)->rm_k(command[arg_for_mode]);
+							if ((*it)->get_k() == false)
+							{
+								ryl_args_m += "* ";
+								ryl_mode_desable += "k";
+							}
+							else
+								sendToClient(user->get_fd(), ERR_KEYSET(user->get_hostname(), (*it)->getChannelName()));
 							mode_number -= 2;
 						}
-						ryl_args_m += "* "; 
 						arg_for_mode++;
-						ryl_mode_desable += "k";
 					}
 					else if (full_mode_add[i] == 'o' && sign == -1)
 					{
