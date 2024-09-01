@@ -27,8 +27,9 @@ void SendResponse(Client *client, std::string msg)
 {
     if (send(client->get_fd(), msg.c_str(), msg.length(), 0) == -1)
         std::cout << " Failed Send JOIN message to the client " << std::endl;
-        // throw std::runtime_error("");
 }
+
+
 
 std::string Server::buildNamReply(Channel *channel) 
 {
@@ -45,15 +46,12 @@ std::string Server::buildNamReply(Channel *channel)
                 reply += " @" + client->get_nickname();
         }
         else
+        {
             if (reply.empty())
                 reply += client->get_nickname();
             else
                 reply += " " + client->get_nickname();
-        // Client* client = *it;
-        // if (channel->getTheOperator() == client)
-        // else
-        //     reply += client->get_nickname();
-        // if (it + 1 != clients.end())
+        }
     }
     return reply;
 }
@@ -66,11 +64,40 @@ void Server::selfJoinReply(Client *client, Channel *channel)
     SendResponse(client, REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), channel->getChannelName()));
 }
 
+void Server::joinZeroo(Client *client)
+{
+    for(std::vector<Channel *>::iterator iterate = channels.begin(); iterate != channels.end(); ++iterate)
+    {
+        for(size_t i = 0; i < (*iterate)->GetClientssHouse().size(); i++)
+        {
+            if((*iterate)->GetClientssHouse()[i]->get_fd() == client->get_fd())
+            {
+                (*iterate)->removeFromChannel((*iterate)->GetClientssHouse()[i]);
+                SendResponse(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), (*iterate)->getChannelName()));
+                break ;
+            }
+        }
+        if ((*iterate)->GetClientssHouse().size() == 0)
+        {
+            channels.erase(iterate);
+            iterate--;
+        }
+    }
+}
+
 void Server::JoinConstruction(Client *client)
 {
     std::vector<std::string> cmd = client->get_commande();
 
-    if (cmd.size() < 2 || cmd[1].empty() || !cmd[1][1])
+    std::stringstream ss(cmd[1]);
+    std::string zero ;
+    ss >> zero; 
+    if (zero == "0")
+    {
+        joinZeroo(client);
+        return ;
+    }
+    else if (cmd.size() < 2 || cmd[1].empty() || !cmd[1][1])
     {
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
         return ;
@@ -94,7 +121,6 @@ void Server::JoinConstruction(Client *client)
         keyIt = splittedKeys.begin();
         hasKey = true;
     }
-    
     for (std::vector<std::string>::iterator it = channelNames.begin(); it != channelNames.end(); ++it)
     {
         std::string channelName = *it;

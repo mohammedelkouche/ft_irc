@@ -62,9 +62,6 @@ bool Channel::addToChannel(Client *client, std::string key)
     }
     if(get_k() == true)
     {
-        std::cout << "####### KEY STATUS ####### => "<< this->key.empty() << std::endl;
-        std::cout << "####### getChannelKey() ####### => "<< getChannelKey() << std::endl;
-        std::cout << "####### key ####### => "<< key << std::endl;
         if (!this->key.empty() && getChannelKey() != key)
         {
             SendResponse(client, ERROR_BADCHANNELKEY(client->get_nickname(), client->get_hostname(), getChannelName()));
