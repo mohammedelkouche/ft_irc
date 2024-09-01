@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bot_bonus.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:04:27 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/29 15:06:19 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/01 21:28:13 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,8 @@ void Bot::PlayNwetat(const std::string &sender)
         "galk li zin zin wakha i3om mn tnin l tnin , wli khayb khayb wakha i3om blma tayb",
         "tahya khassa l khouya aymen rak 7ader nadr w dareb ndader w katchtef lia 3el lkyader tchanchit w chi maychit",
         "galk aymane douzi 3ando l insta bach takli l passta , w galk oussama douzi 3ando l facebook atl9ayh dayr f profil rwayda bla slouk ",
-        "galk sel3a slou3 w mohammed mol l bot ga3ma mekhlou3 , tahyati l khouya mohammed lkouk wl kheyzzo me7kouk"
+        "galk sel3a slou3 w mohammed mol l bot ga3ma mekhlou3 , tahyati l khouya mohammed lkouk wl kheyzzo me7kouk",
+        "galk l3alam kooollo wla khdam libror, li mikiddich l bizza kila77ag lhedra"
     };
 
     std::vector<std::string> sentences(nwetat_arr, nwetat_arr + sizeof(nwetat_arr) / sizeof(nwetat_arr[0]));
