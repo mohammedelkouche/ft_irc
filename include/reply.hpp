@@ -81,7 +81,7 @@
 
 #define REPLY_VIEWTOPIC(hostname, nick, channel, topic) ":" + hostname + " 332 " + nick + " " + channel + " :" + topic + "\r\n"
 #define REPLY_VIEWTIME(hostname, nick, channel, time) ":" + hostname + " 333 " + nick + " " + channel + " " + nick + " " + time + "\r\n"
-#define REPLY_SETTOPIC(nick, uname, hostname, channel, setter, topic) ":" + nick + "!~" + uname + "@" + hostname + " TOPIC " + channel+ " :" + setter + " : " + topic + "\r\n"
+#define REPLY_SETTOPIC(nick, uname, hostname, channel, topic) ":" + nick + "!~" + uname + "@" + hostname + " TOPIC " + channel + " :" + topic + "\r\n"
 
 /*
 ":" + hostname + " 332 " + nick + " " + channel + " :" + setter + " has set a new topic: " + topic + "\r\n"
