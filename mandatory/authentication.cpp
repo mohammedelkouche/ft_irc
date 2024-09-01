@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/27 11:43:23 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/01 22:15:47 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,21 @@ void	Server::sendToClient(int fd, const std::string& message)
 		std::cerr << "send() faild" << std::endl;
 }
 
+void Server::updateClientsOnTheChannel(Client *user, std::string newNick)
+{
+	for(size_t i = 0; i < channels.size(); i++)
+	{
+		for(size_t j = 0; j < channels[i]->GetClientssHouse().size(); j++)
+		{
+			if(channels[i]->GetClientssHouse()[j]->get_nickname() == user->get_nickname())
+			{
+				channels[i]->GetClientssHouse()[j]->set_nickname(newNick);
+				break ;			
+			}
+		}
+	}
+}
+
 void	Server::handle_nickname(Client *user)
 {
 	std::vector<std::string> commande = user->get_commande();
@@ -111,8 +126,9 @@ void	Server::handle_nickname(Client *user)
 					sendToClient(user->get_fd(), ERROR_NICKNAMEINUSE(user->get_nickname(), user->get_hostname()));
 				else
 				{
-					sendToClient(user->get_fd(), REPLY_NICKCHANGE(user->get_nickname(), commande[1], user->get_hostname()));
 					user->set_nickname(commande[1]);
+					sendToClient(user->get_fd(), REPLY_NICKCHANGE(user->get_nickname(), commande[1], user->get_hostname()));
+					updateClientsOnTheChannel(user, commande[1]);
 				}
 			}
 			else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:30 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/14 20:49:05 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/01 04:44:28 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,22 @@ void check_arg(char **argv) {
 	}
 }
 
+void printIntro() 
+{
+    std::string reset = "\033[0m";
+	std::string green = "\033[32m";
+	std::string blue = "\033[34m";
 
+	std::cout << green;
+    std::cout << " _   _        __        __   _                            __  __       _    _ _      _     _   " << std::endl;
+    std::cout << "| \\ | | ___   \\ \\      / /__| | ___ ___  _ __ ___   ___  |  \\/  | __ _| |_ (_|_) ___| |__ (_)" << std::endl;
+    std::cout << "|  \\| |/ _ \\   \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\ | |\\/| |/ _` | __|| | |/ __| '_ \\| |" << std::endl;
+    std::cout << "| |\\  | (_) |   \\ V  V /  __/ | (_| (_) | | | | | |  __/ | |  | | (_| | |_ | | | (__| | | | |" << std::endl;
+    std::cout << "|_| \\_|\\___/     \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___| |_|  |_|\\__,_|\\__|/ |_|\\___|_| |_|_|" << std::endl;
+    std::cout << "                                                                         |__/               "<<std::endl;
+    std::cout << reset;
+    std::cout << blue  << " Hahaha Just Kidding Welcome To the best IRC server made by RIJAL <3 "  << reset << std::endl;
+}
 
 int main(int argc, char **argv) {
 	try 
@@ -45,6 +60,7 @@ int main(int argc, char **argv) {
 			std::cout << "write: executable file  <port> <password>" << std::endl;
 			return 1;
 		}
+		printIntro();
 		check_arg(argv);
 		irc.initializeServer(std::atoi(argv[1]), argv[2]);
 	}

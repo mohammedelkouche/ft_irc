@@ -1,3 +1,8 @@
--> add keys to join
--> check if the invite works properly
--> 
+(FIXED)-> make the time of creation of the channel attribute (check set_time_ctime() in topic.cpp file)
+(FIXED)-> add the @ sufix for the new operators
+(FIXED)-> change the nick of the user in all the allredy joined channels
+(FIXED)-> the key of the channel should not set on the creation of it (join #c kk)
+(FIXED)-> should check the limit attri
+(FIXED)-> check the invit only attri. when like to join a channel
+-> should add JOIN "0" should Leave all currently joined channels
+-> diplay the mode of the channel when join it.

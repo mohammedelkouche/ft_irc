@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azgaoua <azgaoua@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 18:03:45 by azgaoua           #+#    #+#             */
-/*   Updated: 2024/08/17 02:29:03 by azgaoua          ###   ########.fr       */
+/*   Updated: 2024/08/29 17:57:07 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ int Server::on_channel(std::vector<Client *>  Clnts, Client *nick)
         return (0);
     for (std::vector<Client *>::iterator it = Clnts.begin(); it != Clnts.end(); ++it)
     {
-        if ((*it)->get_nickname() == nick->get_nickname())
+        if (((*it)->get_nickname() == nick->get_nickname()) || \
+            ((*it)->get_nickname() == "@" + nick->get_nickname()))
             return(1);
     }
     return (0);
@@ -96,14 +97,14 @@ void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
                     (*it)->set_time_ctime();
                     if (full_name_topic.empty())
                     {
-                        sendToChannel(user, REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), ""), Topic[1]);
-                        sendToClient(user->get_fd(), REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), ""));
+                        sendToChannel(user, REPLY_SETTOPIC(user->get_nickname(), user->get_username(), user->get_hostname(), (*it)->getChannelName(), (*it)->get_topic_setter(), ""), (*it)->getChannelName());
+                        sendToClient(user->get_fd(), REPLY_SETTOPIC(user->get_nickname(), user->get_username(), user->get_hostname(), (*it)->getChannelName(), (*it)->get_topic_setter(), ""));
                         (*it)->set_topic("");
                     }
                     else
                     {
-                        sendToChannel(user, REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), full_name_topic), Topic[1]);
-                        sendToClient(user->get_fd(), REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), full_name_topic));
+                        sendToChannel(user, REPLY_SETTOPIC(user->get_nickname(), user->get_username(), user->get_hostname(), (*it)->getChannelName(), (*it)->get_topic_setter(), full_name_topic), Topic[1]);
+                        sendToClient(user->get_fd(), REPLY_SETTOPIC(user->get_nickname(), user->get_username(), user->get_hostname(), (*it)->getChannelName(), (*it)->get_topic_setter(), full_name_topic));
                         (*it)->set_topic(full_name_topic);
                     }
                     (*it)->set_topic_setter(user->get_nickname());
@@ -113,14 +114,14 @@ void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
                     full_name_topic += Topic[2];
                     if (full_name_topic.empty())
                     {
-                        sendToChannel(user, REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), ""), Topic[1]);
-                        sendToClient(user->get_fd(), REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), ""));
+                        sendToChannel(user, REPLY_SETTOPIC(user->get_nickname(), user->get_username(), user->get_hostname(), (*it)->getChannelName(), (*it)->get_topic_setter(), ""), Topic[1]);
+                        sendToClient(user->get_fd(), REPLY_SETTOPIC(user->get_nickname(), user->get_username(), user->get_hostname(), (*it)->getChannelName(), (*it)->get_topic_setter(), ""));
                         (*it)->set_topic("");
                     }
                     else
                     {
-                        sendToChannel(user, REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), full_name_topic), Topic[1]);
-                        sendToClient(user->get_fd(), REPLY_TOPIC(user->get_hostname(), user->get_nickname(), Topic[1], (*it)->get_topic_setter(), full_name_topic));
+                        sendToChannel(user, REPLY_SETTOPIC(user->get_nickname(), user->get_username(), user->get_hostname(), (*it)->getChannelName(), (*it)->get_topic_setter(), full_name_topic), Topic[1]);
+                        sendToClient(user->get_fd(), REPLY_SETTOPIC(user->get_nickname(), user->get_username(), user->get_hostname(), (*it)->getChannelName(), (*it)->get_topic_setter(), full_name_topic));
                         (*it)->set_topic(full_name_topic);
                     }
                 }

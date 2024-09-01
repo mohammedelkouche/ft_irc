@@ -3,6 +3,7 @@
 Channel::Channel(std::string name, std::string key): name(name), key(key)
 {
     init_modes();
+    setTheChannelTimeCreated();
 }
 
 Channel::Channel()
@@ -17,6 +18,21 @@ void print(std::vector<int> v)
     for (size_t i = 0; i < v.size(); i++)
         std::cout << v[i] << std::endl;
     std::cout << "-----------------\n";
+}
+
+void Channel::setTheChannelTimeCreated()
+{
+    time_t present_time;
+    present_time = time(NULL);
+    std::ostringstream oss;
+    oss << present_time;
+    std::string time_now = oss.str();
+    this->channelTime = time_now;
+}
+
+std::string Channel::getTheChannelTimeCreated()
+{
+    return channelTime;
 }
 
 bool IsClientInChannel(std::vector<Client *> ClientssHouse, int fd)
@@ -44,20 +60,21 @@ bool Channel::addToChannel(Client *client, std::string key)
         SendResponse(client, ERROR_USERONCHANNEL(client->get_hostname(), getChannelName(), client->get_nickname()));
         return false;
     }
-    if (!this->key.empty() && this->key != key)
+    if(get_k() == true)
     {
-        SendResponse(client, ERROR_BADCHANNELKEY(client->get_nickname(), client->get_hostname(), getChannelName()));
-        return false;
+        if (!this->key.empty() && getChannelKey() != key)
+        {
+            SendResponse(client, ERROR_BADCHANNELKEY(client->get_nickname(), client->get_hostname(), getChannelName()));
+            return false;
+        }
     }
-
     // Determine if the client should be an operator before adding
     bool shouldSetOperator = ClientssHouse.empty();
     std::cout << "Channel is empty before adding client: " << shouldSetOperator << std::endl;
     // Set operator status
     client->setOperatorStatus(shouldSetOperator);
-    Client *newClient = new Client(*client);  // Create a new Client object on the heap
-    // Add client to the channel
-    ClientssHouse.push_back(newClient);;
+    Client *newClient = new Client(*client);
+    ClientssHouse.push_back(newClient);
     std::cout << "Client " << newClient->get_nickname() << " added to the channel with operator status: " << newClient->getIsOperatorStatus() << std::endl;
     return true;
 }
@@ -67,11 +84,7 @@ Client* NO_OPERATOR = NULL;
 void Channel::removeFromChannel(Client *client)
 {
     Client *Coperator = getTheOperator();
-    if (Coperator == NO_OPERATOR)
-    {
-        std::cout << "No Operator in the channel! " << std::endl;
-        return;
-    }
+
     if(IsClientInChannel(ClientssHouse, client->get_fd()))
     {
         for(size_t i = 0; i < ClientssHouse.size(); i++)
@@ -82,8 +95,12 @@ void Channel::removeFromChannel(Client *client)
                 break ;
             }
     }
-    else
-        SendResponse(Coperator, ERROR_NOTONCHANNEL(client->get_nickname(), getChannelName()));
+    if (Coperator == NO_OPERATOR)
+    {
+        std::cout << "No Operator in the channel! " << std::endl;
+        return;
+    }
+
 }
 
 void Channel::setChannelName(std::string name)
@@ -106,21 +123,10 @@ std::string Channel::getChannelKey()
     return key;
 }
 
-// std::string Channel::getHasKey()
-// {
-//     return hasKey;
-// }
-
-// std::string Channel::getKey()
-// {
-//     return key;
-// }
-
-// void Channel::setKey(std::string key)
-// {
-//     this->key = key;
-// }
-
+size_t Channel::getChannelLimitNum()
+{
+    return limit;
+}
 
 Channel::~Channel()
 {

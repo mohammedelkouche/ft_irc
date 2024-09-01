@@ -1,3 +1,5 @@
+GREEN = \033[32m
+COLOR_OFF = \033[0m
 NAME = ircserv
 BNAME = ircserv_bonus
 
@@ -25,18 +27,19 @@ all :: $(NAME)
 bonus : $(BNAME)
 
 $(NAME) : $(OBJ) $(HEADER)
-		$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+		@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 $(BNAME) : $(BOBJ) $(HEADER_bonus)
-		$(CC)  $(CFLAGS) $(BOBJ) -o $(BNAME)
+		@$(CC)  $(CFLAGS) $(BOBJ) -o $(BNAME)
 
 %.o : %.cpp $(HEADER) $(HEADER_bonus)
-	$(CC) $(CFLAGS)  -c $< -o $@
+	@printf "${GREEN}Compiling $<... ${COLOR_OFF}\r"
+	@$(CC) $(CFLAGS)  -c $< -o $@
 
 clean:
-		rm -rf $(OBJ) $(BOBJ)
+		@rm -rf $(OBJ) $(BOBJ)
 
 fclean: clean
-		rm -rf $(NAME) $(BNAME)
+		@rm -rf $(NAME) $(BNAME)
 
 re:	fclean all
