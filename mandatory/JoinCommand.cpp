@@ -133,7 +133,6 @@ void Server::JoinConstruction(Client *client)
                 if (!newChannel->addToChannel(client, ""))
                     continue ;
                 channels.push_back(newChannel);
-                client->getInvitedChannels().push_back(channelName);
                 selfJoinReply(client, newChannel);
                 sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
                 std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
@@ -150,9 +149,17 @@ void Server::JoinConstruction(Client *client)
             }
             if (existingChannel->get_k() && existingChannel->getChannelKey().empty()) //ila kan l flag m setti wmkynch l key (should review aymane s code to not double check)
                 continue;
+            if(existingChannel->get_i())
+            {
+                std::vector<std::string>::iterator it = std::find(client->getInvitedChannels().begin(), client->getInvitedChannels().end(), existingChannel->getChannelName());
+                if(it == client->getInvitedChannels().end())
+                {
+                    SendResponse(client, ERROR_INVITEONLY(client->get_nickname(), existingChannel->getChannelName()));
+                    continue;
+                }
+            }
             if (!existingChannel->addToChannel(client, key_var))
                 continue ;
-            client->getInvitedChannels().push_back(channelName);
             selfJoinReply(client, existingChannel);
             sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
         }

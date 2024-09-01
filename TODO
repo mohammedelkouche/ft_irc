@@ -3,16 +3,6 @@
 (FIXED)-> change the nick of the user in all the allredy joined channels
 (FIXED)-> the key of the channel should not set on the creation of it (join #c kk)
 (FIXED)-> should check the limit attri
--> diplay the mode of the channel when join it.
 -> check the invit only attri. when like to join a channel
+-> diplay the mode of the channel when join it.
 -> should add JOIN "0" should Leave all currently joined channels
-
-
-
-
-std::cout << "  _   _        __        __   _                            __  __       _    _ _      _     _   " << std::endl;
-std::cout << "| \ | | ___   \ \      / /__| | ___ ___  _ __ ___   ___  |  \/  | __ _| |_ (_|_) ___| |__ (_)" << std::endl;
-std::cout << "|  \| |/ _ \   \ \ /\ / / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | |\/| |/ _` | __|| | |/ __| '_ \| |" << std::endl;
-std::cout << "| |\  | (_) |   \ V  V /  __/ | (_| (_) | | | | | |  __/ | |  | | (_| | |_ | | | (__| | | | |" << std::endl;
-std::cout << "|_| \_|\___/     \_/\_/ \___|_|\___\___/|_| |_| |_|\___| |_|  |_|\__,_|\__|/ |_|\___|_| |_|_|" << std::endl;
-std::cout << "                                                                         |__/               "<<std::endl;
