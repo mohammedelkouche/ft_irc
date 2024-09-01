@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/29 16:54:11 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/01 04:09:45 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,12 @@ void	Server::AcceptNewClient()
 	pollfds.push_back(client_poll_fd);
 	// insert a new buffer entry for the new client
 	partial_messages.insert(std::make_pair(fd_client_sock, ""));
-	std::cout << "Client fd = '" << fd_client_sock << "' Connected" << std::endl;
+	std::string yellow = "\033[33m";
+	std::string red = "\033[31m";
+	std::string magenta = "\033[35m";
+	std::string reset = "\033[0m";
+
+	std::cout << yellow << "Client fd = '" << reset << red << fd_client_sock << reset << magenta << "' Connected" << reset << std::endl;
 }
 
 void	Server::RemoveClient(int fd)
@@ -317,9 +322,9 @@ void	Server::initializeServer(int port_nbr,std::string str)
 	this->pass = str;
 	config_server();
 	
-	std::cout << "Server with fd <" << fd_srv_socket << "> Connected" << std::endl;
-	std::cout << "Server started. Listening on port : " << this->port << std::endl;
-	std::cout << "Waiting to accept a connection..." << std::endl;
+	// std::cout << "Server with fd <" << fd_srv_socket << "> Connected" << std::endl;
+	// std::cout << "Server started. Listening on port : " << this->port << std::endl;
+	// std::cout << "Waiting to accept a connection..." << std::endl;
 	
 	while (!stopServer)
 	{
