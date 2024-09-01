@@ -4,6 +4,7 @@ Channel::Channel(std::string name, std::string key): name(name), key(key)
 {
     init_modes();
     setTheChannelTimeCreated();
+    
 }
 
 Channel::Channel()

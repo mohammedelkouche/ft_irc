@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/29 22:11:11 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/01 23:32:47 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,8 @@ void	Server::handle_nickname(Client *user)
 				else
 				{
 					sendToClient(user->get_fd(), REPLY_NICKCHANGE(user->get_nickname(), commande[1], user->get_hostname()));
-					user->set_nickname(commande[1]);
 					updateClientsOnTheChannel(user, commande[1]);
+					user->set_nickname(commande[1]);
 				}
 			}
 			else
