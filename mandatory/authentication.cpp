@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/01 23:32:47 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/02 20:41:27 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,17 @@ void	Server::handle_pass(Client *user)
 	}
 }
 
+void Server::broadcastWithoutTargetedChannel(Client *user, std::string message)
+{
+	for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
+    {
+		for (size_t i = 0; i < (*it)->GetClientssHouse().size(); i++)
+		{
+			if ((*it)->GetClientssHouse()[i]->get_nickname() != user->get_nickname())
+				sendToClient((*it)->GetClientssHouse()[i]->get_fd(), message);
+		}
+    }
+}
 
 void	Server::sendToClient(int fd, const std::string& message)
 {
@@ -68,16 +79,16 @@ void	Server::sendToClient(int fd, const std::string& message)
 void Server::updateClientsOnTheChannel(Client *user, std::string newNick)
 {
 	for(size_t i = 0; i < channels.size(); i++)
+	{
+		for(size_t j = 0; j < channels[i]->GetClientssHouse().size(); j++)
 		{
-			for(size_t j = 0; j < channels[i]->GetClientssHouse().size(); j++)
+			if(channels[i]->GetClientssHouse()[j]->get_nickname() == user->get_nickname())
 			{
-				if(channels[i]->GetClientssHouse()[j]->get_nickname() == user->get_nickname())
-				{
-					channels[i]->GetClientssHouse()[j]->set_nickname(newNick);
-					break ;			
-				}
+				channels[i]->GetClientssHouse()[j]->set_nickname(newNick);
+				break ;
 			}
 		}
+	}
 }
 
 void	Server::handle_nickname(Client *user)
@@ -126,9 +137,13 @@ void	Server::handle_nickname(Client *user)
 					sendToClient(user->get_fd(), ERROR_NICKNAMEINUSE(user->get_nickname(), user->get_hostname()));
 				else
 				{
-					sendToClient(user->get_fd(), REPLY_NICKCHANGE(user->get_nickname(), commande[1], user->get_hostname()));
+					std::string oldNick = user->get_nickname();
 					updateClientsOnTheChannel(user, commande[1]);
 					user->set_nickname(commande[1]);
+					// std::string rpl = ":" + oldNick + " NICK " + user->get_nickname() + "\r\n";
+					std::string rpl = REPLY_NICKCHANGE(oldNick, user->get_nickname(), user->get_hostname());
+					sendToClient(user->get_fd(), rpl);
+					broadcastWithoutTargetedChannel(user, rpl);
 				}
 			}
 			else

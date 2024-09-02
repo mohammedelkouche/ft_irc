@@ -46,31 +46,9 @@ void Server::KickConstruction(Client *client)
                 std::string rpl = REPLY_KICK(client->get_nickname(), client->get_username(), \
                 target.get_hostname(), channel.getChannelName(), target.get_nickname(), vec[3]);
                 SendResponse(&target, rpl);
-                // REMINDER : should broadcast to all clients in the channel
-                for (std::vector<Channel *>::iterator itrem = channels.begin(); itrem != channels.end(); ++itrem)
-                {
-                    Channel* tmp = *itrem;
-                    if (tmp == &channel && channel.GetClientssHouse().size() == 0)
-                    {
-                        channels.erase(itrem);
-                        break;
-                    }
-                }
+                sendToChannel(&target, rpl, channel.getChannelName());
+                deleteTheChannelWhenNoUserInIt(&channel);
             }
         }
-    }
-    for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) 
-    {
-        std::cout << "Channel: " << (*it)->getChannelName() << std::endl;
-        std::vector<Client*> clientsHouse = (*it)->GetClientssHouse();
-        if (clientsHouse.empty())
-        {
-            std::cout << "No clients in channel: " << (*it)->getChannelName() << std::endl;
-            continue;
-        }
-        for (std::vector<Client*>::iterator clientIt = clientsHouse.begin(); clientIt != clientsHouse.end(); ++clientIt)
-            std::cout << "Client fd: " << (*clientIt)->get_fd()
-                    << " nickname: " << (*clientIt)->get_nickname()
-                    << " operator status: " << (*clientIt)->getIsOperatorStatus() << std::endl;
     }
 }

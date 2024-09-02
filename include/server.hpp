@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/01 19:21:17 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/02 20:36:51 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ class Server
 		void 					selfJoinReply(Client *client, Channel *channel);
 		void 					updateClientsOnTheChannel(Client *client, std::string newNick);
 		void 					joinZeroo(Client *client);
+		void 					broadcastWithoutTargetedChannel(Client *user, std::string message);
+		void 					deleteTheChannelWhenNoUserInIt(Channel *channel);
 		// server utils		
 		bool					unique_nickname(std::string nickname);
 		bool					check_valid_nick_name(std::string nick_name);

@@ -5,8 +5,9 @@
 (FIXED)-> should check the limit attri
 (FIXED)-> check the invit only attri. when like to join a channel
 (FIXED)-> should add JOIN "0" should Leave all currently joined channels
--> diplay the mode of the channel when join it.
-
+(FIXED)-> diplay the mode of the channel when join it.
+-> (invite) :testnet.ergo.chat 443 oussama oussama #c :User is already on that channel
+-> (join) #, 
 
  _   _        __        __   _                            __  __       _    _ _      _     _   
 | \ | | ___   \ \      / /__| | ___ ___  _ __ ___   ___  |  \/  | __ _| |_ (_|_) ___| |__ (_)
