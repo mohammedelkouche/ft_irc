@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/03 19:05:19 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/03 22:47:37 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ class Server
 		bool					check_valid_nick_name(std::string nick_name);
 		void					success_connect(Client *user);
 		Channel* 				getChannelByName(std::vector<Channel *> channels, std::string name);
+		bool					check_notisspace_nick(std::string commande);
 		// add
 		bool					check_valid_realname(std::string realname);
 		static void 			handleSigint(int sig);

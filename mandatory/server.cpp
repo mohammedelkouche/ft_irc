@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/01 04:09:45 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/03 22:41:53 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,26 +136,34 @@ void	Server::RemoveClient(int fd)
 	partial_messages.erase(fd);  // Remove any stored partial messages for the client
 }
 
-std::vector<std::string>	devide_commande(std::string message, int fd)
+std::vector<std::string>	devide_commande(std::string message)
 {
 	std::vector<std::string> vector;
-	(void)fd;
 	std::string Command;
 	for (size_t space = 0; space < message.size(); space++)
 	{
 		if (!std::isspace(message[space]))
 		{
 			size_t	next_space = message.find(' ', space);
+			size_t	next_tab = message.find('	', space);
 			if (message[space] == ':')
 			{
 				vector.push_back(message.substr(space,1));
 				vector.push_back(message.substr(space + 1, message.size() - (space + 1)));
 				break ;
 			}
-			else if (next_space != std::string::npos)
+			else if (next_space != std::string::npos || next_tab != std::string::npos)
 			{
-				vector.push_back(message.substr(space, next_space - space));
-				space = next_space;
+				if (next_tab < next_space)
+				{
+					vector.push_back(message.substr(space, next_tab - space));
+					space = next_tab;
+				}
+				else
+				{
+					vector.push_back(message.substr(space, next_space - space));
+					space = next_space;
+				}
 			}
 			else
 			{
@@ -166,6 +174,7 @@ std::vector<std::string>	devide_commande(std::string message, int fd)
 	}
 	return vector;
 }
+
 
 void	Server::execute_commande(Client *user)
 {
@@ -224,7 +233,7 @@ void	Server::parse_message(std::string buffer, int fd)
     size_t end_pos = 0;
 	while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos) {
 		std::string command = buffer.substr(pos, end_pos - pos);
-		std::vector<std::string> commande = devide_commande(command, fd);
+		std::vector<std::string> commande = devide_commande(command);
 		user->set_commande(commande);
 		execute_commande(user);
 		pos = end_pos + 2; // Move past "\r\n"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/03 22:19:15 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/03 22:48:39 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,19 +95,33 @@ void	Server::handle_nickname(Client *user)
 {
 	std::vector<std::string> commande = user->get_commande();
 	std::vector<std::string>::iterator iter = commande.begin();
+	int	flag = 0;
 	while (iter != commande.end())
 	{
+        // if ((*iter == ":" || *iter == "") && !flag)
         if (*iter == ":" || *iter == "")
+		{
             iter = commande.erase(iter);
+			flag = 1;
+			break;
+		}
         else
             ++iter;
-    }
+    }	
 	if (commande.size() == 1)
 	{
 		if (user->is_enregistred())
 			sendToClient(user->get_fd(), ERROR_NONICKNAMEGIVEN(user->get_nickname(), user->get_hostname()));
 		else
 			sendToClient(user->get_fd(), ERROR_NONICKNAMEGIVEN(" * ", user->get_hostname()));
+	}
+	// else if (commande.size() == 2 && flag && (!commande[1].compare("") || std::isspace(commande[1][0])))
+	else if (commande.size() == 2 && flag && !check_notisspace_nick(commande[1]))
+	{
+		if (!user->is_enregistred())
+			sendToClient(user->get_fd(), ERROR_NONICKNAMEGIVEN(" * ", user->get_hostname()));
+		else
+			sendToClient(user->get_fd(), ERROR_NONICKNAMEGIVEN(user->get_nickname(), user->get_hostname()));
 	}
 	else
 	{

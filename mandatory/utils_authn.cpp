@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:30:20 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/27 11:49:51 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/03 22:37:24 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	Server::check_valid_nick_name(std::string nick_name)
 {
 	if (isdigit(nick_name[0]))
 		return false;
-	if (nick_name.find_first_of("#: ") != std::string::npos)
+	if (nick_name.find_first_of("#: 	") != std::string::npos)
 		return false;
 	if (nick_name.find("#&") != std::string::npos)
 		return false;
@@ -62,4 +62,14 @@ bool	Server::check_valid_realname(std::string realname)
 	if (realname.find_first_of("0123456789") != std::string::npos)
 		return false;
 	return true;
+}
+
+bool	Server::check_notisspace_nick(std::string commande)
+{
+	for (size_t i = 0; i < commande.size(); i++)
+	{
+		if (!std::isspace(commande[i]))
+			return true;
+	}
+	return false;
 }
