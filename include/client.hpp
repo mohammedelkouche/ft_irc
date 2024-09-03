@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 17:11:32 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/27 11:48:18 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/03 18:37:51 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define CLIENT_HPP
 #include <iostream>
 #include <vector>
+#include <map>
 #include <netdb.h>
 #include <unistd.h>
 #include "global.hpp"
@@ -29,7 +30,7 @@ class   Client
 		std::string username;
 		std::string hostname;
 		// the channels that the client invited to
-		std::vector<std::string> invitedChannels;
+		std::map<std::string, bool> invitedChannels;
 		bool	registred;
 		bool	isOperator;
 		bool correct_pass;
@@ -61,7 +62,7 @@ class   Client
 		bool		get_correct_pass();
 		// Client	*get_connect_client(int fd);
 		//oussama added a vector of channels accessible by the client
-		std::vector<std::string>& getInvitedChannels();
+		std::map<std::string, bool> & getInvitedChannels();
 };
 
 #endif

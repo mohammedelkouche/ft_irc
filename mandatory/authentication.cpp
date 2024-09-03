@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/03 22:40:59 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/03 22:48:39 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,17 @@ void	Server::handle_pass(Client *user)
 	}
 }
 
+void Server::broadcastWithoutTargetedChannel(Client *user, std::string message)
+{
+	for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
+    {
+		for (size_t i = 0; i < (*it)->GetClientssHouse().size(); i++)
+		{
+			if ((*it)->GetClientssHouse()[i]->get_nickname() != user->get_nickname())
+				sendToClient((*it)->GetClientssHouse()[i]->get_fd(), message);
+		}
+    }
+}
 
 void	Server::sendToClient(int fd, const std::string& message)
 {
@@ -74,7 +85,7 @@ void Server::updateClientsOnTheChannel(Client *user, std::string newNick)
 			if(channels[i]->GetClientssHouse()[j]->get_nickname() == user->get_nickname())
 			{
 				channels[i]->GetClientssHouse()[j]->set_nickname(newNick);
-				break ;			
+				break ;
 			}
 		}
 	}
@@ -140,10 +151,12 @@ void	Server::handle_nickname(Client *user)
 					sendToClient(user->get_fd(), ERROR_NICKNAMEINUSE(user->get_nickname(), user->get_hostname()));
 				else
 				{
-					sendToClient(user->get_fd(), REPLY_NICKCHANGE(user->get_nickname(), commande[1]));
-					// sendToClient(user->get_fd(), REPLY_NICKCHANGE(user->get_nickname(), commande[1], user->get_hostname()));
+					std::string oldNick = user->get_nickname();
 					updateClientsOnTheChannel(user, commande[1]);
 					user->set_nickname(commande[1]);
+					std::string rpl = REPLY_NICKCHANGE(oldNick, user->get_nickname(), user->get_hostname());
+					sendToClient(user->get_fd(), rpl);
+					broadcastWithoutTargetedChannel(user, rpl);
 				}
 			}
 			else

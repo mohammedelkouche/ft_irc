@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:30 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/01 04:44:28 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/03 22:18:09 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void printIntro()
     std::cout << "|_| \\_|\\___/     \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___| |_|  |_|\\__,_|\\__|/ |_|\\___|_| |_|_|" << std::endl;
     std::cout << "                                                                         |__/               "<<std::endl;
     std::cout << reset;
-    std::cout << blue  << " Hahaha Just Kidding Welcome To the best IRC server made by RIJAL <3 "  << reset << std::endl;
+    std::cout << blue  << " Hahaha Just Kidding Welcome To the best IRC server made by RIJAL ❤️"  << reset << std::endl;
 }
 
 int main(int argc, char **argv) {

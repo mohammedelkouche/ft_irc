@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/03 22:32:23 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/03 22:47:37 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 #include "./client.hpp"
 #include "./channels.hpp"
 #include <ctime>
-#include <map>
 #include "global.hpp"
+#include <map>
 
 
 #define BUFFER_SIZE 1024
@@ -88,6 +88,8 @@ class Server
 		void 					selfJoinReply(Client *client, Channel *channel);
 		void 					updateClientsOnTheChannel(Client *client, std::string newNick);
 		void 					joinZeroo(Client *client);
+		void 					broadcastWithoutTargetedChannel(Client *user, std::string message);
+		void 					deleteTheChannelWhenNoUserInIt(Channel *channel);
 		// server utils		
 		bool					unique_nickname(std::string nickname);
 		bool					check_valid_nick_name(std::string nick_name);
