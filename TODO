@@ -6,7 +6,7 @@
 (FIXED)-> check the invit only attri. when like to join a channel
 (FIXED)-> should add JOIN "0" should Leave all currently joined channels
 (FIXED)-> diplay the mode of the channel when join it.
--> (invite) :testnet.ergo.chat 443 oussama oussama #c :User is already on that channel
+(FIXED)-> (invite) :testnet.ergo.chat 443 oussama oussama #c :User is already on that channel
 -> (join) #, 
 
  _   _        __        __   _                            __  __       _    _ _      _     _   

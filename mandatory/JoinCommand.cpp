@@ -128,6 +128,7 @@ void Server::JoinConstruction(Client *client)
         std::string channelName = *it;
         if (hasKey && keyIt != splittedKeys.end())
         {
+        std::cout << "kaaaaaaaaan hna \n";
             key_var = *keyIt;
             if (!key_var.empty() && key_var[0] == ':')
                 key_var.erase(0,1);
@@ -201,8 +202,9 @@ void Server::JoinConstruction(Client *client)
         if (clientsHouse.empty())
         {
             std::cout << "No clients in channel: " << (*it)->getChannelName() << std::endl;
-            continue;
+            continue ;
         }
+
         for (std::vector<Client*>::iterator clientIt = clientsHouse.begin(); clientIt != clientsHouse.end(); ++clientIt)
         {
             std::cout << "Client fd: " << (*clientIt)->get_fd()

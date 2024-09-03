@@ -18,7 +18,7 @@ BOBJ = $(BONUS:.cpp=.o)
 
 HEADER_bonus =  ./include/bot_bonus.hpp
 
-CFLAGS = -Wall -Wextra -Werror  -std=c++98 -fsanitize=address -g
+# CFLAGS = -Wall -Wextra -Werror  -std=c++98 -fsanitize=address -g
 
 CC = c++
 

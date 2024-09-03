@@ -1,13 +1,5 @@
 #include  "../include/server.hpp"
 
-// static bool AtleastOneClient()
-// {
-//     Channel channel;
-//     if(channel.GetClientssHouse().size() > 0)
-//         return true;
-//     return false;
-// }
-
 Client NO_CLIENT;
 
 Client& Server::getClientByNick(std::vector<Client> &clients, std::string nickname)
@@ -37,11 +29,7 @@ void Server::InviteConstruction(Client *client)
         SendResponse(client, ERROR_NOSUCHNICK(client->get_hostname(),client->get_nickname(), vec[1]));
     else if (getClientByNick(clients, vec[1]).get_fd())
     {
-        // std::cout << "InviteConstruction" << std::endl;
         Client& target = getClientByNick(clients, vec[1]);
-        Channel invitted(vec[2], "");
-        if (!(invitted.addToChannel(client, "")))
-            return ;
         target.getInvitedChannels()[vec[2]] = true;
         SendResponse(client , REPLY_INVITING(client->get_hostname(), client->get_nickname(), target.get_nickname(), vec[2]));
         SendResponse(&target, REPLY_INVITE(target.get_nickname(), target.get_username(), target.get_hostname(), vec[1], vec[2]));
