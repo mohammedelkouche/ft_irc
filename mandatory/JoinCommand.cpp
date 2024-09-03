@@ -139,12 +139,12 @@ void Server::JoinConstruction(Client *client)
         if (channelName[0] != '#')
         {
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelName, client->get_nickname()));
-            continue ;
+            break ;
         }
-        else if (!channelName[1])
+        if (!channelName[1])
         {
             SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
-            continue ;
+            break ;
         }
         std::vector<Channel*>::iterator channelIt;
         for (channelIt = channels.begin(); channelIt != channels.end(); ++channelIt)
@@ -201,8 +201,9 @@ void Server::JoinConstruction(Client *client)
         if (clientsHouse.empty())
         {
             std::cout << "No clients in channel: " << (*it)->getChannelName() << std::endl;
-            continue;
+            continue ;
         }
+
         for (std::vector<Client*>::iterator clientIt = clientsHouse.begin(); clientIt != clientsHouse.end(); ++clientIt)
         {
             std::cout << "Client fd: " << (*clientIt)->get_fd()
