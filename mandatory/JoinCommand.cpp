@@ -166,10 +166,11 @@ void Server::JoinConstruction(Client *client)
                 std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
             }
         }
-         else
+        else
         {
             // Channel exists, check key requirement
             Channel* existingChannel = *channelIt;
+            std::map<std::string, bool>::iterator it = client->getInvitedChannels().find(existingChannel->getChannelName());
             if (existingChannel->get_l() && existingChannel->GetClientssHouse().size() >= existingChannel->getChannelLimitNum())
             {
                 SendResponse(client, ERROR_CHANNELISFULL(client->get_nickname(), existingChannel->getChannelName()));
@@ -179,13 +180,14 @@ void Server::JoinConstruction(Client *client)
                 continue;
             if(existingChannel->get_i())
             {
-                std::vector<std::string>::iterator it = std::find(client->getInvitedChannels().begin(), client->getInvitedChannels().end(), existingChannel->getChannelName());
-                if(it == client->getInvitedChannels().end())
+                if(it == client->getInvitedChannels().end() || !it->second)
                 {
                     SendResponse(client, ERROR_INVITEONLY(client->get_nickname(), existingChannel->getChannelName()));
                     continue;
                 }
             }
+            if(existingChannel->get_i() && it != client->getInvitedChannels().end())
+                it->second = false;
             if (!existingChannel->addToChannel(client, key_var))
                 continue ;
             selfJoinReply(client, existingChannel);

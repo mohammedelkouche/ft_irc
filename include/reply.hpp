@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:05:25 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/02 20:44:55 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/02 22:41:40 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,8 @@
 #define ERROR_ERRONEUSNICKNAME(nick, hostname) ":" + hostname + " 432 " + nick + " :Erroneus nickname !\r\n"
 #define ERROR_NONICKNAMEGIVEN(nick, hostname) ":" + hostname + " 431 " + nick + " :No nickname given !\r\n"
 #define ERROR_NICKNAMEINUSE(nick, hostname) ":" + hostname + " 433 " + nick + " :Nickname is already in use !\r\n"
-// #define REPLY_NICKCHANGE(oldNick, nick, hostname) ":" + oldNick + " NICK " + nick + "\r\n"
 #define REPLY_NICKCHANGE(oldNick, nick, hostname) ":" + oldNick + "!~u@" + hostname + " NICK " + nick + "\r\n"
-// #define ERROR_NEEDMOREPARAMSOR(nick)  (std::string (":") + " 461 " + nick + std::string(" :Not enough parameters !\r\n"))
 #define ERROR_NEEDMOREPARAMS(nick, hostname) (std::string (":") + hostname + std::string(" 461 ") + nick + " :Not enough parameters !\r\n")
-// #define ERROR_NEEDMOREPARAMSTOPIC(nick, hostname, command) (std::string (":") + hostname + std::string(" 461 ") + nick + std::string(" ") + command + " :Not enough parameters !\r\n")
 
 #define PART_REPLY(nickname, username, hostname, channel) ":" + std::string(nickname) + "!~" + std::string(username) + "@" + std::string(hostname) + " PART " + std::string(channel) + "\r\n"
 
@@ -50,9 +47,6 @@
 #define REPLY_JOIN(nick, username, channelname, ipaddress) ":" + nick + "!~" + username + "@" + ipaddress + " JOIN " + channelname + "\r\n"
 #define REPLY_TOPICDISPLAY(hostname, nick, channel, topic) ":" + hostname + " 332 " + nick + " " + channel + " :" + topic + "\r\n"
 #define REPLY_TOPIC(hostname, nick, channel, setter, topic) ":" + hostname + " 332 " + nick + " " + channel + " :" + setter + " has set a new topic: " + topic + "\r\n"
-/*
-:aygaoua!~u@qk3i8byd6tfyg.irc TOPIC #cc :viva drari
-*/
 
 
 #define REPLY_TOPICWHOTIME(topicsetter, topic_time, nick, hostname, channelName) ":" + hostname + " 333 " + nick + " " + channelName + " " + topicsetter + "!~" + topicsetter + "@" + hostname + " " + topic_time + "\r\n"

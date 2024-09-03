@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/02 20:36:51 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/03 19:05:19 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 #include "./client.hpp"
 #include "./channels.hpp"
 #include <ctime>
-#include <map>
 #include "global.hpp"
+#include <map>
 
 
 #define BUFFER_SIZE 1024

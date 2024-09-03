@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/30 19:40:13 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/03 18:54:43 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,8 @@ Client::Client(const Client& copy)
 	registred = copy.registred;
 	isOperator = copy.isOperator;
 	correct_pass = copy.correct_pass;
-	for(size_t i = 0; i < commande.size(); i++)
-		commande[i] = copy.commande[i];
-	for(size_t i = 0; i < invitedChannels.size(); i++)
-		invitedChannels[i] = copy.invitedChannels[i];
+	commande = copy.commande;
+	invitedChannels = copy.invitedChannels;
 }
 
 void	Client::set_fd(int fd_client)
@@ -156,7 +154,7 @@ std::string  Client::get_client_host() {
 }
 
 
-std::vector<std::string>& Client::getInvitedChannels()
+std::map<std::string, bool>& Client::getInvitedChannels()
 {
 	return this->invitedChannels;
 }
