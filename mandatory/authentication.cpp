@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/02 20:41:27 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/03 22:19:15 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,6 @@ void	Server::handle_nickname(Client *user)
 					std::string oldNick = user->get_nickname();
 					updateClientsOnTheChannel(user, commande[1]);
 					user->set_nickname(commande[1]);
-					// std::string rpl = ":" + oldNick + " NICK " + user->get_nickname() + "\r\n";
 					std::string rpl = REPLY_NICKCHANGE(oldNick, user->get_nickname(), user->get_hostname());
 					sendToClient(user->get_fd(), rpl);
 					broadcastWithoutTargetedChannel(user, rpl);

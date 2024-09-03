@@ -27,6 +27,8 @@ void Server::InviteConstruction(Client *client)
         SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), vec[2], client->get_nickname()));
     else if (!isClientExist(clients, vec[1]))
         SendResponse(client, ERROR_NOSUCHNICK(client->get_hostname(),client->get_nickname(), vec[1]));
+    else if(IsClientInChannel(getChannelByName(channels, vec[2])->GetClientssHouse(), getClientByNick(clients, vec[1]).get_fd()))
+        SendResponse(client, ERROR_USERONCHANNEL(getClientByNick(clients, vec[1]).get_hostname(), vec[2], getClientByNick(clients, vec[1]).get_nickname()));
     else if (getClientByNick(clients, vec[1]).get_fd())
     {
         Client& target = getClientByNick(clients, vec[1]);

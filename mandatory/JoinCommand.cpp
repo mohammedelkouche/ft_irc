@@ -128,7 +128,6 @@ void Server::JoinConstruction(Client *client)
         std::string channelName = *it;
         if (hasKey && keyIt != splittedKeys.end())
         {
-        std::cout << "kaaaaaaaaan hna \n";
             key_var = *keyIt;
             if (!key_var.empty() && key_var[0] == ':')
                 key_var.erase(0,1);
@@ -140,12 +139,12 @@ void Server::JoinConstruction(Client *client)
         if (channelName[0] != '#')
         {
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelName, client->get_nickname()));
-            continue ;
+            break ;
         }
-        else if (!channelName[1])
+        if (!channelName[1])
         {
             SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
-            continue ;
+            break ;
         }
         std::vector<Channel*>::iterator channelIt;
         for (channelIt = channels.begin(); channelIt != channels.end(); ++channelIt)

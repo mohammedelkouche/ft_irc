@@ -1,4 +1,8 @@
 GREEN = \033[32m
+BLUE = \033[34m
+PURPLE = \033[35m
+RED = \033[0;31m
+ORANGE = \033[38;5;208m
 COLOR_OFF = \033[0m
 NAME = ircserv
 BNAME = ircserv_bonus
@@ -23,8 +27,10 @@ HEADER_bonus =  ./include/bot_bonus.hpp
 CC = c++
 
 all :: $(NAME)
+		@echo "${BLUE} ⭐ Mandatory Compiled successfully 🚀 ✅${COLOR_OFF}"
 
 bonus : $(BNAME)
+		@echo "${PURPLE} ⭐ Bonus Compiled successfully 🚀 ✅${COLOR_OFF}"
 
 $(NAME) : $(OBJ) $(HEADER)
 		@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
@@ -33,7 +39,7 @@ $(BNAME) : $(BOBJ) $(HEADER_bonus)
 		@$(CC)  $(CFLAGS) $(BOBJ) -o $(BNAME)
 
 %.o : %.cpp $(HEADER) $(HEADER_bonus)
-	@printf "${GREEN}Compiling $<... ${COLOR_OFF}\r"
+	@printf "${GREEN}Compiling 💻 $<...  🚀  ${COLOR_OFF}\n\r"
 	@$(CC) $(CFLAGS)  -c $< -o $@
 
 clean:
@@ -41,5 +47,6 @@ clean:
 
 fclean: clean
 		@rm -rf $(NAME) $(BNAME)
+		@echo "${ORANGE}Cleaned successfully 🧹 🗑️ ${COLOR_OFF}"
 
 re:	fclean all
