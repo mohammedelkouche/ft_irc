@@ -68,10 +68,7 @@ void	Channel::add_l(size_t limit)
 	l = true;
 	this->limit = limit;
 }
-void	Channel::add_o(std::string nick)
-{
-	std::cout << nick << " should have the +o on this channel" << std::endl;
-}
+
 void	Channel::add_t()
 {
 	t = true;
@@ -91,10 +88,6 @@ void	Channel::rm_l()
 {
 	l = false;
 	limit = -1;
-}
-void	Channel::rm_o(std::string nick)
-{
-	std::cout << "need to check the " << nick << std::endl;
 }
 void	Channel::rm_t()
 {
