@@ -350,13 +350,12 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 					sendToClient(user->get_fd(), REPLY_CHANNELMODES(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->get_channel_mode()));
 					sendToClient(user->get_fd(), REPLY_CREATIONTIME(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->getTheChannelTimeCreated()));
 				}
-				std::cout << "limit is ->> :" << (*it)->getChannelLimitNum() << std::endl;
 				return ;
 			}
 		}
 		sendToClient(user->get_fd(), ERR_NOTONCHANNEL(user->get_hostname(), command[1], user->get_nickname()));
 	}
 	else
-        sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), \
-                            command[1], user->get_nickname()));
+		sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), \
+						command[1], user->get_nickname()));
 }
