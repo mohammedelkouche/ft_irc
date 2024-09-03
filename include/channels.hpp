@@ -53,12 +53,10 @@ class Channel
         size_t                  getChannelLimitNum();
         void	                add_i();
 		void	                add_t();
-		void	                add_o(std::string nick);
 		void	                add_k(std::string key);
 		void	                add_l(size_t limit);
         void	                rm_i();
 		void	                rm_t();
-		void	                rm_o(std::string nick);
 		void	                rm_k(std::string old_key);
 		void	                rm_l();
         bool	                get_i();

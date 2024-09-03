@@ -68,10 +68,7 @@ void	Channel::add_l(size_t limit)
 	l = true;
 	this->limit = limit;
 }
-void	Channel::add_o(std::string nick)
-{
-	std::cout << nick << " should have the +o on this channel" << std::endl;
-}
+
 void	Channel::add_t()
 {
 	t = true;
@@ -91,10 +88,6 @@ void	Channel::rm_l()
 {
 	l = false;
 	limit = -1;
-}
-void	Channel::rm_o(std::string nick)
-{
-	std::cout << "need to check the " << nick << std::endl;
 }
 void	Channel::rm_t()
 {
@@ -350,13 +343,12 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 					sendToClient(user->get_fd(), REPLY_CHANNELMODES(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->get_channel_mode()));
 					sendToClient(user->get_fd(), REPLY_CREATIONTIME(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->getTheChannelTimeCreated()));
 				}
-				std::cout << "limit is ->> :" << (*it)->getChannelLimitNum() << std::endl;
 				return ;
 			}
 		}
 		sendToClient(user->get_fd(), ERR_NOTONCHANNEL(user->get_hostname(), command[1], user->get_nickname()));
 	}
 	else
-        sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), \
-                            command[1], user->get_nickname()));
+		sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), \
+						command[1], user->get_nickname()));
 }
