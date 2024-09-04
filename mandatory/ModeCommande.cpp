@@ -182,13 +182,23 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 					{
 						if ((*it)->get_k() == false && command.size() >= (arg_for_mode + 1))
 						{
-							ryl_args_p += command[arg_for_mode] +  " ";
-							(*it)->add_k(command[arg_for_mode++]);
-							ryl_mode_enable += "k";
+							std::cout << "the key is--> `" << command[arg_for_mode] << "`" << std::endl;
+							if (command[arg_for_mode] == ":" && (command[arg_for_mode + 1][0] == ':' || (command[arg_for_mode + 1].find(' ', 0) != std::string::npos)))
+								sendToClient(user->get_fd(), ERROR_INVALIDMODEPARAM_KEY((*it)->getChannelName(), user->get_hostname(), "k", command[++arg_for_mode]));
+							else
+							{
+								if (command[arg_for_mode] == ":")
+									arg_for_mode++;
+								ryl_args_p += command[arg_for_mode] +  " ";
+								(*it)->add_k(command[arg_for_mode++]);
+								ryl_mode_enable += "k";
+							}
 						}
 					}
 					else if (full_mode_add[i] == 'o' && sign == 1)
 					{
+						if (command[arg_for_mode] == ":")
+								arg_for_mode++;
 						if (command.size() >= (arg_for_mode + 1))
 						{
 							for (i_i = 0; i_i < clients.size(); i_i++)
@@ -229,6 +239,8 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 					}
 					else if (full_mode_add[i] == 'l' && sign == 1)
 					{	
+						if (command[arg_for_mode] == ":")
+								arg_for_mode++;
 						if (command.size() >= (arg_for_mode + 1) && is_number(command[arg_for_mode]))
 						{
 							if ((*it)->getChannelLimitNum() != (size_t)std::atol(command[arg_for_mode].c_str()))
@@ -250,6 +262,8 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 					}
 					else if (full_mode_add[i] == 'k' && sign == -1)
 					{
+						if (command[arg_for_mode] == ":")
+								arg_for_mode++;
 						if ((*it)->get_k() == true)
 						{
 							(*it)->rm_k(command[arg_for_mode]);
@@ -265,6 +279,8 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 					}
 					else if (full_mode_add[i] == 'o' && sign == -1)
 					{
+						if (command[arg_for_mode] == ":")
+								arg_for_mode++;
 						if (command.size() >= (arg_for_mode + 1))
 						{
 							for (i_i = 0; i_i < clients.size(); i_i++)
@@ -326,12 +342,12 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 				if (ryl_args_p.empty() == false)
 				{
 					reply_mode += " " + ryl_args_p;
-					reply_mode.erase(reply_mode.size() - 1, 1);
+					// reply_mode.erase(reply_mode.size() - 1, 1);
 				}
 				if (ryl_args_m.empty() == false)
 				{
 					reply_mode += " " + ryl_args_m;
-					reply_mode.erase(reply_mode.size() - 1, 1);
+					// reply_mode.erase(reply_mode.size() - 1, 1);
 				}
 				if (reply_mode.empty() == false)
 				{

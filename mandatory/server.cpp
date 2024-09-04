@@ -199,6 +199,11 @@ void	Server::execute_commande(Client *user)
 	}
 	if (user->is_enregistred())
 	{
+		for (size_t i = 0; i < commande.size(); i++)
+		{
+			std::cout << "command [" << i << "] ---> `" << commande[i] + "`"<< std::endl;
+		}
+		
 		if (commande[0] == "join" || commande[0] == "JOIN")
 			JoinConstruction(user);
 		else if (commande[0] == "invite" || commande[0] == "INVITE")
@@ -288,7 +293,6 @@ void	Server::ReceiveClientData(int fd)
         } else {
             buffer[BUFFER_SIZE - 1] = '\0';
         }
-		// std::cout << "Client fd = '" << fd << "' send : " << buffer;
 		message = buffer;
 		if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
 		{
