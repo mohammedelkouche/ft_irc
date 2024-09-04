@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 17:11:32 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/03 18:37:51 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/04 19:15:22 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include <netdb.h>
 #include <unistd.h>
 #include "global.hpp"
+#include <arpa/inet.h>   // For inet_ntoa and sockaddr_in
+#include <netdb.h>       // For gethostbyaddr and hostent
 
 class   Client
 {

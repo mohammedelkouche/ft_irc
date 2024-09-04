@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/03 18:54:43 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/04 19:13:34 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,18 +138,14 @@ bool	Client::check_registration(Client *user)
 }
 
 
-// gethostname is a system call that retrieves the name
-// of the current machine (the host) on which your program
-// is running.
+std::string Client::get_client_host()
+{
+    struct in_addr addr;
+    inet_aton(ipaddress.c_str(), &addr); // Convert IP string to in_addr structure
 
-std::string  Client::get_client_host() {
-    char hostname[256];
-    if (gethostname(hostname, sizeof(hostname)) == 0) {
-        struct hostent* hostInfo = gethostbyname(hostname);
-        if (hostInfo != NULL) {
-            return std::string(hostInfo->h_name);
-        }
-    }
+    struct hostent* hostInfo = gethostbyaddr((const void*)&addr, sizeof(addr), AF_INET);
+    if (hostInfo != NULL)
+        return std::string(hostInfo->h_name);
     return "Unknown";
 }
 
