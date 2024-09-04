@@ -60,7 +60,7 @@ void Server::selfJoinReply(Client *client, Channel *channel)
 {
     SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channel->getChannelName(), client->get_hostname()));
     std::cout << buildNamReply(channel) << std::endl;
-    sendToClient(client->get_fd(), REPLY_CHANNELMODES(client->get_hostname(), channel->getChannelName(), client->get_nickname(), channel->get_channel_mode()));
+    // sendToClient(client->get_fd(), REPLY_CHANNELMODES(client->get_hostname(), channel->getChannelName(), client->get_nickname(), channel->get_channel_mode()));
     SendResponse(client, REPLY_NAMREPLY(client->get_hostname(), buildNamReply(channel), channel->getChannelName(), client->get_nickname()));
     SendResponse(client, REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), channel->getChannelName()));
 }
@@ -126,12 +126,12 @@ void Server::JoinConstruction(Client *client)
     for (std::vector<std::string>::iterator it = channelNames.begin(); it != channelNames.end(); ++it)
     {
         std::string channelName = *it;
+        std::cout << "*keyIt--------------{ " << *keyIt << " }-------------"<< std::endl;
         if (hasKey && keyIt != splittedKeys.end())
         {
-            key_var = *keyIt;
-            if (!key_var.empty() && key_var[0] == ':')
-                key_var.erase(0,1);
-            std::cout << "erase: [" << key_var << "]" << std::endl;
+            // key_var = *keyIt;
+            // if (!key_var.empty() && key_var[0] == ':')
+            //     key_var.erase(0,1);
             ++keyIt;
         }
         else
@@ -153,18 +153,13 @@ void Server::JoinConstruction(Client *client)
         if (channelIt == channels.end()) 
         {
             // Channel doesn't exist, create new channel and add client
-            if(!key_var.empty())
+            Channel* newChannel = new Channel(channelName, "");
+            if (!newChannel->addToChannel(client, ""))
                 continue ;
-            else
-            {
-                Channel* newChannel = new Channel(channelName, "");
-                if (!newChannel->addToChannel(client, ""))
-                    continue ;
-                channels.push_back(newChannel);
-                selfJoinReply(client, newChannel);
-                sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
-                std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
-            }
+            channels.push_back(newChannel);
+            selfJoinReply(client, newChannel);
+            sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
+            std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
         }
         else
         {
@@ -176,7 +171,7 @@ void Server::JoinConstruction(Client *client)
                 SendResponse(client, ERROR_CHANNELISFULL(client->get_nickname(), existingChannel->getChannelName()));
                 continue;
             }
-            if (existingChannel->get_k() && existingChannel->getChannelKey().empty()) //ila kan l flag m setti wmkynch l key (should review aymane s code to not double check)
+            if (existingChannel->get_k() && existingChannel->getChannelKey().empty())
                 continue;
             if(existingChannel->get_i())
             {
