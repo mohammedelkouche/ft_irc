@@ -1,5 +1,0 @@
-PASS x
-NICK nick4209
-USER user4209 0 * abc
-JOIN #channel4209
-PRIVMSG #channel4209 :waaaaach al hbibaaaaaaaaaa!

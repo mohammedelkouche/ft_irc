@@ -1,5 +1,0 @@
-PASS x
-NICK nick1136
-USER user1136 0 * abc
-JOIN #channel1136
-PART #channel1136
