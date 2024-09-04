@@ -1,6 +1,6 @@
 import os
 import sys
-TMP='''PASS h\r\nNICK nick{0}\r\nUSER user{0} 0 * abc \r\n'''
+TMP='''PASS x\r\nNICK nick{0}\r\nUSER user{0} 0 * abc \r\n'''
 
 
 for clinet in range(int(sys.argv[1])):
@@ -9,4 +9,4 @@ for clinet in range(int(sys.argv[1])):
     with open(filename, "w") as fp:
         fp.write(cmd)
     os.system("sleep 0.05")
-    os.system("nc -c localhost  5050 < '" + filename + "'")
+    os.system("nc -c localhost  8080 < '" + filename + "'")

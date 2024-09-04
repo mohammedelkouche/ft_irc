@@ -14,7 +14,7 @@ import sys
 # -------------------------------
 
 #-------------------------------
-TMP='''PASS h\r\nNICK nick{0}\r\nUSER user{0} 0 * abc\r\nJOIN #channel{0}\r\nPRIVMSG #channel{0} :hello world!\r\n'''
+TMP='''PASS x\r\nNICK nick{0}\r\nUSER user{0} 0 * abc\r\nJOIN #channel{0}\r\nPART #channel{0}\r\n'''
 # TMP='''PASS 1234\r\nNICK nick{0}\r\nUSER user{0} 0 * abc\r\nJOIN #channel{0}\r\n'''
 
 for clinet in range(int(sys.argv[1])):

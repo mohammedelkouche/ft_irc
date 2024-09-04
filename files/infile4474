@@ -1,0 +1,5 @@
+PASS x
+NICK nick4474
+USER user4474 0 * abc
+JOIN #channel4474
+PRIVMSG #channel4474 :waaaaach al hbibaaaaaaaaaa!

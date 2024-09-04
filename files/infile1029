@@ -1,0 +1,5 @@
+PASS x
+NICK nick1029
+USER user1029 0 * abc
+JOIN #channel1029
+PART #channel1029

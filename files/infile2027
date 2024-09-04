@@ -1,0 +1,5 @@
+PASS x
+NICK nick2027
+USER user2027 0 * abc
+JOIN #channel2027
+PART #channel2027

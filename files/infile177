@@ -1,0 +1,5 @@
+PASS x
+NICK nick177
+USER user177 0 * abc
+JOIN #channel177
+PART #channel177

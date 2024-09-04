@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/03 22:41:53 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/04 19:30:15 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	Server::AcceptNewClient()
 	int fd_client_sock = accept(fd_srv_socket, (sockaddr *)&client_addr, &addresslenght);
 	if (fd_client_sock == -1)
 	{
-		 std::cout << "accept() failed" << std::endl;
+		//  std::cout << "accept() failed" << std::endl;
         return;
     }
 	if (fcntl(fd_client_sock, F_SETFL, O_NONBLOCK) == -1)
@@ -106,11 +106,10 @@ void	Server::AcceptNewClient()
 	// insert a new buffer entry for the new client
 	partial_messages.insert(std::make_pair(fd_client_sock, ""));
 	std::string yellow = "\033[33m";
-	std::string red = "\033[31m";
-	std::string magenta = "\033[35m";
+	std::string green = "\033[32m";
 	std::string reset = "\033[0m";
 
-	std::cout << yellow << "Client fd = '" << reset << red << fd_client_sock << reset << magenta << "' Connected" << reset << std::endl;
+	std::cout << yellow << " Client fd = " << fd_client_sock << reset << green << " Connected" << reset << std::endl;
 }
 
 void	Server::RemoveClient(int fd)
@@ -270,12 +269,12 @@ void	Server::ReceiveClientData(int fd)
 	size_t pos = 0;
     size_t end_pos = 0;
 	size_t bytes_received = recv(fd, buffer, BUFFER_SIZE - 1, 0);
+	std::string red = "\033[31m";
+	std::string yellow = "\033[33m";
+	std::string reset = "\033[0m";
 	if (bytes_received <= 0)
 	{
-		// quit();
-		// sendToClient(fd, "Client fd = '" << fd << "' Disconnected);
-		std::cout << "[Client fd]= [" << fd << "] [Disconnected]" << std::endl;
-		
+		std::cout << yellow << "Client fd = " << fd  << reset << red  << " Disconnected " << reset << std::endl;
 		Client * client = get_connect_client(fd);
 		for (size_t i = 0; i < channels.size(); i++)
 			channels[i]->removeFromChannel(client);
@@ -289,7 +288,7 @@ void	Server::ReceiveClientData(int fd)
         } else {
             buffer[BUFFER_SIZE - 1] = '\0';
         }
-		std::cout << "Client fd = '" << fd << "' send : " << buffer;
+		// std::cout << "Client fd = '" << fd << "' send : " << buffer;
 		message = buffer;
 		if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
 		{
@@ -306,20 +305,25 @@ bool Server::stopServer = 0;
 
 void Server::handleSigint(int sig)
 {
-    std::cout << "Caught SIGINT (" << sig << "). Shutting down server gracefully." << std::endl;
+    // std::cout << "Caught SIGINT (" << sig << "). Shutting down server gracefully." << std::endl;
     Server::stopServer = 1; // Set the flag to stop the server loop
 }
 
 void	Server::close_all_fds()
 {
+	std::string orange = "\033[38;5;208m";
+	std::string red = "\033[31m";
+	std::string yellow = "\033[33m";
+	std::string reset = "\033[0m";
+
 	for (size_t i = 0; i < clients.size(); i++)
 	{
-		std::cout << "client << [" << clients[i].get_fd() << "] << [disconnect]" <<  std::endl;
+		std::cout << yellow << "Client fd = " << clients[i].get_fd()  << reset << red  << " Disconnected " << reset << std::endl;
 		close(clients[i].get_fd());
 	}
 	if (fd_srv_socket != -1)
 	{
-		std::cout << "server << [" << fd_srv_socket << "] << [disconnect]" <<  std::endl;
+		std::cout << orange << "Server fd = " << fd_srv_socket  << reset << red  << " Disconnected " << reset << std::endl;
 		close(fd_srv_socket);
 	}
 }

@@ -1,0 +1,5 @@
+PASS x
+NICK nick3827
+USER user3827 0 * abc
+JOIN #channel3827
+PRIVMSG #channel3827 :waaaaach al hbibaaaaaaaaaa!

@@ -1,0 +1,5 @@
+PASS x
+NICK nick960
+USER user960 0 * abc
+JOIN #channel960
+PART #channel960

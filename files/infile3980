@@ -1,0 +1,5 @@
+PASS x
+NICK nick3980
+USER user3980 0 * abc
+JOIN #channel3980
+PRIVMSG #channel3980 :waaaaach al hbibaaaaaaaaaa!

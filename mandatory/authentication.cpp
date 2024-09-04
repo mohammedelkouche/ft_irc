@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/03 22:48:39 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/04 01:10:03 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	Server::handle_pass(Client *user)
 	std::vector <std::string>::iterator it = std::find(commande.begin(), commande.end(), ":");
 
 	if (it != commande.end())
-			commande.erase(it);
+		commande.erase(it);
 	if (commande.size() == 1)
 	{
 		if (user->is_enregistred())

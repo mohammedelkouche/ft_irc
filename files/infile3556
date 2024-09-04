@@ -1,0 +1,5 @@
+PASS x
+NICK nick3556
+USER user3556 0 * abc
+JOIN #channel3556
+PART #channel3556
