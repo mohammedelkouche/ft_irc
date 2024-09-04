@@ -58,6 +58,7 @@ bool Channel::addToChannel(Client *client, std::string key)
 
     if (IsClientInChannel(ClientssHouse, client->get_fd()))
     {
+        std::cout << "mtafe9 m3aya simo \n";
         SendResponse(client, ERROR_USERONCHANNEL(client->get_hostname(), getChannelName(), client->get_nickname()));
         return false;
     }
@@ -73,6 +74,7 @@ bool Channel::addToChannel(Client *client, std::string key)
     bool shouldSetOperator = ClientssHouse.empty();
     std::cout << "Channel is empty before adding client: " << shouldSetOperator << std::endl;
     // Set operator status
+    std::cout << "mtafe9 m3aya \n";
     client->setOperatorStatus(shouldSetOperator);
     Client *newClient = new Client(*client);
     ClientssHouse.push_back(newClient);
