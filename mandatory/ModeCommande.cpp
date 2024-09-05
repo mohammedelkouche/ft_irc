@@ -216,6 +216,7 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 											((*it_c)->get_nickname() == "@" + command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == false))
 									{
 										(*it_c)->setOperatorStatus(true);
+										std::cout << "dkhel l hna wt setta i true ---> " << (*it_c)->getIsOperatorStatus() << std::endl;
 										ryl_args_p += command[arg_for_mode] + " ";
 										ryl_mode_enable += "o";
 										break ;
