@@ -183,7 +183,7 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 						if ((*it)->get_k() == false && command.size() >= (arg_for_mode + 1))
 						{
 							std::cout << "the key is--> `" << command[arg_for_mode] << "`" << std::endl;
-							if (command[arg_for_mode] == ":" && (command[arg_for_mode + 1][0] == ':' || (command[arg_for_mode + 1].find(' ', 0) != std::string::npos)))
+							if (command[arg_for_mode] == ":" && (command[arg_for_mode + 1][0] == ':' || command[arg_for_mode + 1].empty() || (command[arg_for_mode + 1].find(' ', 0) != std::string::npos)))
 								sendToClient(user->get_fd(), ERROR_INVALIDMODEPARAM_KEY((*it)->getChannelName(), user->get_hostname(), "k", command[++arg_for_mode]));
 							else
 							{
