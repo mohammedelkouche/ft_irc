@@ -62,11 +62,7 @@ bool Channel::addToChannel(Client *client, std::string key)
             return false;
         }
     }
-    // Determine if the client should be an operator before adding
     bool shouldSetOperator = ClientssHouse.empty();
-    // std::cout << "Channel is empty before adding client: " << shouldSetOperator << std::endl;
-    // Set operator status
-    // std::cout << "mtafe9 m3aya \n";
     client->setOperatorStatus(shouldSetOperator);
     Client *newClient = new Client(*client);
     ClientssHouse.push_back(newClient);

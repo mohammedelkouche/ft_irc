@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/05 18:55:48 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/06 00:15:35 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,7 +277,10 @@ void	Server::ReceiveClientData(int fd)
 		std::cout << yellow << "Client fd = " << fd  << reset << red  << " Disconnected " << reset << std::endl;
 		Client * client = get_connect_client(fd);
 		for (size_t i = 0; i < channels.size(); i++)
+		{
 			channels[i]->removeFromChannel(client);
+			deleteTheChannelWhenNoUserInIt(channels[i]);
+		}
         RemoveClient(fd);
         close(fd);
 	}
