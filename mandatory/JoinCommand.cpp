@@ -134,7 +134,7 @@ void Server::JoinConstruction(Client *client)
             if (!key_var.empty() && key_var[0] == ':')
                 key_var.erase(0,1);
             ++keyIt;
-        }
+        }    
         else
             key_var = "";
         if (channelName[0] != '#')

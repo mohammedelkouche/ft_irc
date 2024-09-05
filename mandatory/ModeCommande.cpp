@@ -6,7 +6,8 @@
 bool is_number(std::string str)
 {
 	size_t found = str.find_first_not_of("0123456789");
-	if (found == std::string::npos && std::atol(str.c_str()) <= 9223372036854775807)
+	if (found == std::string::npos && \
+		std::atol(str.c_str()) <= 9223372036854775807)
 		return (true);
 	return (false);
 }
@@ -82,7 +83,6 @@ void	Channel::rm_k(std::string old_key)
 {
 	if (getChannelKey() == old_key)
 		k = false;
-
 }
 void	Channel::rm_l()
 {
@@ -102,7 +102,7 @@ void	Channel::set_mode(int mode_number)
 void Server::ModeCommand(std::vector<std::string> command, Client *user)
 {
 	int sign = 0;
-	size_t arg_for_mode = 3;     
+	size_t arg_for_mode = 3;
 	size_t	i_i;
 	std::string ryl_mode_enable;
 	std::string ryl_args_p;
@@ -111,16 +111,19 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 	
 	if (command.size() == 1)
 	{
-		sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(user->get_nickname(), \
-                        user->get_hostname()));
+		sendToClient(user->get_fd(), \
+						ERROR_NEEDMOREPARAMS(user->get_nickname(), \
+                        						user->get_hostname()));
 		return ;
 	}
 	if (command[1][0] == '#')
 	{
 		if (no_suck_channel(command) == 1)
         {
-            sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), \
-                            command[1], user->get_nickname()));
+            sendToClient(user->get_fd(), \
+							ERROR_NOSUCHCHANNEL(user->get_hostname(), \
+                            					command[1], \
+												user->get_nickname()));
             return ;
         }
 		for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
@@ -129,8 +132,16 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
             {
 				if (command.size() == 2)
 				{
-					sendToClient(user->get_fd(), REPLY_CHANNELMODES(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->get_channel_mode()));
-					sendToClient(user->get_fd(), REPLY_CREATIONTIME(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->getTheChannelTimeCreated()));
+					sendToClient(user->get_fd(), \
+									REPLY_CHANNELMODES(user->get_hostname(), \
+														(*it)->getChannelName(), \
+														user->get_nickname(), \
+														(*it)->get_channel_mode()));
+					sendToClient(user->get_fd(), \
+									REPLY_CREATIONTIME(user->get_hostname(), \
+														(*it)->getChannelName(), \
+														user->get_nickname(), \
+														(*it)->getTheChannelTimeCreated()));
 					return ;
 				}
 				std::vector<Client *> Clnts = (*it)->GetClientssHouse();
@@ -142,7 +153,9 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 					{
 						if ((*it)->getIsOperatorStatus() == 0)
 						{
-							sendToClient(user->get_fd(), ERROR_NOPRIVILEGES(user->get_hostname(), command[1]));
+							sendToClient(user->get_fd(), \
+											ERROR_NOPRIVILEGES(user->get_hostname(), \
+																command[1]));
 							return ; 
 						}
 						else
@@ -170,7 +183,8 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							}
 						}
 					}
-					if (full_mode_add[i] == 'i' && sign == 1)
+					if (full_mode_add[i] == 'i' && \
+						sign == 1)
 					{
 						if ((*it)->get_i() == false)
 						{
@@ -178,13 +192,23 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							ryl_mode_enable += "i";
 						}
 					}
-					else if (full_mode_add[i] == 'k' && sign == 1)
+					else if (full_mode_add[i] == 'k' && \
+								sign == 1)
 					{
 						if ((*it)->get_k() == false && command.size() >= (arg_for_mode + 1))
 						{
 							std::cout << "the key is--> `" << command[arg_for_mode] << "`" << std::endl;
-							if (command[arg_for_mode] == ":" && (command[arg_for_mode + 1][0] == ':' || (command[arg_for_mode + 1].find(' ', 0) != std::string::npos)))
-								sendToClient(user->get_fd(), ERROR_INVALIDMODEPARAM_KEY((*it)->getChannelName(), user->get_hostname(), "k", command[++arg_for_mode]));
+							if (command[arg_for_mode] == ":" && \
+								(command[arg_for_mode + 1][0] == ':' || \
+								command[arg_for_mode + 1].empty() || \
+								(command[arg_for_mode + 1].find(' ', 0) != std::string::npos)))
+							{
+								sendToClient(user->get_fd(), \
+												ERROR_INVALIDMODEPARAM_KEY((*it)->getChannelName(), \
+																			user->get_hostname(), \
+																			"k", \
+																			command[++arg_for_mode]));
+							}
 							else
 							{
 								if (command[arg_for_mode] == ":")
@@ -195,7 +219,8 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							}
 						}
 					}
-					else if (full_mode_add[i] == 'o' && sign == 1)
+					else if (full_mode_add[i] == 'o' && \
+								sign == 1)
 					{
 						if (command[arg_for_mode] == ":")
 								arg_for_mode++;
@@ -203,17 +228,22 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 						{
 							for (i_i = 0; i_i < clients.size(); i_i++)
 							{
-								if ((clients[i_i]).get_nickname() == command[arg_for_mode] || (clients[i_i]).get_nickname() == "@" + command[arg_for_mode])
+								if ((clients[i_i]).get_nickname() == command[arg_for_mode] || \
+									(clients[i_i]).get_nickname() == "@" + command[arg_for_mode])
 									break;
 							}
 							if ((i_i) >= clients.size())
-								sendToClient(user->get_fd(), ERR_NOSUCHNICK(user->get_hostname(), command[arg_for_mode]));
+								sendToClient(user->get_fd(), \
+												ERR_NOSUCHNICK(user->get_hostname(), \
+																command[arg_for_mode]));
 							else
 							{
 								for (std::vector<Client *>::iterator it_c = Clnts.begin(); it_c != Clnts.end(); ++it_c)
 								{
-									if (((*it_c)->get_nickname() == command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == false) || \
-											((*it_c)->get_nickname() == "@" + command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == false))
+									if (((*it_c)->get_nickname() == command[arg_for_mode] && \
+										(*it_c)->getIsOperatorStatus() == false) || \
+										((*it_c)->get_nickname() == "@" + command[arg_for_mode] && \
+										(*it_c)->getIsOperatorStatus() == false))
 									{
 										(*it_c)->setOperatorStatus(true);
 										std::cout << "dkhel l hna wt setta i true ---> " << (*it_c)->getIsOperatorStatus() << std::endl;
@@ -224,13 +254,18 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 									else if ((*it_c)->get_nickname() == command[arg_for_mode])
 										break ;
 									else if ((*it_c) == Clnts[Clnts.size() - 1])
-										sendToClient(user->get_fd(), ERROR_USERNOTINCHANNEL(user->get_hostname(), (*it)->getChannelName()));
+									{
+										sendToClient(user->get_fd(), \
+														ERROR_USERNOTINCHANNEL(user->get_hostname(), \
+																				(*it)->getChannelName()));
+									}
 								}
 							}
 							arg_for_mode++;
 						}
 					}
-					else if (full_mode_add[i] == 't' && sign == 1)
+					else if (full_mode_add[i] == 't' && \
+								sign == 1)
 					{
 						if ((*it)->get_t() == false)
 						{
@@ -238,11 +273,13 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							ryl_mode_enable += "t";
 						}
 					}
-					else if (full_mode_add[i] == 'l' && sign == 1)
+					else if (full_mode_add[i] == 'l' && \
+								sign == 1)
 					{	
 						if (command[arg_for_mode] == ":")
 								arg_for_mode++;
-						if (command.size() >= (arg_for_mode + 1) && is_number(command[arg_for_mode]))
+						if (command.size() >= (arg_for_mode + 1) && \
+							is_number(command[arg_for_mode]))
 						{
 							if ((*it)->getChannelLimitNum() != (size_t)std::atol(command[arg_for_mode].c_str()))
 							{
@@ -253,7 +290,8 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 						}
 						arg_for_mode++;
 					}
-					else if (full_mode_add[i] == 'i' && sign == -1)
+					else if (full_mode_add[i] == 'i' && \
+								sign == -1)
 					{
 						if ((*it)->get_i() == true)
 						{
@@ -261,10 +299,11 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							ryl_mode_desable += "i";
 						}
 					}
-					else if (full_mode_add[i] == 'k' && sign == -1)
+					else if (full_mode_add[i] == 'k' && \
+								sign == -1)
 					{
 						if (command[arg_for_mode] == ":")
-								arg_for_mode++;
+							arg_for_mode++;
 						if ((*it)->get_k() == true)
 						{
 							(*it)->rm_k(command[arg_for_mode]);
@@ -274,11 +313,16 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 								ryl_mode_desable += "k";
 							}
 							else
-								sendToClient(user->get_fd(), ERR_KEYSET(user->get_hostname(), (*it)->getChannelName()));
+							{
+								sendToClient(user->get_fd(), \
+												ERR_KEYSET(user->get_hostname(), \
+															(*it)->getChannelName()));
+							}
 						}
 						arg_for_mode++;
 					}
-					else if (full_mode_add[i] == 'o' && sign == -1)
+					else if (full_mode_add[i] == 'o' && \
+								sign == -1)
 					{
 						if (command[arg_for_mode] == ":")
 								arg_for_mode++;
@@ -286,11 +330,14 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 						{
 							for (i_i = 0; i_i < clients.size(); i_i++)
 							{
-								if ((clients[i_i]).get_nickname() == command[arg_for_mode] || (clients[i_i]).get_nickname() == "@" + command[arg_for_mode])
+								if ((clients[i_i]).get_nickname() == command[arg_for_mode] || \
+									(clients[i_i]).get_nickname() == "@" + command[arg_for_mode])
 									break;
 							}
 							if ((i_i) >= clients.size())
-								sendToClient(user->get_fd(), ERR_NOSUCHNICK(user->get_hostname(), command[arg_for_mode]));
+								sendToClient(user->get_fd(), \
+												ERR_NOSUCHNICK(user->get_hostname(), \
+																command[arg_for_mode]));
 							else
 							{
 								for (std::vector<Client *>::iterator it_c = Clnts.begin(); it_c != Clnts.end(); ++it_c)
@@ -306,13 +353,18 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 									else if ((*it_c)->get_nickname() == command[arg_for_mode])
 										break ;
 									else if ((*it_c) == Clnts[Clnts.size() - 1])
-										sendToClient(user->get_fd(), ERROR_USERNOTINCHANNEL(user->get_hostname(), (*it)->getChannelName()));
+									{
+										sendToClient(user->get_fd(), \
+														ERROR_USERNOTINCHANNEL(user->get_hostname(), \
+																				(*it)->getChannelName()));
+									}
 								}
 							}
 							arg_for_mode++;
 						}
 					}
-					else if (full_mode_add[i] == 't' && sign == -1)
+					else if (full_mode_add[i] == 't' && \
+								sign == -1)
 					{
 						if ((*it)->get_t() == true)
 						{
@@ -320,52 +372,78 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							ryl_mode_desable += "t";
 						}
 					}
-					else if (full_mode_add[i] == 'l' && sign == -1)
+					else if (full_mode_add[i] == 'l' && \
+								sign == -1)
 					{	
 						if ((*it)->get_l() == true)
-						{
 							(*it)->rm_l();
-						}
 						ryl_mode_desable += "l";
 					}
-					else if (full_mode_add[i] != 'l' && full_mode_add[i] != 'i' && full_mode_add[i] != 't' && full_mode_add[i] != 'o' && full_mode_add[i] != 'k')
-						sendToClient(user->get_fd(), ERR_UNKNOWNMODE(user->get_hostname(), user->get_nickname(), full_mode_add[i]));
+					else if (full_mode_add[i] != 'l' && \
+								full_mode_add[i] != 'i' && \
+								full_mode_add[i] != 't' && \
+								full_mode_add[i] != 'o' && \
+								full_mode_add[i] != 'k')
+					{
+						sendToClient(user->get_fd(), \
+										ERR_UNKNOWNMODE(user->get_hostname(), \
+														user->get_nickname(), \
+														full_mode_add[i]));
+					}
 				}
 				std::string reply_mode;
 				if (ryl_mode_enable.empty() == false)
-				{
 					reply_mode += "+" + ryl_mode_enable;
-				}
 				if (ryl_mode_desable.empty() == false)
-				{
 					reply_mode += "-" + ryl_mode_desable;
-				}
 				if (ryl_args_p.empty() == false)
 				{
 					reply_mode += " " + ryl_args_p;
-					// reply_mode.erase(reply_mode.size() - 1, 1);
+					reply_mode.erase(reply_mode.size() - 1, 1);
 				}
 				if (ryl_args_m.empty() == false)
 				{
 					reply_mode += " " + ryl_args_m;
-					// reply_mode.erase(reply_mode.size() - 1, 1);
+					reply_mode.erase(reply_mode.size() - 1, 1);
 				}
 				if (reply_mode.empty() == false)
 				{
-					sendToChannel(user, REPLY_CHANNELMODES__(user->get_username(), (*it)->getChannelName(), user->get_nickname(), reply_mode), (*it)->getChannelName());
-					sendToClient(user->get_fd(), REPLY_CHANNELMODES__(user->get_username(), (*it)->getChannelName(), user->get_nickname(), reply_mode));
+					sendToChannel(user, \
+									REPLY_CHANNELMODES__(user->get_username(), \
+															(*it)->getChannelName(), \
+															user->get_nickname(), \
+															reply_mode), \
+									(*it)->getChannelName());
+					sendToClient(user->get_fd(), \
+									REPLY_CHANNELMODES__(user->get_username(), \
+															(*it)->getChannelName(), \
+															user->get_nickname(), \
+															reply_mode));
 				}
 				else if (command.size() <= 3)
 				{
-					sendToClient(user->get_fd(), REPLY_CHANNELMODES(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->get_channel_mode()));
-					sendToClient(user->get_fd(), REPLY_CREATIONTIME(user->get_hostname(), (*it)->getChannelName(), user->get_nickname(), (*it)->getTheChannelTimeCreated()));
+					sendToClient(user->get_fd(), \
+									REPLY_CHANNELMODES(user->get_hostname(), \
+														(*it)->getChannelName(), \
+														user->get_nickname(), \
+														(*it)->get_channel_mode()));
+					sendToClient(user->get_fd(), \
+									REPLY_CREATIONTIME(user->get_hostname(), \
+														(*it)->getChannelName(), \
+														user->get_nickname(), \
+														(*it)->getTheChannelTimeCreated()));
 				}
 				return ;
 			}
 		}
-		sendToClient(user->get_fd(), ERR_NOTONCHANNEL(user->get_hostname(), command[1], user->get_nickname()));
+		sendToClient(user->get_fd(), \
+						ERR_NOTONCHANNEL(user->get_hostname(), \
+											command[1], \
+											user->get_nickname()));
 	}
 	else
-		sendToClient(user->get_fd(), ERROR_NOSUCHCHANNEL(user->get_hostname(), \
-						command[1], user->get_nickname()));
+		sendToClient(user->get_fd(), \
+						ERROR_NOSUCHCHANNEL(user->get_hostname(), \
+											command[1], \
+											user->get_nickname()));
 }
