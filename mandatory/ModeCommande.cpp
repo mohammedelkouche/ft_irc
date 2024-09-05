@@ -213,10 +213,11 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 								if (command.size() >= (arg_for_mode + 1) && command[arg_for_mode] == ":")
 									arg_for_mode++;
 								ryl_args_p += command[arg_for_mode] +  " ";
-								(*it)->add_k(command[arg_for_mode++]);
+								(*it)->add_k(command[arg_for_mode]);
 								ryl_mode_enable += "k";
 							}
 						}
+						arg_for_mode++;
 					}
 					else if (full_mode_add[i] == 'o' && \
 								sign == 1)
@@ -233,6 +234,7 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							}
 							if ((i_i) >= clients.size())
 							{
+								std::cout << "user to be op --> `" << command[arg_for_mode] + "`" << std::endl;
 								sendToClient(user->get_fd(), \
 												ERR_NOSUCHNICK(user->get_hostname(), \
 																command[arg_for_mode]));
@@ -262,6 +264,13 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 								}
 							}
 							arg_for_mode++;
+						}
+						else
+						{
+							sendToClient(user->get_fd(),\
+											ERROR_INVALIDMODEPARAM((*it)->getChannelName(), \
+																	user->get_hostname(), \
+																	'o'));
 						}
 					}
 					else if (full_mode_add[i] == 't' && \
@@ -363,6 +372,13 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 								}
 							}
 							arg_for_mode++;
+						}
+						else
+						{
+							sendToClient(user->get_fd(),\
+											ERROR_INVALIDMODEPARAM((*it)->getChannelName(), \
+																	user->get_hostname(), \
+																	'o'));
 						}
 					}
 					else if (full_mode_add[i] == 't' && \
