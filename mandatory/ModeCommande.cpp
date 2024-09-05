@@ -441,8 +441,10 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 											user->get_nickname()));
 	}
 	else
+	{
 		sendToClient(user->get_fd(), \
 						ERROR_NOSUCHCHANNEL(user->get_hostname(), \
 											command[1], \
 											user->get_nickname()));
+	}
 }
