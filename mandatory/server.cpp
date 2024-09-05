@@ -309,6 +309,7 @@ bool Server::stopServer = 0;
 
 void Server::handleSigint(int sig)
 {
+	(void) sig;
     // std::cout << "Caught SIGINT (" << sig << "). Shutting down server gracefully." << std::endl;
     Server::stopServer = 1; // Set the flag to stop the server loop
 }
