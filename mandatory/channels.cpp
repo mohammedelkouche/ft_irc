@@ -13,14 +13,6 @@ Channel::Channel()
     init_modes();
 }
 
-void print(std::vector<int> v)
-{
-    std::cout << "-----------------\n";
-    for (size_t i = 0; i < v.size(); i++)
-        std::cout << v[i] << std::endl;
-    std::cout << "-----------------\n";
-}
-
 void Channel::setTheChannelTimeCreated()
 {
     time_t present_time;
@@ -54,11 +46,11 @@ Client* Channel::getTheOperator()
 
 bool Channel::addToChannel(Client *client, std::string key)
 {
-    std::cout << "Attempting to add client: " << client->get_nickname() << std::endl;
+    // std::cout << "Attempting to add client: " << client->get_nickname() << std::endl;
 
     if (IsClientInChannel(ClientssHouse, client->get_fd()))
     {
-        std::cout << "mtafe9 m3aya simo \n";
+        // std::cout << "mtafe9 m3aya simo \n";
         SendResponse(client, ERROR_USERONCHANNEL(client->get_hostname(), getChannelName(), client->get_nickname()));
         return false;
     }
@@ -72,13 +64,13 @@ bool Channel::addToChannel(Client *client, std::string key)
     }
     // Determine if the client should be an operator before adding
     bool shouldSetOperator = ClientssHouse.empty();
-    std::cout << "Channel is empty before adding client: " << shouldSetOperator << std::endl;
+    // std::cout << "Channel is empty before adding client: " << shouldSetOperator << std::endl;
     // Set operator status
-    std::cout << "mtafe9 m3aya \n";
+    // std::cout << "mtafe9 m3aya \n";
     client->setOperatorStatus(shouldSetOperator);
     Client *newClient = new Client(*client);
     ClientssHouse.push_back(newClient);
-    std::cout << "Client " << newClient->get_nickname() << " added to the channel with operator status: " << newClient->getIsOperatorStatus() << std::endl;
+    // std::cout << "Client " << newClient->get_nickname() << " added to the channel with operator status: " << newClient->getIsOperatorStatus() << std::endl;
     return true;
 }
 

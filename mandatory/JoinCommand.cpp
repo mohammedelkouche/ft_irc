@@ -59,8 +59,8 @@ std::string Server::buildNamReply(Channel *channel)
 void Server::selfJoinReply(Client *client, Channel *channel)
 {
     SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channel->getChannelName(), client->get_hostname()));
-    std::cout << buildNamReply(channel) << std::endl;
-    // sendToClient(client->get_fd(), REPLY_CHANNELMODES(client->get_hostname(), channel->getChannelName(), client->get_nickname(), channel->get_channel_mode()));
+    std::cout << "-------------------------("<< client->get_hostname() << " )" << std::endl;
+    sendToClient(client->get_fd(), REPLY_CHANNELMODES(client->get_hostname(), channel->getChannelName(), client->get_nickname(), channel->get_channel_mode()));
     SendResponse(client, REPLY_NAMREPLY(client->get_hostname(), buildNamReply(channel), channel->getChannelName(), client->get_nickname()));
     SendResponse(client, REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), channel->getChannelName()));
 }
@@ -107,7 +107,8 @@ void Server::JoinConstruction(Client *client)
 
     std::vector<std::string> channelNames = Splitter(cmd[1], ",");
     std::vector<std::string> splittedKeys;
-    std::vector<std::string>::iterator keyIt;
+    std::vector<std::string> initialize;
+    std::vector<std::string>::iterator keyIt = initialize.begin();
     std::string key_var;
     bool hasKey = false;
 
@@ -126,7 +127,7 @@ void Server::JoinConstruction(Client *client)
     for (std::vector<std::string>::iterator it = channelNames.begin(); it != channelNames.end(); ++it)
     {
         std::string channelName = *it;
-        std::cout << "*keyIt--------------{ " << *keyIt << " }-------------"<< std::endl;
+        // std::cout << "*keyIt--------------{ " << *keyIt << " }-------------"<< std::endl;
         if (hasKey && keyIt != splittedKeys.end())
         {
             key_var = *keyIt;
@@ -159,7 +160,7 @@ void Server::JoinConstruction(Client *client)
             channels.push_back(newChannel);
             selfJoinReply(client, newChannel);
             sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
-            std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
+            // std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
         }
         else
         {
