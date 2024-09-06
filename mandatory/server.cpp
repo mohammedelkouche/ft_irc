@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/04 19:30:15 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/06 21:51:18 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ void	Server::execute_commande(Client *user)
 			success_connect(user);
 	}
 	if (user->is_enregistred())
-	{
+	{		
 		if (commande[0] == "join" || commande[0] == "JOIN")
 			JoinConstruction(user);
 		else if (commande[0] == "invite" || commande[0] == "INVITE")
@@ -277,7 +277,10 @@ void	Server::ReceiveClientData(int fd)
 		std::cout << yellow << "Client fd = " << fd  << reset << red  << " Disconnected " << reset << std::endl;
 		Client * client = get_connect_client(fd);
 		for (size_t i = 0; i < channels.size(); i++)
+		{
 			channels[i]->removeFromChannel(client);
+			deleteTheChannelWhenNoUserInIt(channels[i]);
+		}
         RemoveClient(fd);
         close(fd);
 	}
@@ -288,7 +291,6 @@ void	Server::ReceiveClientData(int fd)
         } else {
             buffer[BUFFER_SIZE - 1] = '\0';
         }
-		// std::cout << "Client fd = '" << fd << "' send : " << buffer;
 		message = buffer;
 		if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
 		{
@@ -305,6 +307,7 @@ bool Server::stopServer = 0;
 
 void Server::handleSigint(int sig)
 {
+	(void) sig;
     // std::cout << "Caught SIGINT (" << sig << "). Shutting down server gracefully." << std::endl;
     Server::stopServer = 1; // Set the flag to stop the server loop
 }
@@ -361,6 +364,8 @@ void	Server::initializeServer(int port_nbr,std::string str)
 
 Server::~Server()
 {
+	for(size_t i = 0; i < channels.size(); i++)
+		delete (channels[i]);
 }
 
 

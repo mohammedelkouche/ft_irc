@@ -8,25 +8,46 @@ Channel* Server::getChannelByName(std::vector<Channel *> channels, std::string n
     return NULL;
 }
 
+Client*  NO_CL = NULL;
+
+static Client* staticGetClientByNickplus(std::vector<Client *> clients, std::string nickname)
+{
+    for (size_t i = 0; i < clients.size(); i++)
+        if (clients[i]->get_nickname() == nickname)
+            return (clients[i]);
+   return NO_CL;
+}
+
 
 void Server::KickConstruction(Client *client)
 {
     std::vector<std::string> vec = client->get_commande();
-    if (!client->getIsOperatorStatus())
-    {
-        SendResponse(client, ERROR_NOPRIVILEGES(client->get_nickname(), client->get_hostname()));
-        return;
-    }
+    std::cout << "NICKNAME ------------> " << client->get_nickname() << "  HIS STATUS ----------> "  << client->getIsOperatorStatus() << std::endl;
     if (vec.size() < 3)
+    {
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
+        return ;
+    }
     std::vector<std::string> splittedChannels = Splitter(vec[1], ",");
     for(std::vector<std::string>::iterator iterate = splittedChannels.begin() ; iterate != splittedChannels.end(); ++iterate)
     {
         std::string eachChannel = *iterate;
+        Channel* check = getChannelByName(channels, eachChannel);
         if (eachChannel[0] != '#')
+        {
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
+            continue ;
+        }
         else if(channeDoesntlExists(channels, eachChannel))
+        {
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
+            continue ;
+        }
+        if (staticGetClientByNickplus((check->GetClientssHouse()), client->get_nickname()) && !staticGetClientByNickplus(check->GetClientssHouse(), client->get_nickname())->getIsOperatorStatus())
+        {
+            SendResponse(client, ERROR_NOPRIVILEGES(client->get_nickname(), client->get_hostname()));
+            continue;
+        }
         std::vector<std::string> splittedUsers = Splitter(vec[2], ",");
         for (std::vector<std::string>::iterator it = splittedUsers.begin(); it != splittedUsers.end(); ++it)
         {
@@ -49,6 +70,23 @@ void Server::KickConstruction(Client *client)
                 sendToChannel(&target, rpl, channel.getChannelName());
                 deleteTheChannelWhenNoUserInIt(&channel);
             }
+        }
+    }
+    for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
+    {
+        std::cout << " KICK -----------------------> Channel: " << (*it)->getChannelName() << std::endl;
+        std::vector<Client*> clientsHouse = (*it)->GetClientssHouse();
+        if (clientsHouse.empty())
+        {
+            std::cout << " KICK -----------------------> No clients in channel: " << (*it)->getChannelName() << std::endl;
+            continue ;
+        }
+
+        for (std::vector<Client*>::iterator clientIt = clientsHouse.begin(); clientIt != clientsHouse.end(); ++clientIt)
+        {
+            std::cout << " KICK -----------------------> Client fd: " << (*clientIt)->get_fd()
+                      << " KICK ----------------------->  nickname: " << (*clientIt)->get_nickname()
+                      << " KICK ----------------------->  operator status: " << (*clientIt)->getIsOperatorStatus() << std::endl;
         }
     }
 }

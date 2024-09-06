@@ -29,8 +29,6 @@ void SendResponse(Client *client, std::string msg)
         std::cout << " Failed Send JOIN message to the client " << std::endl;
 }
 
-
-
 std::string Server::buildNamReply(Channel *channel) 
 {
     std::string reply;
@@ -59,7 +57,7 @@ std::string Server::buildNamReply(Channel *channel)
 void Server::selfJoinReply(Client *client, Channel *channel)
 {
     SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channel->getChannelName(), client->get_hostname()));
-    std::cout << buildNamReply(channel) << std::endl;
+    // std::cout << "-------------------------("<< client->get_hostname() << " )" << std::endl;
     sendToClient(client->get_fd(), REPLY_CHANNELMODES(client->get_hostname(), channel->getChannelName(), client->get_nickname(), channel->get_channel_mode()));
     SendResponse(client, REPLY_NAMREPLY(client->get_hostname(), buildNamReply(channel), channel->getChannelName(), client->get_nickname()));
     SendResponse(client, REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), channel->getChannelName()));
@@ -67,6 +65,7 @@ void Server::selfJoinReply(Client *client, Channel *channel)
 
 void Server::joinZeroo(Client *client)
 {
+    bool flag = false;
     for(std::vector<Channel *>::iterator iterate = channels.begin(); iterate != channels.end(); ++iterate)
     {
         for(size_t i = 0; i < (*iterate)->GetClientssHouse().size(); i++)
@@ -74,14 +73,16 @@ void Server::joinZeroo(Client *client)
             if((*iterate)->GetClientssHouse()[i]->get_fd() == client->get_fd())
             {
                 (*iterate)->removeFromChannel((*iterate)->GetClientssHouse()[i]);
+                flag = true;
                 SendResponse(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), (*iterate)->getChannelName()));
-                broadcastWithoutTargetedChannel(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), (*iterate)->getChannelName()));
                 break ;
             }
         }
+        if (flag)
+            broadcastWithoutTargetedChannel(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), (*iterate)->getChannelName()));
         if ((*iterate)->GetClientssHouse().size() == 0)
         {
-            channels.erase(iterate);
+            deleteTheChannelWhenNoUserInIt(*iterate);
             iterate--;
         }
     }
@@ -107,7 +108,8 @@ void Server::JoinConstruction(Client *client)
 
     std::vector<std::string> channelNames = Splitter(cmd[1], ",");
     std::vector<std::string> splittedKeys;
-    std::vector<std::string>::iterator keyIt;
+    std::vector<std::string> initialize;
+    std::vector<std::string>::iterator keyIt = initialize.begin();
     std::string key_var;
     bool hasKey = false;
 
@@ -131,52 +133,50 @@ void Server::JoinConstruction(Client *client)
             key_var = *keyIt;
             if (!key_var.empty() && key_var[0] == ':')
                 key_var.erase(0,1);
-            std::cout << "erase: [" << key_var << "]" << std::endl;
             ++keyIt;
-        }
+        }    
         else
             key_var = "";
         if (channelName[0] != '#')
         {
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelName, client->get_nickname()));
-            break ;
+            continue ;
         }
         if (!channelName[1])
         {
             SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
-            break ;
+            continue ;
         }
         std::vector<Channel*>::iterator channelIt;
         for (channelIt = channels.begin(); channelIt != channels.end(); ++channelIt)
             if ((*channelIt)->getChannelName() == channelName)
-                break;
+                break;    
         if (channelIt == channels.end()) 
         {
             // Channel doesn't exist, create new channel and add client
-            if(!key_var.empty())
+            Channel* newChannel = new Channel(channelName, "");
+            if (!newChannel->addToChannel(client, ""))
                 continue ;
-            else
-            {
-                Channel* newChannel = new Channel(channelName, "");
-                if (!newChannel->addToChannel(client, ""))
-                    continue ;
-                channels.push_back(newChannel);
-                selfJoinReply(client, newChannel);
-                sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
-                std::cout << "Channel created: " << channelName << " with client: " << client->get_nickname() << std::endl;
-            }
+            channels.push_back(newChannel);
+            selfJoinReply(client, newChannel);
+            sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
         }
         else
         {
             // Channel exists, check key requirement
             Channel* existingChannel = *channelIt;
             std::map<std::string, bool>::iterator it = client->getInvitedChannels().find(existingChannel->getChannelName());
+            if (IsClientInChannel(existingChannel->GetClientssHouse(), client->get_fd()))
+            {
+                SendResponse(client, ERROR_USERONCHANNEL(client->get_hostname(), existingChannel->getChannelName(), client->get_nickname()));
+                continue ;
+            }
             if (existingChannel->get_l() && existingChannel->GetClientssHouse().size() >= existingChannel->getChannelLimitNum())
             {
                 SendResponse(client, ERROR_CHANNELISFULL(client->get_nickname(), existingChannel->getChannelName()));
                 continue;
             }
-            if (existingChannel->get_k() && existingChannel->getChannelKey().empty()) //ila kan l flag m setti wmkynch l key (should review aymane s code to not double check)
+            if (existingChannel->get_k() && existingChannel->getChannelKey().empty())
                 continue;
             if(existingChannel->get_i())
             {

@@ -1,31 +1,3 @@
-import os
-import sys
-# TMP='''PASS 1234\r\nNICK nick{0}\r\nUSER user{0} 0 * abc \r\n'''
-
-
-# for clinet in range(int(sys.argv[1])):
-#     cmd = TMP.format(clinet)
-#     filename = "files/infile{0}".format(clinet)
-#     with open(filename, "w") as fp:
-#         fp.write(cmd)
-#     os.system("nc 127.0.0.1 8888 < '" + filename + "'")
-
-
-# -------------------------------
-
-#-------------------------------
-# TMP='''PASS h\r\nNICK nick{0}\r\nUSER user{0} 0 * abc\r\nJOIN #channel{0}\r\nPART #channel{0}\r\n'''
-# # TMP='''PASS h\r\nNICK nick{0}\r\nUSER user{0} 0 * abc\r\nJOIN #channel{0}\r\nPART #channel{0}\r\n'''
-
-# for clinet in range(int(sys.argv[1])):
-#     cmd = TMP.format(clinet)
-#     filename = "files/infile{0}".format(clinet)
-#     with open(filename, "w") as fp:
-#         fp.write(cmd)
-#     os.system("nc -c 127.0.0.1 8080 < '" + filename + "'")
-
-#-------*************-----------
-
 import socket
 import sys
 import threading
@@ -36,13 +8,12 @@ server_port = 8080
 
 # Initial lines to send
 initial_lines = [
-    'pass h\r\n',
-    # 'nick ouss\r\n',
-    'nick aygaoua\r\n',
+    'pass x\r\n',
+    'nick oussama\r\n',
     'user r r r r\r\n',
-    'join #cc\r\n',
-    # 'join #cc key,popo\r\n',
-    # 'mode #cc +k key\r\n'
+    'join #c,#p\r\n',
+    # 'mode #c +k key\r\n'
+    # 'mode #r +k key\r\n'
 ]
 
 def receive_from_server(sock):
@@ -64,7 +35,7 @@ def send_to_server(sock):
         try:
             line = input()
             if line:
-                line += '\r\n'  # Ensure the line ends with \r\n
+                line += '\r\n'
                 sock.sendall(line.encode('utf-8'))
         except KeyboardInterrupt:
             print("\nDisconnected.")
@@ -92,9 +63,9 @@ def main():
             receive_thread.start()
             send_thread.start()
             
-            send_thread.join()  # Wait for the send_thread to finish
-            sock.close()        # Close the socket when done
-            receive_thread.join()  # Ensure receive_thread finishes before exiting
+            send_thread.join()
+            sock.close()
+            receive_thread.join()
 
     except Exception as e:
         print(f'An error occurred: {e}')

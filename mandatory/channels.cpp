@@ -13,14 +13,6 @@ Channel::Channel()
     init_modes();
 }
 
-void print(std::vector<int> v)
-{
-    std::cout << "-----------------\n";
-    for (size_t i = 0; i < v.size(); i++)
-        std::cout << v[i] << std::endl;
-    std::cout << "-----------------\n";
-}
-
 void Channel::setTheChannelTimeCreated()
 {
     time_t present_time;
@@ -54,10 +46,11 @@ Client* Channel::getTheOperator()
 
 bool Channel::addToChannel(Client *client, std::string key)
 {
-    std::cout << "Attempting to add client: " << client->get_nickname() << std::endl;
+    // std::cout << "Attempting to add client: " << client->get_nickname() << std::endl;
 
     if (IsClientInChannel(ClientssHouse, client->get_fd()))
     {
+        // std::cout << "mtafe9 m3aya simo \n";
         SendResponse(client, ERROR_USERONCHANNEL(client->get_hostname(), getChannelName(), client->get_nickname()));
         return false;
     }
@@ -69,14 +62,10 @@ bool Channel::addToChannel(Client *client, std::string key)
             return false;
         }
     }
-    // Determine if the client should be an operator before adding
     bool shouldSetOperator = ClientssHouse.empty();
-    std::cout << "Channel is empty before adding client: " << shouldSetOperator << std::endl;
-    // Set operator status
     client->setOperatorStatus(shouldSetOperator);
     Client *newClient = new Client(*client);
     ClientssHouse.push_back(newClient);
-    std::cout << "Client " << newClient->get_nickname() << " added to the channel with operator status: " << newClient->getIsOperatorStatus() << std::endl;
     return true;
 }
 
@@ -92,6 +81,7 @@ void Channel::removeFromChannel(Client *client)
             //it s okay if the operator kicked himself (no one will be the operator in that chanel)
             if(ClientssHouse[i]->get_fd() == client->get_fd())
             {
+                delete (ClientssHouse[i]);
                 ClientssHouse.erase(ClientssHouse.begin() + i);
                 break ;
             }
@@ -101,7 +91,6 @@ void Channel::removeFromChannel(Client *client)
         // std::cout << "No Operator in the channel! " << std::endl;
         return;
     }
-
 }
 
 void Channel::setChannelName(std::string name)
@@ -131,7 +120,6 @@ size_t Channel::getChannelLimitNum()
 
 Channel::~Channel()
 {
-    
 }
 
 Channel::Channel(const Channel& copy) 

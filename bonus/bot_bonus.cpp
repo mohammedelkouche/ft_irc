@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bot_bonus.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:04:27 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/01 21:59:43 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/05 01:04:31 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,8 @@ void Bot::PlayNwetat(const std::string &sender)
         "tahya khassa l khouya aymen rak 7ader nadr w dareb ndader w katchtef lia 3el lkyader tchanchit w chi maychit",
         "galk aymane douzi 3ando l insta bach takli l passta , w galk oussama douzi 3ando l facebook atl9ayh dayr f profil rwayda bla slouk ",
         "galk sel3a slou3 w mohammed mol l bot ga3ma mekhlou3 , tahyati l khouya mohammed lkouk wl kheyzzo me7kouk",
-        "galk l3alam kooollo wla khdam libror, li mikiddich l bizza kila77ag lhedra"
+        "galk l3alam kooollo wla khdam libror, li mikiddich l bizza kila77ag lhedra",
+        "[1]    44471 segmentation fault  ./ircserv 8080 x ---> CHOUF F SMA 3AWTANI CHOUF F SMA HHHHHHH"
     };
 
     std::vector<std::string> sentences(nwetat_arr, nwetat_arr + sizeof(nwetat_arr) / sizeof(nwetat_arr[0]));
