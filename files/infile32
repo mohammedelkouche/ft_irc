@@ -1,5 +1,0 @@
-PASS h
-NICK nick32
-USER user32 0 * abc
-JOIN #channel32
-PART #channel32
