@@ -195,23 +195,31 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 					else if (full_mode_add[i] == 'k' && \
 								sign == 1)
 					{
-						if ((*it)->get_k() == false && command.size() >= (arg_for_mode + 1))
+						if (command.size() >= (arg_for_mode + 1) && command[arg_for_mode] == ":")
+							arg_for_mode++;
+						if (command.size() < (arg_for_mode + 1))
 						{
-							if (command[arg_for_mode] == ":" && \
-								(command[arg_for_mode + 1][0] == ':' || \
-								command[arg_for_mode + 1].empty() || \
-								(command[arg_for_mode + 1].find(' ', 0) != std::string::npos)))
+							sendToClient(user->get_fd(), \
+												ERROR_INVALIDMODEPARAM_KEY((*it)->getChannelName(), \
+																			user->get_hostname(), \
+																			"k", \
+																			"`need param !!`"));
+							continue ;
+						}
+						else if ((*it)->get_k() == false && command.size() >= (arg_for_mode + 1))
+						{
+							if (((command[arg_for_mode][0] == ':' || \
+									command[arg_for_mode].empty() || \
+									(command[arg_for_mode].find(' ', 0) != std::string::npos))))
 							{
 								sendToClient(user->get_fd(), \
 												ERROR_INVALIDMODEPARAM_KEY((*it)->getChannelName(), \
 																			user->get_hostname(), \
 																			"k", \
-																			command[++arg_for_mode]));
+																			command[arg_for_mode]));
 							}
 							else
 							{
-								if (command.size() >= (arg_for_mode + 1) && command[arg_for_mode] == ":")
-									arg_for_mode++;
 								ryl_args_p += command[arg_for_mode] +  " ";
 								(*it)->add_k(command[arg_for_mode]);
 								ryl_mode_enable += "k";
@@ -234,7 +242,6 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							}
 							if ((i_i) >= clients.size())
 							{
-								std::cout << "user to be op --> `" << command[arg_for_mode] + "`" << std::endl;
 								sendToClient(user->get_fd(), \
 												ERR_NOSUCHNICK(user->get_hostname(), \
 																command[arg_for_mode]));
@@ -284,7 +291,14 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 					}
 					else if (full_mode_add[i] == 'l' && \
 								sign == 1)
-					{	
+					{
+						if (command.size() < (arg_for_mode + 1))
+						{
+							sendToClient(user->get_fd(), \
+											ERROR_INVALIDMODEPARAM_LIMIT((*it)->getChannelName(), \
+																			user->get_hostname(), \
+																			"l"));
+						}
 						if (command.size() >= (arg_for_mode + 1) && \
 							command[arg_for_mode] == ":")
 								arg_for_mode++;
@@ -312,6 +326,14 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 					else if (full_mode_add[i] == 'k' && \
 								sign == -1)
 					{
+						if (command.size() < (arg_for_mode + 1))
+						{
+							sendToClient(user->get_fd(), \
+											ERROR_INVALIDMODEPARAM_KEY((*it)->getChannelName(), \
+																		user->get_hostname(), \
+																		"k", \
+																		"`need param !!`"));
+						}
 						if (command.size() >= (arg_for_mode + 1) && command[arg_for_mode] == ":")
 							arg_for_mode++;
 						if ((*it)->get_k() == true)
@@ -394,8 +416,10 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 								sign == -1)
 					{	
 						if ((*it)->get_l() == true)
+						{
 							(*it)->rm_l();
-						ryl_mode_desable += "l";
+							ryl_mode_desable += "l";
+						}
 					}
 					else if (full_mode_add[i] != 'l' && \
 								full_mode_add[i] != 'i' && \

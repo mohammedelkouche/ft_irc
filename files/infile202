@@ -1,0 +1,5 @@
+PASS h
+NICK nick202
+USER user202 0 * abc
+JOIN #channel202
+PART #channel202

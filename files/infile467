@@ -1,0 +1,5 @@
+PASS h
+NICK nick467
+USER user467 0 * abc
+JOIN #channel467
+PART #channel467

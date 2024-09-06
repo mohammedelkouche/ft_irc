@@ -1,0 +1,5 @@
+PASS h
+NICK nick453
+USER user453 0 * abc
+JOIN #channel453
+PART #channel453

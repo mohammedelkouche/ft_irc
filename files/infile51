@@ -1,0 +1,5 @@
+PASS h
+NICK nick51
+USER user51 0 * abc
+JOIN #channel51
+PART #channel51

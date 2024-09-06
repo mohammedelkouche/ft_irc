@@ -1,0 +1,5 @@
+PASS h
+NICK nick118
+USER user118 0 * abc
+JOIN #channel118
+PART #channel118

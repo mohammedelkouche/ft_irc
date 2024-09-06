@@ -1,0 +1,5 @@
+PASS h
+NICK nick428
+USER user428 0 * abc
+JOIN #channel428
+PART #channel428

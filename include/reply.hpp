@@ -49,8 +49,9 @@
 #define REPLY_NAMREPLY(hostname, clients, channelname, nick) ":" + hostname + " 353 " + nick + " = " + channelname + " :" + clients + "\r\n"
 #define REPLY_ENDOFNAMES(hostname, nick, channelname) ":" + hostname + " 366 " + nick + " " + channelname + " :END of /NAMES list\r\n"
 
+#define ERROR_INVALIDMODEPARAM_LIMIT(channel, hostname, flag) ":" + hostname + " 696 " + channel + " " + flag + " * You must specify a parameter for the limit mode. Syntax: <limit>.\r\n"
 #define ERROR_INVALIDMODEPARAM(channel, hostname, flag) ":" + hostname + " 696 " + channel + " " + flag + " * you must specifiy a parameter for the op mode. Syntax: <nick>.\r\n"
-#define ERROR_INVALIDMODEPARAM_KEY(channel, hostname, flag, param) ":" + hostname + " 696 " + channel + " " + flag + " * :Invalid mode " + flag + " parameter: " + param + "\r\n"
+#define ERROR_INVALIDMODEPARAM_KEY(channel, hostname, flag, param) ":" + hostname + " 696 " + channel + " " + flag + " * :Invalid mode " + flag + " parameter: `" + param + "`\r\n"
 #define ERROR_USERNOTINCHANNEL(hostname, channel) ":" + hostname + " 441 " + channel + " " + ":they aren't on that channel\r\n"
 #define ERROR_NOPRIVILEGES(hostname, channel) ":" + hostname + " 482 " + channel + " " + ":You're not a channel operator\r\n"
 
