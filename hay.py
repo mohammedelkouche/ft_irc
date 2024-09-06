@@ -42,7 +42,7 @@ initial_lines = [
     'user r r r r\r\n',
     'join #cc\r\n',
     # 'join #cc key,popo\r\n',
-    'mode #cc +k key\r\n'
+    # 'mode #cc +k key\r\n'
 ]
 
 def receive_from_server(sock):
