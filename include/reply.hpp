@@ -19,11 +19,9 @@
 #include <iostream>
 #include "global.hpp"
 
-
 #define REPLY_WELCOME(nick, hostname) ":" + hostname + " 001 " + nick + " :Welcome " + nick + " to the ft_irc network !\r\n"
 #define REPLY_YOURHOST(nick, hostname) ":" + hostname + " 002 " + nick + " :Your host is " + hostname + " running version 1.0 !\r\n"
 #define REPLY_CREATED(nick, hostname, formatted_time) ":" + hostname + " 003 " + nick + " :This server was created " + formatted_time + " !\r\n"
-#define REPLY_MYINFO(nick, hostname) ":" + hostname + " 004 " + nick + " :Host: " + hostname + ", Version: 1.0, User mode: none, Channel modes: o, t, k, i !\r\n"
 
 #define ERROR_PASSWDMISMATCH(nick, hostname) ":" + hostname + " 464 " + nick + " :Password incorrect !\r\n"
 #define ERROR_ALREADYREGISTERED(nick, hostname) ":" + hostname + " 462 " + nick + " :You are already registered !\r\n"
@@ -39,23 +37,18 @@
 
 #define RPL_AWAY(sender , username, hostname, message , nick_resever) ":" + std::string(sender) + "!~" + std::string(username) + "@" + std::string(hostname) + " PRIVMSG " + nick_resever + " :" + message + "\r\n"
 
-#define ERROR_BADCHANNELNAME(nick, hostname, channelname) ":" + hostname + " 476 " + nick + " " + channelname + " :Invalid channel name." + "\r\n"
 #define ERROR_CHANNELISFULL(nick, channelName) (std::string(":") + nick + " 471 " + channelName + " :Cannot join channel (+l)\r\n")
 #define ERROR_BADCHANNELKEY(nick, hostname, channelName) (std::string(":") + hostname + " 475 " + nick + " " + channelName + " :Cannot join channel (+K) - bad key\r\n")
 #define ERROR_INVITEONLY(nick, channelName) ":" + nick + " 473 " + channelName + " :Cannot join channel (+i)\r\n"
 
 #define REPLY_JOIN(nick, username, channelname, ipaddress) ":" + nick + "!~" + username + "@" + ipaddress + " JOIN " + channelname + "\r\n"
 #define REPLY_TOPICDISPLAY(hostname, nick, channel, topic) ":" + hostname + " 332 " + nick + " " + channel + " :" + topic + "\r\n"
-#define REPLY_TOPIC(hostname, nick, channel, setter, topic) ":" + hostname + " 332 " + nick + " " + channel + " :" + setter + " has set a new topic: " + topic + "\r\n"
 
 
 #define REPLY_TOPICWHOTIME(topicsetter, topic_time, nick, hostname, channelName) ":" + hostname + " 333 " + nick + " " + channelName + " " + topicsetter + "!~" + topicsetter + "@" + hostname + " " + topic_time + "\r\n"
 #define REPLY_NAMREPLY(hostname, clients, channelname, nick) ":" + hostname + " 353 " + nick + " = " + channelname + " :" + clients + "\r\n"
 #define REPLY_ENDOFNAMES(hostname, nick, channelname) ":" + hostname + " 366 " + nick + " " + channelname + " :END of /NAMES list\r\n"
 
-#define REPLY_MODEIS(channel, hostname, mode) ":" + hostname + " MODE " + channel + " " + mode + "\r\n"
-#define REPLY_MODEISLIMIT(channel, hostname, mode, newlimit) ":" + hostname + " MODE " + channel + " " + mode + " " + newlimit + "\r\n"
-#define REPLY_MODEISOP(channel, hostname, mode, target) ":" + hostname + " MODE " + channel + " " + mode + " " + target + "\r\n"
 #define ERROR_INVALIDMODEPARAM(channel, hostname, flag) ":" + hostname + " 696 " + channel + " " + flag + " * you must specifiy a parameter for the op mode. Syntax: <nick>.\r\n"
 #define ERROR_INVALIDMODEPARAM_KEY(channel, hostname, flag, param) ":" + hostname + " 696 " + channel + " " + flag + " * :Invalid mode " + flag + " parameter: " + param + "\r\n"
 #define ERROR_USERNOTINCHANNEL(hostname, channel) ":" + hostname + " 441 " + channel + " " + ":they aren't on that channel\r\n"
@@ -72,21 +65,9 @@
 #define ERROR_NOSUCHNICK(hostname, channel, argument) ":" + hostname + " 401 " + channel + " " + argument + " :No such nickname\r\n"
 #define ERROR_USERONCHANNEL(hostname, channel, nick) ":" + hostname + " 443 " + nick + " " + channel + "  :is already on channel\r\n"
 
-#define ERROR_INPUTTOOLONG(nick, hostname) ":" + hostname + " 417 " + nick + " :Input line was too long !\r\n"
-
-#define REPLY_VIEWTOPIC(hostname, nick, channel, topic) ":" + hostname + " 332 " + nick + " " + channel + " :" + topic + "\r\n"
-#define REPLY_VIEWTIME(hostname, nick, channel, time) ":" + hostname + " 333 " + nick + " " + channel + " " + nick + " " + time + "\r\n"
 #define REPLY_SETTOPIC(nick, uname, hostname, channel, topic) ":" + nick + "!~" + uname + "@" + hostname + " TOPIC " + channel + " :" + topic + "\r\n"
 
-/*
-":" + hostname + " 332 " + nick + " " + channel + " :" + setter + " has set a new topic: " + topic + "\r\n"
-*/
-
-#define REPLY_BOT(hostname, nick, message) ":" + hostname + " 001 " + nick + " Dad joke: " + message + "\r\n"
-#define ERROR_BOT(hostname, nick) ":" + hostname + " 450 " + nick + "enter [BOT generate] to generate a joke" + "\r\n"
-#define REPLY_UMODEIS(hostname, channelname) ":" + hostname + " MODE " + channelname + " +nt\r\n"
-
-#define ERROR_UNKNOWNMODE(nick, hostname, channel, character) ":" + hostname + " 472 " + nick + " " + channel + " " + character + " :is unknown mode char to me\r\n"
+#define ERR_UNKNOWNMODE(nick, hostname, channel, character) ":" + hostname + " 472 " + nick + " " + channel + " " + character + " :is unknown mode char to me\r\n"
 #define REPLY_YOUREOPER(hostname, nick) ":" + hostname + " 381 " + nick + ":You are now an IRC operator\r\n"
 #define REPLY_KICK(kicker, username, host, channel, targetuser, reason) ":" + kicker + "!" + username + "@" + host + " KICK " + channel + " " + targetuser + " :" + reason + "\r\n"
 #define PRIVMSG_FORMAT(senderNick, senderUsername, senderHostname, receiver, message) ":" + senderNick + "!~" + senderUsername + "@" + senderHostname + " PRIVMSG " + receiver + " :" + message + "\r\n"
@@ -100,23 +81,14 @@
 #define RPL_NOTOPIC(hostname, channel) ":" + hostname + " 331 " + channel + " :No topic is set\r\n"
 #define RPL_TOPIC(hostname, channel, topic) ":" + hostname + " 332 " + channel + " :" + topic + "\r\n"
 #define ERR_NOTONCHANNEL(hostname, channel, nick) ":" + hostname + " 442 " + nick + " " + channel + " :You're not on that channel\r\n"
-// #define RPL_AWAY(nick_resever, hostname, message) ":" + hostname +  " " + nick_resever + " :" + message + "\r\n"
 #define ERR_NOTEXTTOSEND(hostname) ":" + hostname + " 412 " + ":No text to send\r\n"
 #define ERR_NOSUCHNICK(hostname, nick) ":" + hostname + " 401 " + nick + " :No such nick\r\n"
-#define ERR_UNKNOWNMODE(hostname, nick, modechar) ":" + hostname + " 472 " + nick + " " + modechar + " :is unknown mode char to me\r\n"
 
-// add by mohammed
 #define ERROR_NEEDTOREGISTER(nick, hostname, command) ":" + hostname + " 422 " + nick + " " + command + " :You need to register before you can use that command\r\n"
 #define ERROR_REALNAME(nick, hostname) ":" + hostname + " 423 " + nick + " :Error in realename !\r\n"
 #define ERROR_ALREADYSETPASS(nick, hostname) ":" + hostname + " 424 " + nick + " :You are already set the password !\r\n"
 #define ERROR_TOOMUSHPARAMS(nick, hostname) (std::string (":") + hostname + std::string(" 461 ") + nick + " :too much parameters !\r\n")
 
-// void	ERR_NEEDMOREPARAMS(std::string nick_name, std::string commande)
-// {
-// 	std::cout << "461 " <<  nick_name << " " << commande <<  " : Not enough parameters" << std::endl;
-// }
-
 #define ERR_KEYSET(hostname, channelname) ":" + hostname  + " 467 "+ channelname + " :Channel key already set\r\n"
-
 
 #endif
