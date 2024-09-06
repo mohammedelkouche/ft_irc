@@ -426,7 +426,8 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 								full_mode_add[i] != 'i' && \
 								full_mode_add[i] != 't' && \
 								full_mode_add[i] != 'o' && \
-								full_mode_add[i] != 'k')
+								full_mode_add[i] != 'k' && \
+								full_mode_add[i] != '\0')
 					{
 						sendToClient(user->get_fd(), \
 										ERR_UNKNOWNMODE(user->get_nickname(), \
