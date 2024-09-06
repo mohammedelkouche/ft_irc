@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:30:20 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/03 22:37:24 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/06 23:01:40 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,15 @@ bool	Server::unique_nickname(std::string nickname)
 
 bool	Server::check_valid_nick_name(std::string nick_name)
 {
-	if (isdigit(nick_name[0]))
+	if (isdigit(nick_name[0]) || nick_name[0] == '$' ||  nick_name[0] == ':')
 		return false;
-	if (nick_name.find_first_of("#: 	") != std::string::npos)
+	if (nick_name.find_first_of("#:,*?!@. 	") != std::string::npos)
 		return false;
 	if (nick_name.find("#&") != std::string::npos)
 		return false;
 	if (nick_name.find("&#") != std::string::npos)
+		return false;
+	if (nick_name.size() > 9)
 		return false;
 	return true;
 }
