@@ -34,9 +34,15 @@ void Server::KickConstruction(Client *client)
         std::string eachChannel = *iterate;
         Channel* check = getChannelByName(channels, eachChannel);
         if (eachChannel[0] != '#')
+        {
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
+            continue ;
+        }
         else if(channeDoesntlExists(channels, eachChannel))
+        {
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
+            continue ;
+        }
         if (staticGetClientByNickplus((check->GetClientssHouse()), client->get_nickname()) && !staticGetClientByNickplus(check->GetClientssHouse(), client->get_nickname())->getIsOperatorStatus())
         {
             SendResponse(client, ERROR_NOPRIVILEGES(client->get_nickname(), client->get_hostname()));
