@@ -29,8 +29,6 @@ void SendResponse(Client *client, std::string msg)
         std::cout << " Failed Send JOIN message to the client " << std::endl;
 }
 
-
-
 std::string Server::buildNamReply(Channel *channel) 
 {
     std::string reply;
@@ -81,7 +79,7 @@ void Server::joinZeroo(Client *client)
         }
         if ((*iterate)->GetClientssHouse().size() == 0)
         {
-            channels.erase(iterate);
+            deleteTheChannelWhenNoUserInIt(*iterate);
             iterate--;
         }
     }
@@ -127,7 +125,6 @@ void Server::JoinConstruction(Client *client)
     for (std::vector<std::string>::iterator it = channelNames.begin(); it != channelNames.end(); ++it)
     {
         std::string channelName = *it;
-        // std::cout << "*keyIt--------------{ " << *keyIt << " }-------------"<< std::endl;
         if (hasKey && keyIt != splittedKeys.end())
         {
             key_var = *keyIt;
@@ -169,7 +166,7 @@ void Server::JoinConstruction(Client *client)
             if (IsClientInChannel(existingChannel->GetClientssHouse(), client->get_fd()))
             {
                 SendResponse(client, ERROR_USERONCHANNEL(client->get_hostname(), existingChannel->getChannelName(), client->get_nickname()));
-                return ;
+                continue ;
             }
             if (existingChannel->get_l() && existingChannel->GetClientssHouse().size() >= existingChannel->getChannelLimitNum())
             {

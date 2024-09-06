@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:30 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/03 22:18:09 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/06 01:45:25 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@ void check_arg(char **argv) {
 	int port;
 	std::stringstream portstream(portstr);
 	portstream >> port;
-	// if (portstream.fail()) {
-	//     throw std::invalid_argument("Error: Failed to convert port to integer");
-	// }
 	if (port < 1024 || port > 65535) {
 		throw std::out_of_range("Error: Invalid port number");
 	}
@@ -60,8 +57,8 @@ int main(int argc, char **argv) {
 			std::cout << "write: executable file  <port> <password>" << std::endl;
 			return 1;
 		}
-		printIntro();
 		check_arg(argv);
+		printIntro();
 		irc.initializeServer(std::atoi(argv[1]), argv[2]);
 	}
 	catch (const std::invalid_argument& e) 
