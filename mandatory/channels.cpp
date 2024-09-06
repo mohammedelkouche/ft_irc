@@ -120,15 +120,6 @@ size_t Channel::getChannelLimitNum()
 
 Channel::~Channel()
 {
-    std::cout << "CHANNEL DESTRUCTOR\n";
-    // for(size_t i = 0; i < GetClientssHouse().size(); i++)
-    // {
-    //     if (GetClientssHouse()[i] != NULL)
-    //     {
-    //         std::cout << "to delet --->" << GetClientssHouse()[i] << std::endl;
-    //         delete GetClientssHouse()[i];
-    //     }
-    // }
 }
 
 Channel::Channel(const Channel& copy) 

@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/06 04:02:18 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/06 21:51:43 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,5 +159,5 @@ std::map<std::string, bool>& Client::getInvitedChannels()
 
 Client::~Client()
 {
-	std::cout << "CLIENT DESTRUCTOR\n";
+	
 }

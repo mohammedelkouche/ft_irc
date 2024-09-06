@@ -65,6 +65,7 @@ void Server::selfJoinReply(Client *client, Channel *channel)
 
 void Server::joinZeroo(Client *client)
 {
+    bool flag = false;
     for(std::vector<Channel *>::iterator iterate = channels.begin(); iterate != channels.end(); ++iterate)
     {
         for(size_t i = 0; i < (*iterate)->GetClientssHouse().size(); i++)
@@ -72,11 +73,13 @@ void Server::joinZeroo(Client *client)
             if((*iterate)->GetClientssHouse()[i]->get_fd() == client->get_fd())
             {
                 (*iterate)->removeFromChannel((*iterate)->GetClientssHouse()[i]);
+                flag = true;
                 SendResponse(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), (*iterate)->getChannelName()));
-                broadcastWithoutTargetedChannel(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), (*iterate)->getChannelName()));
                 break ;
             }
         }
+        if (flag)
+            broadcastWithoutTargetedChannel(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), (*iterate)->getChannelName()));
         if ((*iterate)->GetClientssHouse().size() == 0)
         {
             deleteTheChannelWhenNoUserInIt(*iterate);

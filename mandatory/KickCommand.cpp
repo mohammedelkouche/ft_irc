@@ -24,21 +24,24 @@ void Server::KickConstruction(Client *client)
     std::vector<std::string> vec = client->get_commande();
     std::cout << "NICKNAME ------------> " << client->get_nickname() << "  HIS STATUS ----------> "  << client->getIsOperatorStatus() << std::endl;
     if (vec.size() < 3)
+    {
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
+        return ;
+    }
     std::vector<std::string> splittedChannels = Splitter(vec[1], ",");
     for(std::vector<std::string>::iterator iterate = splittedChannels.begin() ; iterate != splittedChannels.end(); ++iterate)
     {
         std::string eachChannel = *iterate;
         Channel* check = getChannelByName(channels, eachChannel);
-        if (staticGetClientByNickplus((check->GetClientssHouse()), client->get_nickname()) && !staticGetClientByNickplus(check->GetClientssHouse(), client->get_nickname())->getIsOperatorStatus())
-        {
-            SendResponse(client, ERROR_NOPRIVILEGES(client->get_nickname(), client->get_hostname()));
-            return;
-        }
         if (eachChannel[0] != '#')
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
         else if(channeDoesntlExists(channels, eachChannel))
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
+        if (staticGetClientByNickplus((check->GetClientssHouse()), client->get_nickname()) && !staticGetClientByNickplus(check->GetClientssHouse(), client->get_nickname())->getIsOperatorStatus())
+        {
+            SendResponse(client, ERROR_NOPRIVILEGES(client->get_nickname(), client->get_hostname()));
+            continue;
+        }
         std::vector<std::string> splittedUsers = Splitter(vec[2], ",");
         for (std::vector<std::string>::iterator it = splittedUsers.begin(); it != splittedUsers.end(); ++it)
         {
