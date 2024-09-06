@@ -37,10 +37,12 @@ server_port = 8080
 # Initial lines to send
 initial_lines = [
     'pass h\r\n',
+    # 'nick ouss\r\n',
     'nick aygaoua\r\n',
     'user r r r r\r\n',
     'join #cc\r\n',
-    'mode #cc -o\r\n'
+    # 'join #cc key,popo\r\n',
+    'mode #cc +k key,popo\r\n'
 ]
 
 def receive_from_server(sock):

@@ -210,7 +210,8 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 						{
 							if (((command[arg_for_mode][0] == ':' || \
 									command[arg_for_mode].empty() || \
-									(command[arg_for_mode].find(' ', 0) != std::string::npos))))
+									(command[arg_for_mode].find(' ', 0) != std::string::npos) || \
+									command[arg_for_mode].find(',', 0) != std::string::npos)))
 							{
 								sendToClient(user->get_fd(), \
 												ERROR_INVALIDMODEPARAM_KEY((*it)->getChannelName(), \
