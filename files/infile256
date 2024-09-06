@@ -1,0 +1,5 @@
+PASS x
+NICK nick256
+USER user256 0 * abc
+JOIN #channel256
+PART #channel256

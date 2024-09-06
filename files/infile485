@@ -1,0 +1,5 @@
+PASS x
+NICK nick485
+USER user485 0 * abc
+JOIN #channel485
+PART #channel485
