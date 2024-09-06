@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:30 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/06 00:27:24 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/06 01:45:25 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@ void check_arg(char **argv) {
 	int port;
 	std::stringstream portstream(portstr);
 	portstream >> port;
-	// if (portstream.fail()) {
-	//     throw std::invalid_argument("Error: Failed to convert port to integer");
-	// }
 	if (port < 1024 || port > 65535) {
 		throw std::out_of_range("Error: Invalid port number");
 	}
