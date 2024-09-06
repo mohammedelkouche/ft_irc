@@ -7,7 +7,10 @@
 (FIXED)-> should add JOIN "0" should Leave all currently joined channels
 (FIXED)-> diplay the mode of the channel when join it.
 (FIXED)-> (invite) :testnet.ergo.chat 443 oussama oussama #c :User is already on that channel
--> (join) #, 
+(FIXED)-> (join) #, 
+ -> CHECKING LEAAAAAAAAKS :)
+ "while true; do leaks ircserv ; sleep 1; done"
+
 
  _   _        __        __   _                            __  __       _    _ _      _     _   
 | \ | | ___   \ \      / /__| | ___ ___  _ __ ___   ___  |  \/  | __ _| |_ (_|_) ___| |__ (_)
