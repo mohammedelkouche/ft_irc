@@ -66,7 +66,6 @@ bool Channel::addToChannel(Client *client, std::string key)
     client->setOperatorStatus(shouldSetOperator);
     Client *newClient = new Client(*client);
     ClientssHouse.push_back(newClient);
-    // std::cout << "Client " << newClient->get_nickname() << " added to the channel with operator status: " << newClient->getIsOperatorStatus() << std::endl;
     return true;
 }
 
@@ -82,6 +81,7 @@ void Channel::removeFromChannel(Client *client)
             //it s okay if the operator kicked himself (no one will be the operator in that chanel)
             if(ClientssHouse[i]->get_fd() == client->get_fd())
             {
+                delete (ClientssHouse[i]);
                 ClientssHouse.erase(ClientssHouse.begin() + i);
                 break ;
             }
@@ -91,7 +91,6 @@ void Channel::removeFromChannel(Client *client)
         // std::cout << "No Operator in the channel! " << std::endl;
         return;
     }
-
 }
 
 void Channel::setChannelName(std::string name)
@@ -121,7 +120,15 @@ size_t Channel::getChannelLimitNum()
 
 Channel::~Channel()
 {
-    
+    std::cout << "CHANNEL DESTRUCTOR\n";
+    // for(size_t i = 0; i < GetClientssHouse().size(); i++)
+    // {
+    //     if (GetClientssHouse()[i] != NULL)
+    //     {
+    //         std::cout << "to delet --->" << GetClientssHouse()[i] << std::endl;
+    //         delete GetClientssHouse()[i];
+    //     }
+    // }
 }
 
 Channel::Channel(const Channel& copy) 

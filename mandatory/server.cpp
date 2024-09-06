@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/06 00:15:35 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/06 04:02:30 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -364,6 +364,9 @@ void	Server::initializeServer(int port_nbr,std::string str)
 
 Server::~Server()
 {
+	std::cout << "server DESTRUCTOR\n";
+	for(size_t i = 0; i < channels.size(); i++)
+		delete (channels[i]);
 }
 
 
