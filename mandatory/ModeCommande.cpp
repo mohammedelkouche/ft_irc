@@ -404,8 +404,9 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 								full_mode_add[i] != 'k')
 					{
 						sendToClient(user->get_fd(), \
-										ERR_UNKNOWNMODE(user->get_hostname(), \
-														user->get_nickname(), \
+										ERR_UNKNOWNMODE(user->get_nickname(), \
+														user->get_hostname(), \
+														(*it)->getChannelName(), \
 														full_mode_add[i]));
 					}
 				}
