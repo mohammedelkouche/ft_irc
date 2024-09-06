@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:30 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/03 22:18:09 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/06 00:27:24 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ int main(int argc, char **argv) {
 			std::cout << "write: executable file  <port> <password>" << std::endl;
 			return 1;
 		}
-		printIntro();
 		check_arg(argv);
+		printIntro();
 		irc.initializeServer(std::atoi(argv[1]), argv[2]);
 	}
 	catch (const std::invalid_argument& e) 
