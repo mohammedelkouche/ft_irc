@@ -58,35 +58,38 @@ void Server::KickConstruction(Client *client)
             {
                 Client& target = getClientByNick(clients, eachUser);
                 Channel* channelPtr = getChannelByName(channels, eachChannel);
+                std::string reason;
                 if (!channelPtr)
                     return ;
                 if (vec.size() == 3)
-                    vec.push_back("no comment is given");
+                    reason = "no comment is given";
+                else if(vec.size() >= 4 && vec[3] == ":")
+                    reason = vec[4];
                 Channel& channel = *channelPtr;
                 channel.removeFromChannel(&target);
                 std::string rpl = REPLY_KICK(client->get_nickname(), client->get_username(), \
-                target.get_hostname(), channel.getChannelName(), target.get_nickname(), vec[3]);
+                target.get_hostname(), channel.getChannelName(), target.get_nickname(), reason);
                 SendResponse(&target, rpl);
                 sendToChannel(&target, rpl, channel.getChannelName());
                 deleteTheChannelWhenNoUserInIt(&channel);
             }
         }
     }
-    for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
-    {
-        std::cout << " KICK -----------------------> Channel: " << (*it)->getChannelName() << std::endl;
-        std::vector<Client*> clientsHouse = (*it)->GetClientssHouse();
-        if (clientsHouse.empty())
-        {
-            std::cout << " KICK -----------------------> No clients in channel: " << (*it)->getChannelName() << std::endl;
-            continue ;
-        }
+    // for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
+    // {
+    //     std::cout << " KICK -----------------------> Channel: " << (*it)->getChannelName() << std::endl;
+    //     std::vector<Client*> clientsHouse = (*it)->GetClientssHouse();
+    //     if (clientsHouse.empty())
+    //     {
+    //         std::cout << " KICK -----------------------> No clients in channel: " << (*it)->getChannelName() << std::endl;
+    //         continue ;
+    //     }
 
-        for (std::vector<Client*>::iterator clientIt = clientsHouse.begin(); clientIt != clientsHouse.end(); ++clientIt)
-        {
-            std::cout << " KICK -----------------------> Client fd: " << (*clientIt)->get_fd()
-                      << " KICK ----------------------->  nickname: " << (*clientIt)->get_nickname()
-                      << " KICK ----------------------->  operator status: " << (*clientIt)->getIsOperatorStatus() << std::endl;
-        }
-    }
+    //     for (std::vector<Client*>::iterator clientIt = clientsHouse.begin(); clientIt != clientsHouse.end(); ++clientIt)
+    //     {
+    //         std::cout << " KICK -----------------------> Client fd: " << (*clientIt)->get_fd()
+    //                   << " KICK ----------------------->  nickname: " << (*clientIt)->get_nickname()
+    //                   << " KICK ----------------------->  operator status: " << (*clientIt)->getIsOperatorStatus() << std::endl;
+    //     }
+    // }
 }
