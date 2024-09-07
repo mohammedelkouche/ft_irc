@@ -22,7 +22,6 @@ static Client* staticGetClientByNickplus(std::vector<Client *> clients, std::str
 void Server::KickConstruction(Client *client)
 {
     std::vector<std::string> vec = client->get_commande();
-    std::cout << "NICKNAME ------------> " << client->get_nickname() << "  HIS STATUS ----------> "  << client->getIsOperatorStatus() << std::endl;
     if (vec.size() < 3)
     {
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
@@ -75,21 +74,5 @@ void Server::KickConstruction(Client *client)
             }
         }
     }
-    // for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
-    // {
-    //     std::cout << " KICK -----------------------> Channel: " << (*it)->getChannelName() << std::endl;
-    //     std::vector<Client*> clientsHouse = (*it)->GetClientssHouse();
-    //     if (clientsHouse.empty())
-    //     {
-    //         std::cout << " KICK -----------------------> No clients in channel: " << (*it)->getChannelName() << std::endl;
-    //         continue ;
-    //     }
 
-    //     for (std::vector<Client*>::iterator clientIt = clientsHouse.begin(); clientIt != clientsHouse.end(); ++clientIt)
-    //     {
-    //         std::cout << " KICK -----------------------> Client fd: " << (*clientIt)->get_fd()
-    //                   << " KICK ----------------------->  nickname: " << (*clientIt)->get_nickname()
-    //                   << " KICK ----------------------->  operator status: " << (*clientIt)->getIsOperatorStatus() << std::endl;
-    //     }
-    // }
 }

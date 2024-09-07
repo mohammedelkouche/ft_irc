@@ -46,11 +46,8 @@ Client* Channel::getTheOperator()
 
 bool Channel::addToChannel(Client *client, std::string key)
 {
-    // std::cout << "Attempting to add client: " << client->get_nickname() << std::endl;
-
     if (IsClientInChannel(ClientssHouse, client->get_fd()))
     {
-        // std::cout << "mtafe9 m3aya simo \n";
         SendResponse(client, ERROR_USERONCHANNEL(client->get_hostname(), getChannelName(), client->get_nickname()));
         return false;
     }
@@ -78,7 +75,6 @@ void Channel::removeFromChannel(Client *client)
     if(IsClientInChannel(ClientssHouse, client->get_fd()))
     {
         for(size_t i = 0; i < ClientssHouse.size(); i++)
-            //it s okay if the operator kicked himself (no one will be the operator in that chanel)
             if(ClientssHouse[i]->get_fd() == client->get_fd())
             {
                 delete (ClientssHouse[i]);
@@ -87,10 +83,7 @@ void Channel::removeFromChannel(Client *client)
             }
     }
     if (Coperator == NO_OPERATOR)
-    {
-        // std::cout << "No Operator in the channel! " << std::endl;
         return;
-    }
 }
 
 void Channel::setChannelName(std::string name)
