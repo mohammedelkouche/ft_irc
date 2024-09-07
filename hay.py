@@ -8,8 +8,10 @@ server_port = 8080
 
 # Initial lines to send
 initial_lines = [
-    'pass x\r\n',
-    'nick ogz\r\n',
+    'pass h\r\n',
+    'nick aygaoua\r\n',
+    'nick ouss\r\n',
+    'nick moha\r\n',
     'user r r r r\r\n'
 ] 
 def receive_from_server(sock):
@@ -57,6 +59,7 @@ def main():
             # Send initial lines
             for line in initial_lines:
                 sock.sendall(line.encode('utf-8'))
+                print(f'Sent: {line.strip()}')
             
             # Join multiple channels dynamically
             for i in range(1, num_channels + 1):
