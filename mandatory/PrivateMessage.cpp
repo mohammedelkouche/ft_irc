@@ -45,12 +45,12 @@ void Server::Private_message(std::vector<std::string> command, Client *user)
     std::string full_message;
     size_t i;
 
-    targets =  split(command[1], ',');
-    if (command.size() <= 2)
+    if (command.size() <= 2 || (command.size() == 3 && command[1] == ":"))
     {
         sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(user->get_nickname(), user->get_hostname()));
         return ;
     }
+    targets =  split(command[1], ',');
     for(std::vector<std::string>::iterator it_t = targets.begin(); it_t != targets.end(); ++it_t)
     {
         if ((*it_t)[0] == '#')

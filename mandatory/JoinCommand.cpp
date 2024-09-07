@@ -57,7 +57,6 @@ std::string Server::buildNamReply(Channel *channel)
 void Server::selfJoinReply(Client *client, Channel *channel)
 {
     SendResponse(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channel->getChannelName(), client->get_hostname()));
-    // std::cout << "-------------------------("<< client->get_hostname() << " )" << std::endl;
     sendToClient(client->get_fd(), REPLY_CHANNELMODES(client->get_hostname(), channel->getChannelName(), client->get_nickname(), channel->get_channel_mode()));
     SendResponse(client, REPLY_NAMREPLY(client->get_hostname(), buildNamReply(channel), channel->getChannelName(), client->get_nickname()));
     SendResponse(client, REPLY_ENDOFNAMES(client->get_hostname(), client->get_nickname(), channel->getChannelName()));
@@ -66,6 +65,7 @@ void Server::selfJoinReply(Client *client, Channel *channel)
 void Server::joinZeroo(Client *client)
 {
     bool flag = false;
+    std::string channelLeft;
     for(std::vector<Channel *>::iterator iterate = channels.begin(); iterate != channels.end(); ++iterate)
     {
         for(size_t i = 0; i < (*iterate)->GetClientssHouse().size(); i++)
@@ -73,17 +73,21 @@ void Server::joinZeroo(Client *client)
             if((*iterate)->GetClientssHouse()[i]->get_fd() == client->get_fd())
             {
                 (*iterate)->removeFromChannel((*iterate)->GetClientssHouse()[i]);
+                channelLeft = (*iterate)->getChannelName();
                 flag = true;
                 SendResponse(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), (*iterate)->getChannelName()));
                 break ;
             }
         }
-        if (flag)
-            broadcastWithoutTargetedChannel(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), (*iterate)->getChannelName()));
         if ((*iterate)->GetClientssHouse().size() == 0)
         {
             deleteTheChannelWhenNoUserInIt(*iterate);
             iterate--;
+        }
+        if (flag)
+        {
+            sendToChannel(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), channelLeft), channelLeft);
+            flag = false;
         }
     }
 }

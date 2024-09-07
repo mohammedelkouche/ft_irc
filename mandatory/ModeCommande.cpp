@@ -376,8 +376,10 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							{
 								for (std::vector<Client *>::iterator it_c = Clnts.begin(); it_c != Clnts.end(); ++it_c)
 								{
-									if (((*it_c)->get_nickname() == command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == true) || \
-										((*it_c)->get_nickname() == "@" + command[arg_for_mode] && (*it_c)->getIsOperatorStatus() == true))
+									if (((*it_c)->get_nickname() == command[arg_for_mode] && \
+										(*it_c)->getIsOperatorStatus() == true) || \
+										((*it_c)->get_nickname() == "@" + command[arg_for_mode] && \
+										(*it_c)->getIsOperatorStatus() == true))
 									{
 										(*it_c)->setOperatorStatus(false);
 										ryl_mode_desable += "o";

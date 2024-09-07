@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/06 21:51:18 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/07 19:48:37 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,11 +276,22 @@ void	Server::ReceiveClientData(int fd)
 	{
 		std::cout << yellow << "Client fd = " << fd  << reset << red  << " Disconnected " << reset << std::endl;
 		Client * client = get_connect_client(fd);
-		for (size_t i = 0; i < channels.size(); i++)
-		{
-			channels[i]->removeFromChannel(client);
-			deleteTheChannelWhenNoUserInIt(channels[i]);
-		}
+		for(std::vector<Channel *>::iterator iterate = channels.begin(); iterate != channels.end(); ++iterate)
+    	{
+    	    for(size_t i = 0; i < (*iterate)->GetClientssHouse().size(); i++)
+    	    {
+    	        if((*iterate)->GetClientssHouse()[i]->get_fd() == client->get_fd())
+    	        {
+    	            (*iterate)->removeFromChannel((*iterate)->GetClientssHouse()[i]);
+    	            break ;
+    	        }
+    	    }
+    	    if ((*iterate)->GetClientssHouse().size() == 0)
+    	    {
+    	        deleteTheChannelWhenNoUserInIt(*iterate);
+    	        iterate--;
+    	    }
+    	}
         RemoveClient(fd);
         close(fd);
 	}
