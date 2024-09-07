@@ -85,7 +85,10 @@ void Server::joinZeroo(Client *client)
             iterate--;
         }
         if (flag)
+        {
             sendToChannel(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), channelLeft), channelLeft);
+            flag = false;
+        }
     }
 }
 
