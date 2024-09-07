@@ -57,6 +57,7 @@ def main():
             # Send initial lines
             for line in initial_lines:
                 sock.sendall(line.encode('utf-8'))
+                print(f'Sent: {line.strip()}')
             
             # Join multiple channels dynamically
             for i in range(1, num_channels + 1):
