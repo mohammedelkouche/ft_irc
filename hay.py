@@ -8,9 +8,11 @@ server_port = 8080
 
 # Initial lines to send
 initial_lines = [
-    'pass x\r\n',
-    'nick mapx\r\n',
-    'user r r r r\r\n'
+    'pass h\r\n',
+    'nick aygaoua\r\n',
+    'user r r r r\r\n',
+    'join #c\r\n',
+    'mode #c +\r\n'
 ] 
 def receive_from_server(sock):
     while True:
@@ -60,10 +62,10 @@ def main():
                 print(f'Sent: {line.strip()}')
             
             # Join multiple channels dynamically
-            for i in range(1, num_channels + 1):
-                join_cmd = f'join #c{i}\r\n'
-                sock.sendall(join_cmd.encode('utf-8'))
-                print(f'Sent: {join_cmd.strip()}')
+            # for i in range(1, num_channels + 1):
+            #     join_cmd = f'join #c{i}\r\n'
+            #     sock.sendall(join_cmd.encode('utf-8'))
+            #     print(f'Sent: {join_cmd.strip()}')
 
             # Start threads for sending and receiving
             receive_thread = threading.Thread(target=receive_from_server, args=(sock,))

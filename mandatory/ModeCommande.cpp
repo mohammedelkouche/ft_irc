@@ -116,6 +116,10 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
                         						user->get_hostname()));
 		return ;
 	}
+	if (command.size() == 3 && command[1] == ":")
+	    command.erase(command.begin() + 1);
+	if (command.size() == 4 && command[2] == ":")
+		command.erase(command.begin() + 2);
 	if (command[1][0] == '#')
 	{
 		if (no_suck_channel(command) == 1)
@@ -204,7 +208,6 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 																			user->get_hostname(), \
 																			"k", \
 																			"`need param !!`"));
-							continue ;
 						}
 						else if ((*it)->get_k() == false && command.size() >= (arg_for_mode + 1))
 						{
@@ -467,7 +470,7 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 															user->get_nickname(), \
 															reply_mode));
 				}
-				else if (command.size() <= 3)
+				else if (command.size() < 3)
 				{
 					sendToClient(user->get_fd(), \
 									REPLY_CHANNELMODES(user->get_hostname(), \
