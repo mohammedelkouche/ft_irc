@@ -1,31 +1,3 @@
-import os
-import sys
-# TMP='''PASS 1234\r\nNICK nick{0}\r\nUSER user{0} 0 * abc \r\n'''
-
-
-# for clinet in range(int(sys.argv[1])):
-#     cmd = TMP.format(clinet)
-#     filename = "files/infile{0}".format(clinet)
-#     with open(filename, "w") as fp:
-#         fp.write(cmd)
-#     os.system("nc 127.0.0.1 8888 < '" + filename + "'")
-
-
-# -------------------------------
-
-#-------------------------------
-# TMP='''PASS h\r\nNICK nick{0}\r\nUSER user{0} 0 * abc\r\nJOIN #channel{0}\r\nPART #channel{0}\r\n'''
-# # TMP='''PASS h\r\nNICK nick{0}\r\nUSER user{0} 0 * abc\r\nJOIN #channel{0}\r\nPART #channel{0}\r\n'''
-
-# for clinet in range(int(sys.argv[1])):
-#     cmd = TMP.format(clinet)
-#     filename = "files/infile{0}".format(clinet)
-#     with open(filename, "w") as fp:
-#         fp.write(cmd)
-#     os.system("nc -c 127.0.0.1 8080 < '" + filename + "'")
-
-#-------*************-----------
-
 import socket
 import sys
 import threading
@@ -36,17 +8,10 @@ server_port = 8080
 
 # Initial lines to send
 initial_lines = [
-    'pass h\r\n',
-    # 'nick ouss\r\n',
-    'nick aygaoua\r\n',
-    'user r r r r\r\n',
-    'join #cc\r\n',
-    # 'privmsg bot start\r\n'
-    # 'privmsg :bot Nwetat\r\n'
-    # 'join #cc key,popo\r\n',
-    # 'mode #cc +k key\r\n'
-]
-
+    'pass x\r\n',
+    'nick ogz\r\n',
+    'user r r r r\r\n'
+] 
 def receive_from_server(sock):
     while True:
         try:
@@ -76,6 +41,12 @@ def send_to_server(sock):
             break
 
 def main():
+    if len(sys.argv) < 2:
+        print("Usage: python script.py <number_of_channels>")
+        sys.exit(1)
+
+    num_channels = int(sys.argv[1])
+
     try:
         # Create a socket object
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -87,6 +58,12 @@ def main():
             for line in initial_lines:
                 sock.sendall(line.encode('utf-8'))
             
+            # Join multiple channels dynamically
+            for i in range(1, num_channels + 1):
+                join_cmd = f'join #c{i}\r\n'
+                sock.sendall(join_cmd.encode('utf-8'))
+                print(f'Sent: {join_cmd.strip()}')
+
             # Start threads for sending and receiving
             receive_thread = threading.Thread(target=receive_from_server, args=(sock,))
             send_thread = threading.Thread(target=send_to_server, args=(sock,))

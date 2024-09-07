@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:04:27 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/05 01:04:31 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/07 00:33:00 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ void Bot::PlayNwetat(const std::string &sender)
         "galk aymane douzi 3ando l insta bach takli l passta , w galk oussama douzi 3ando l facebook atl9ayh dayr f profil rwayda bla slouk ",
         "galk sel3a slou3 w mohammed mol l bot ga3ma mekhlou3 , tahyati l khouya mohammed lkouk wl kheyzzo me7kouk",
         "galk l3alam kooollo wla khdam libror, li mikiddich l bizza kila77ag lhedra",
-        "[1]    44471 segmentation fault  ./ircserv 8080 x ---> CHOUF F SMA 3AWTANI CHOUF F SMA HHHHHHH"
+        "[1]    44471 segmentation fault  ./ircserv 8080 x ------{ CHOUF F SMA 3AWTANI CHOUF F SMA HHHHHHH }-------"
     };
 
     std::vector<std::string> sentences(nwetat_arr, nwetat_arr + sizeof(nwetat_arr) / sizeof(nwetat_arr[0]));
@@ -241,7 +241,7 @@ bool	Bot::Authenticate()
 {
 	std::string nick, user;
     nick = "bot";
-    user = "ahmed";
+    user = "mohammed";
 
     SendMessage("PASS " + password + "\r\n");
     SendMessage("NICK " + nick + "\r\n");

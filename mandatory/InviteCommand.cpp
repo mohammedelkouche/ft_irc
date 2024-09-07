@@ -29,7 +29,9 @@ void Server::InviteConstruction(Client *client)
         SendResponse(client, ERROR_NOSUCHNICK(client->get_hostname(),client->get_nickname(), vec[1]));
     else if(IsClientInChannel(getChannelByName(channels, vec[2])->GetClientssHouse(), getClientByNick(clients, vec[1]).get_fd()))
         SendResponse(client, ERROR_USERONCHANNEL(getClientByNick(clients, vec[1]).get_hostname(), vec[2], getClientByNick(clients, vec[1]).get_nickname()));
-    else if (getClientByNick(clients, vec[1]).get_fd())
+    else if (getChannelByName(channels, vec[2])->get_i() && getClientByNick(clients, vec[1]).get_fd() && !getClientByNick(clients, vec[1]).getIsOperatorStatus())
+        SendResponse(client, ERROR_NOPRIVILEGES(client->get_hostname(), vec[2]));
+    else if (getChannelByName(channels, vec[2])->get_i() == false && getClientByNick(clients, vec[1]).get_fd())
     {
         Client& target = getClientByNick(clients, vec[1]);
         target.getInvitedChannels()[vec[2]] = true;

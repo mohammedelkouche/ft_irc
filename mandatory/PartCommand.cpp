@@ -8,7 +8,6 @@ void Server::deleteTheChannelWhenNoUserInIt(Channel *channel)
         Channel* tmp = *itrem;
         if (tmp == channel && channel->GetClientssHouse().size() == 0)
         {
-            std::cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n";
             delete (*itrem);
             channels.erase(itrem);
             break;
