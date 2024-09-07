@@ -10,7 +10,7 @@ Channel* Server::getChannelByName(std::vector<Channel *> channels, std::string n
 
 Client*  NO_CL = NULL;
 
-static Client* staticGetClientByNickplus(std::vector<Client *> clients, std::string nickname)
+Client* Server::staticGetClientByNickplus(std::vector<Client *> clients, std::string nickname)
 {
     for (size_t i = 0; i < clients.size(); i++)
         if (clients[i]->get_nickname() == nickname)

@@ -198,21 +198,21 @@ void Server::JoinConstruction(Client *client)
             sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
         }
     }
-    for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
-    {
-        std::cout << "Channel: " << (*it)->getChannelName() << std::endl;
-        std::vector<Client*> clientsHouse = (*it)->GetClientssHouse();
-        if (clientsHouse.empty())
-        {
-            std::cout << "No clients in channel: " << (*it)->getChannelName() << std::endl;
-            continue ;
-        }
+    // for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
+    // {
+    //     std::cout << "Channel: " << (*it)->getChannelName() << std::endl;
+    //     std::vector<Client*> clientsHouse = (*it)->GetClientssHouse();
+    //     if (clientsHouse.empty())
+    //     {
+    //         std::cout << "No clients in channel: " << (*it)->getChannelName() << std::endl;
+    //         continue ;
+    //     }
 
-        for (std::vector<Client*>::iterator clientIt = clientsHouse.begin(); clientIt != clientsHouse.end(); ++clientIt)
-        {
-            std::cout << "Client fd: " << (*clientIt)->get_fd()
-                      << " nickname: " << (*clientIt)->get_nickname()
-                      << " operator status: " << (*clientIt)->getIsOperatorStatus() << std::endl;
-        }
-    }
+    //     for (std::vector<Client*>::iterator clientIt = clientsHouse.begin(); clientIt != clientsHouse.end(); ++clientIt)
+    //     {
+    //         std::cout << "Client fd: " << (*clientIt)->get_fd()
+    //                   << " nickname: " << (*clientIt)->get_nickname()
+    //                   << " operator status: " << (*clientIt)->getIsOperatorStatus() << std::endl;
+    //     }
+    // }
 }

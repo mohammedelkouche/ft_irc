@@ -9,7 +9,7 @@ server_port = 8080
 # Initial lines to send
 initial_lines = [
     'pass x\r\n',
-    'nick mapx\r\n',
+    'nick maxq\r\n',
     'user r r r r\r\n'
 ] 
 def receive_from_server(sock):
