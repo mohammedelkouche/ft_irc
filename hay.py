@@ -41,6 +41,8 @@ initial_lines = [
     'nick aygaoua\r\n',
     'user r r r r\r\n',
     'join #cc\r\n',
+    # 'privmsg bot start\r\n'
+    # 'privmsg :bot Nwetat\r\n'
     # 'join #cc key,popo\r\n',
     # 'mode #cc +k key\r\n'
 ]
