@@ -166,8 +166,9 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 								if (full_mode_add[i] != '+' && full_mode_add[i] != '-')
 								{
 									sendToClient(user->get_fd(), \
-												ERROR_NOPRIVILEGES(user->get_hostname(), \
-																	command[1]));
+												ERROR_NOPRIVILEGES__(user->get_hostname(), \
+																		command[1], \
+																		full_mode_add[i]));
 								}
 								flag_privileges = 1;
 								break ;
@@ -211,10 +212,9 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							if (command.size() < (arg_for_mode + 1))
 							{
 								sendToClient(user->get_fd(), \
-													ERROR_INVALIDMODEPARAM_KEY((*it)->getChannelName(), \
+												ERROR_INVALIDMODEPARAM__KEY((*it)->getChannelName(), \
 																				user->get_hostname(), \
-																				"k", \
-																				"`need param !!`"));
+																				"k"));
 							}
 							else if ((*it)->get_k() == false && command.size() >= (arg_for_mode + 1))
 							{
@@ -224,9 +224,8 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 										command[arg_for_mode].find(',', 0) != std::string::npos)))
 								{
 									sendToClient(user->get_fd(), \
-													ERROR_INVALIDMODEPARAM_KEY((*it)->getChannelName(), \
+													ERROR_INVALIDKEY((*it)->getChannelName(), \
 																				user->get_hostname(), \
-																				"k", \
 																				command[arg_for_mode]));
 								}
 								else
@@ -340,10 +339,9 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							if (command.size() < (arg_for_mode + 1))
 							{
 								sendToClient(user->get_fd(), \
-												ERROR_INVALIDMODEPARAM_KEY((*it)->getChannelName(), \
+												ERROR_INVALIDMODEPARAM__KEY((*it)->getChannelName(), \
 																			user->get_hostname(), \
-																			"k", \
-																			"`need param !!`"));
+																			"k"));
 							}
 							if (command.size() >= (arg_for_mode + 1) && command[arg_for_mode] == ":")
 								arg_for_mode++;
