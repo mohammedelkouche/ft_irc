@@ -157,28 +157,24 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 				int flag_privileges = 0;
 				for (size_t i = 0; i < full_mode_add.size(); i++)
 				{
-					if (0 == 0)
+					for (std::vector<Client *>::iterator it = Clnts.begin(); it != Clnts.end(); ++it)
 					{
-						for (std::vector<Client *>::iterator it = Clnts.begin(); it != Clnts.end(); ++it)
+						if ((*it)->get_nickname() == user->get_nickname())
 						{
-							if ((*it)->get_nickname() == user->get_nickname())
+							if ((*it)->getIsOperatorStatus() == 0)
 							{
-								if ((*it)->getIsOperatorStatus() == 0)
+								if (full_mode_add[i] != '+' && full_mode_add[i] != '-')
 								{
-									if (full_mode_add[i] != '+' && full_mode_add[i] != '-')
-									{
-										sendToClient(user->get_fd(), \
-													ERROR_NOPRIVILEGES(user->get_hostname(), \
-																		command[1]));
-									}
-									flag_privileges = 1;
-									break ;
+									sendToClient(user->get_fd(), \
+												ERROR_NOPRIVILEGES(user->get_hostname(), \
+																	command[1]));
 								}
-								else
-									break ;
+								flag_privileges = 1;
+								break ;
 							}
+							else
+								break ;
 						}
-
 					}
 					if (flag_privileges == 0)
 					{
