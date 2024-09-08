@@ -11,7 +11,7 @@ initial_lines = [
     'pass x\r\n',
     'nick eama\r\n',
     'user r r r r\r\n',
-    # 'join #c\r\n',
+    'join #c\r\n',
     # 'mode #c +k key\r\n'
     # 'mode #r +k key\r\n'
 ]
