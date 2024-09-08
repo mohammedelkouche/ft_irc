@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:04:27 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/07 00:33:00 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/08 20:48:54 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ void Bot::PlayGame()
             std::string sender = senderdomaine.substr(1, senderdomaine.find('!') - 1);
             if (msgContent == "start")
             {
-                PrSendMessage("Choose a game: 'Roshambo(rock paper scissors)' or 'Nwetat'. Type 'exit' to quit.", sender);
+                PrSendMessage("Choose a game: 'Roshambo(rock paper scissors)' or 'Dolly'. Type 'exit' to quit.", sender);
                 client_in_game[sender] = true;
                 current_game[sender] = "";  // Initialize to no game selected
             }
@@ -210,10 +210,10 @@ void Bot::PlayGame()
                 PrSendMessage("You chose Roshambo! Send 'rock', 'paper', or 'scissors' to play.", sender);
                 current_game[sender] = "Roshambo";
             }
-            else if (msgContent == "Nwetat" && client_in_game[sender])
+            else if (msgContent == "Dolly" && client_in_game[sender])
             {
-                PrSendMessage("You chose Nwetat!", sender);
-                current_game[sender] = "Nwetat";
+                PrSendMessage("You chose Dolly!", sender);
+                current_game[sender] = "Dolly";
                 PlayNwetat(sender);
             }
             else if (msgContent == "exit" && client_in_game[sender])
@@ -226,10 +226,10 @@ void Bot::PlayGame()
             {
                 if (current_game[sender] == "Roshambo")
                     PlayRoshambo(sender, msgContent);
-                else if (current_game[sender] == "Nwetat" && msgContent == "Nwetat")
+                else if (current_game[sender] == "Dolly" && msgContent == "Dolly")
                     PlayNwetat(sender);
                 else
-                    PrSendMessage("Invalid input. Choose 'Roshambo', 'Nwetat', or 'exit'.", sender);
+                    PrSendMessage("Invalid input. Choose 'Roshambo', 'Dolly', or 'exit'.", sender);
             }
             else if (!client_in_game[sender])
                 PrSendMessage("You must send 'start' to begin the game.", sender);
