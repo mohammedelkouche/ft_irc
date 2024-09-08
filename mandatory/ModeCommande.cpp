@@ -345,7 +345,7 @@ void Server::ModeCommand(std::vector<std::string> command, Client *user)
 							}
 							if (command.size() >= (arg_for_mode + 1) && command[arg_for_mode] == ":")
 								arg_for_mode++;
-							if ((*it)->get_k() == true)
+							if ((*it)->get_k() == true && command.size() >= (arg_for_mode + 1))
 							{
 								(*it)->rm_k(command[arg_for_mode]);
 								if ((*it)->get_k() == false)

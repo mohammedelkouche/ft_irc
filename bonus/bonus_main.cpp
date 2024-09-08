@@ -29,8 +29,8 @@ void	CheckArg(char **argv)
 	if (port < 1024 || port > 65535) {
 		throw std::out_of_range("Error: Invalid port number");
 	}
-	if (ip_address != "localhost" && ip_address != "LOCALHOST" && ip_address != "127.0.0.1")
-		throw std::invalid_argument("Error: Invalid ip_address");
+	// if (ip_address != "localhost" && ip_address != "LOCALHOST" && ip_address != "127.0.0.1")
+	// 	throw std::invalid_argument("Error: Invalid ip_address");
 	
 }
 

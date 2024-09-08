@@ -9,8 +9,11 @@ server_port = 8080
 # Initial lines to send
 initial_lines = [
     'pass h\r\n',
-    'nick mai\r\n',
-    'user r r r r\r\n'
+    'nick moha\r\n',
+    # 'nick aygaoua\r\n',
+    # 'nick oussama\r\n',
+    'user r r r r\r\n',
+    'join #c\r\n'
 ] 
 def receive_from_server(sock):
     while True:
