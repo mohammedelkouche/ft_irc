@@ -27,12 +27,14 @@ void Server::KickConstruction(Client *client)
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
         return ;
     }
-    std::vector<std::string> splittedChannels = Splitter(vec[1], ",");
+    std::vector<std::string> splittedChannels ;
+    splittedChannels = (vec[1] == ":" && vec.size() >= 4) ? Splitter(vec[2], ",") : Splitter(vec[1], ",");
+
     for(std::vector<std::string>::iterator iterate = splittedChannels.begin() ; iterate != splittedChannels.end(); ++iterate)
     {
         std::string eachChannel = *iterate;
         Channel* check = getChannelByName(channels, eachChannel);
-        if (eachChannel[0] != '#')
+        if (eachChannel[0] != '#' || eachChannel.substr(1).find(" ") != std::string::npos)
         {
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
             continue ;
@@ -47,11 +49,12 @@ void Server::KickConstruction(Client *client)
             SendResponse(client, ERROR_NOPRIVILEGES(client->get_nickname(), client->get_hostname()));
             continue;
         }
-        std::vector<std::string> splittedUsers = Splitter(vec[2], ",");
+        std::vector<std::string> splittedUsers;
+        splittedUsers = (vec[2] == ":" && vec.size() >= 4) ? Splitter(vec[3], ",") : Splitter(vec[2], ",");
         for (std::vector<std::string>::iterator it = splittedUsers.begin(); it != splittedUsers.end(); ++it)
         {
             std::string eachUser = *it;
-            if (!isClientExist(clients, eachUser))
+            if (!isClientExist(clients, eachUser) )
                 SendResponse(client, ERROR_NOSUCHNICK(client->get_hostname(),client->get_nickname(), eachUser));
             else if (getClientByNick(clients, eachUser).get_fd())
             {

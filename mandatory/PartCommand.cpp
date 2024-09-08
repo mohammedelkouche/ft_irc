@@ -18,16 +18,20 @@ void Server::deleteTheChannelWhenNoUserInIt(Channel *channel)
 void  	Server::PartConstruction(Client *client)
 {   
     std::vector<std::string> vec = client->get_commande();
-    std::vector<std::string> splittedChannels = Splitter(vec[1], ",");
+    std::vector<std::string> splittedChannels;
     if (vec.size() < 2)
     {
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
         return ;
     }
+    if (vec[1] == ":" && vec.size() == 3)
+        splittedChannels = Splitter(vec[2], ",");
+    else
+        splittedChannels = Splitter(vec[1], ",");
     for (std::vector<std::string>::iterator it = splittedChannels.begin(); it != splittedChannels.end(); ++it)
     {
         std::string eachChannel = *it;
-        if (eachChannel[0] != '#')
+        if (eachChannel[0] != '#' || eachChannel.substr(1).find(" ") != std::string::npos)
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
         else if (channeDoesntlExists(channels, eachChannel))
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
@@ -36,14 +40,17 @@ void  	Server::PartConstruction(Client *client)
         else
         {
             Channel* channelPtr = getChannelByName(channels, eachChannel);
+            std::string reason;
             if (!channelPtr)
                 return ;
             if (vec.size() == 2)
-                vec.push_back("no comment is given");
+                reason = "";
+            else if(vec.size() >= 3 && vec[2] == ":")
+                reason = vec[3];
             Channel& channel = *channelPtr;
             channel.removeFromChannel(client);
-            SendResponse(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), eachChannel));
-            sendToChannel(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), eachChannel), channel.getChannelName() );
+            SendResponse(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), eachChannel, reason));
+            sendToChannel(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), eachChannel, reason), channel.getChannelName());
             deleteTheChannelWhenNoUserInIt(&channel);
         }
     }
