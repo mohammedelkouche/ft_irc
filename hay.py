@@ -8,7 +8,7 @@ server_port = 8080
 
 # Initial lines to send
 initial_lines = [
-    'pass x\r\n',
+    'pass h\r\n',
     'nick mai\r\n',
     'user r r r r\r\n'
 ] 
@@ -61,7 +61,7 @@ def main():
             
             # Join multiple channels dynamically
             for i in range(1, num_channels + 1):
-                join_cmd = f'join ::#c{i}\r\n'
+                join_cmd = f'join :#c{i}\r\n'
                 sock.sendall(join_cmd.encode('utf-8'))
                 print(f'Sent: {join_cmd.strip()}')
 
