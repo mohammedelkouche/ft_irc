@@ -75,12 +75,12 @@ void Channel::removeFromChannel(Client *client)
     if(IsClientInChannel(ClientssHouse, client->get_fd()))
     {
         for(size_t i = 0; i < ClientssHouse.size(); i++)
-            if(ClientssHouse[i]->get_fd() == client->get_fd())
-            {
-                delete (ClientssHouse[i]);
-                ClientssHouse.erase(ClientssHouse.begin() + i);
-                break ;
-            }
+        if(ClientssHouse[i]->get_fd() == client->get_fd())
+        {
+            delete (ClientssHouse[i]);
+            ClientssHouse.erase(ClientssHouse.begin() + i);
+            break ;
+        }
     }
     if (Coperator == NO_OPERATOR)
         return;

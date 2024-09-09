@@ -44,8 +44,14 @@ void Server::KickConstruction(Client *client)
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
             continue ;
         }
+        else if (!staticGetClientByNickplus((check->GetClientssHouse()), client->get_nickname()))
+        {
+            SendResponse(client, ERROR_NOTONCHANNEL(client->get_hostname(), eachChannel));
+            continue ;
+        }
         if (staticGetClientByNickplus((check->GetClientssHouse()), client->get_nickname()) && !staticGetClientByNickplus(check->GetClientssHouse(), client->get_nickname())->getIsOperatorStatus())
         {
+            std::cout << " Client OBJECT ---------------------> " << staticGetClientByNickplus((check->GetClientssHouse()), client->get_nickname());
             SendResponse(client, ERROR_NOPRIVILEGES(client->get_nickname(), client->get_hostname()));
             continue;
         }
@@ -54,7 +60,7 @@ void Server::KickConstruction(Client *client)
         for (std::vector<std::string>::iterator it = splittedUsers.begin(); it != splittedUsers.end(); ++it)
         {
             std::string eachUser = *it;
-            if (!isClientExist(clients, eachUser) )
+            if (!isClientExist(clients, eachUser))
                 SendResponse(client, ERROR_NOSUCHNICK(client->get_hostname(),client->get_nickname(), eachUser));
             else if (getClientByNick(clients, eachUser).get_fd())
             {
