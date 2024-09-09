@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/09 02:27:51 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/09 13:53:43 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,11 @@ void	Server::handle_pass(Client *user)
 		else
 		{
 			if (this->pass != commande[1])
+			{
+				user->set_pass_client(commande[1]);
+				user->set_correct_pass(false);
 				sendToClient(user->get_fd(), ERROR_PASSWDMISMATCH(" * ", user->get_hostname()));
+			}
 			else
 			{ 
 				user->set_pass_client(commande[1]);
@@ -166,7 +170,7 @@ void	Server::handle_username(Client *user)
 		else
 			sendToClient(user->get_fd(), ERROR_NEEDMOREPARAMS(" * ", user->get_hostname()));
 	}
-	else if (commande.size() == 5)
+	else
 	{
 		if (!user->get_correct_pass())
 		{
@@ -178,18 +182,6 @@ void	Server::handle_username(Client *user)
 			sendToClient(user->get_fd(), ERROR_REALNAME("*", user->get_hostname()));
 		else
 			user->set_username(commande[1]);
-	}
-	else
-	{
-		if (user->is_enregistred())
-			sendToClient(user->get_fd(), ERROR_ALREADYREGISTERED(user->get_nickname(), user->get_hostname()));
-		else
-		{
-			if (!user->get_correct_pass())
-				sendToClient(user->get_fd(), ERROR_NOTREGISTERED(" * ", user->get_hostname()));
-			else
-				sendToClient(user->get_fd(), ERROR_TOOMUSHPARAMS("*", user->get_hostname()));
-		}
 	}
 }
 
