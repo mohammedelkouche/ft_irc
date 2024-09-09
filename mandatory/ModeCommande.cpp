@@ -5,6 +5,8 @@
 
 bool is_number(std::string str)
 {
+	if (str[0] == '+')
+		str = str.substr(1, str.size());
 	size_t found = str.find_first_not_of("0123456789");
 	if (found == std::string::npos && \
 		std::atol(str.c_str()) <= 9223372036854775807)
