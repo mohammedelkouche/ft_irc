@@ -38,13 +38,13 @@ void Server::KickConstruction(Client *client)
         {
             std::cout << "if\n" << std::endl;
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
-            continue ;
+            return ;
         }
         else if (eachChannel.find(' ') != std::string::npos)
         {
             std::cout << "else if\n" << std::endl;
             SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
-            continue ;
+            return ;
         }
         else if(channeDoesntlExists(channels, eachChannel))
         {
@@ -83,17 +83,17 @@ void Server::KickConstruction(Client *client)
                 }
                 if (!channelPtr)
                     return ;
-                if (vec.size() == 3)
+                if (vec.size() == 3 || (vec.size() == 4 && vec[2] != ":"))
                     reason = "no comment is given";
-                else if (vec.size() > 3 && vec[3] == ":")
+                else if (vec.size() == 5 && vec[3] == ":")
                     reason = vec[4];
                 else
-                    reason = vec[3];
-
+                    reason = "no comment is given";
                 Channel& channel = *channelPtr;
                 channel.removeFromChannel(&target);
                 std::string rpl = REPLY_KICK(client->get_nickname(), client->get_username(), \
-                target.get_hostname(), channel.getChannelName(), target.get_nickname(), reason);
+                                            target.get_hostname(), channel.getChannelName(), \
+                                            target.get_nickname(), reason);
                 SendResponse(&target, rpl);
                 sendToChannel(&target, rpl, channel.getChannelName());
                 deleteTheChannelWhenNoUserInIt(&channel);
