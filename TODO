@@ -11,7 +11,20 @@
  -> CHECKING LEAAAAAAAAKS :)
  "while true; do leaks ircserv ; sleep 1; done"
 
+->        if (!channelName[1])
+        {
+            SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
+            continue ;
+        }
 
+-> ```INVITE :dfnjkdfn fgbnfg #!#
+:localhost 403 bot dfnjkdfn fgbnfg #!# :No such channel
+invite ll
+:localhost 461 bot :Not enough parameters !
+invite jj #!#
+:localhost 401 bot jj :No such nickname```
+
+-> user out of channel can kick someone inside the channel
  _   _        __        __   _                            __  __       _    _ _      _     _   
 | \ | | ___   \ \      / /__| | ___ ___  _ __ ___   ___  |  \/  | __ _| |_ (_|_) ___| |__ (_)
 |  \| |/ _ \   \ \ /\ / / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | |\/| |/ _` | __|| | |/ __| '_ \| |
