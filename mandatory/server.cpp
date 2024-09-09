@@ -14,14 +14,12 @@
 #include "../include/server.hpp"
 #include "../include/reply.hpp"
 
-
 Server::Server() : pass("")
 {
     signal(SIGINT, handleSigint);
     signal(SIGPIPE, SIG_IGN);
 }
 
-	
 Server::Server(const Server &obj)
 {
 	port = obj.port;
@@ -46,15 +44,14 @@ Server &Server::operator=(Server const &other){
 	return *this;
 }
 
-
 void	Server::config_server()
 {
 	int enable = 1;
-	
+
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(this->port);
 	server_addr.sin_addr.s_addr = INADDR_ANY;
-	
+
 	fd_srv_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (fd_srv_socket == -1)
 		throw(std::runtime_error("Failed to create socket"));
@@ -66,7 +63,7 @@ void	Server::config_server()
 		throw(std::runtime_error("Failed to bind socket"));
 	if (listen(fd_srv_socket, SOMAXCONN) == -1)
 		throw(std::runtime_error("listen() failed"));
-	
+
 	client_poll_fd.fd = fd_srv_socket;
 	client_poll_fd.events = POLLIN;
 	client_poll_fd.revents = 0;
@@ -75,23 +72,19 @@ void	Server::config_server()
 
 void	Server::AcceptNewClient()
 {
-	Client	newclient;
+	Client		newclient;
 	std::string	host;
-
-	socklen_t addresslenght = sizeof(client_addr);
+	socklen_t 	addresslenght = sizeof(client_addr);
 
 	int fd_client_sock = accept(fd_srv_socket, (sockaddr *)&client_addr, &addresslenght);
 	if (fd_client_sock == -1)
-	{
-		//  std::cout << "accept() failed" << std::endl;
         return;
-    }
 	if (fcntl(fd_client_sock, F_SETFL, O_NONBLOCK) == -1)
 	{
 		std::cout << "fcntl() failed" << std::endl;
         return;
 	}
-	
+
 	client_poll_fd.fd = fd_client_sock;
 	client_poll_fd.events = POLLIN;
 	client_poll_fd.revents = 0;
@@ -100,10 +93,9 @@ void	Server::AcceptNewClient()
 	newclient.set_fd(fd_client_sock);
 	host = newclient.get_client_host();
 	newclient.set_hostname(host);
-	
+
 	clients.push_back(newclient);
 	pollfds.push_back(client_poll_fd);
-	// insert a new buffer entry for the new client
 	partial_messages.insert(std::make_pair(fd_client_sock, ""));
 	std::string yellow = "\033[33m";
 	std::string green = "\033[32m";
@@ -114,8 +106,6 @@ void	Server::AcceptNewClient()
 
 void	Server::RemoveClient(int fd)
 {
-
-	// for vector
 	for (size_t i = 0; i < pollfds.size(); i++)
 	{
 		if (clients[i].get_fd() == fd)
@@ -132,7 +122,7 @@ void	Server::RemoveClient(int fd)
 			break ;
 		}
 	}
-	partial_messages.erase(fd);  // Remove any stored partial messages for the client
+	partial_messages.erase(fd);
 }
 
 std::vector<std::string>	devide_commande(std::string message)
@@ -140,7 +130,6 @@ std::vector<std::string>	devide_commande(std::string message)
 	std::vector<std::string> vector;
 	std::string Command;
 
-	
 	for (size_t space = 0; space < message.size(); space++)
 	{
 		if (!std::isspace(message[space]))
@@ -166,7 +155,6 @@ std::vector<std::string>	devide_commande(std::string message)
 	}
 	return vector;
 }
-
 
 void	Server::execute_commande(Client *user)
 {
@@ -228,9 +216,8 @@ void	Server::parse_message(std::string buffer, int fd)
 		std::vector<std::string> commande = devide_commande(command);
 		user->set_commande(commande);
 		execute_commande(user);
-		pos = end_pos + 2; // Move past "\r\n"
+		pos = end_pos + 2;
 	}
-
 }
 
 Client* Server::get_connect_client(int fd)
@@ -242,7 +229,6 @@ Client* Server::get_connect_client(int fd)
 	}
 	return (NULL);
 }
-
 
 std::vector<Client> Server::getClientsInServer()
 {
@@ -312,8 +298,7 @@ bool Server::stopServer = 0;
 void Server::handleSigint(int sig)
 {
 	(void) sig;
-    // std::cout << "Caught SIGINT (" << sig << "). Shutting down server gracefully." << std::endl;
-    Server::stopServer = 1; // Set the flag to stop the server loop
+    Server::stopServer = 1;
 }
 
 void	Server::close_all_fds()
@@ -335,24 +320,18 @@ void	Server::close_all_fds()
 	}
 }
 
-
 void	Server::initializeServer(int port_nbr,std::string str)
 {
 	this->port = port_nbr;
 	this->pass = str;
 	config_server();
-	
-	// std::cout << "Server with fd <" << fd_srv_socket << "> Connected" << std::endl;
-	// std::cout << "Server started. Listening on port : " << this->port << std::endl;
-	// std::cout << "Waiting to accept a connection..." << std::endl;
-	
+
 	while (!stopServer)
 	{
 		if (poll(&pollfds[0], pollfds.size(), -1) == -1 && !stopServer)
 			throw(std::runtime_error("poll() failed"));
 		for (size_t i = 0; i < pollfds.size(); i++)
 		{
-			// check if file descriptor has data available for reading
 			if (pollfds[i].revents & POLLIN)
 			{
 				if (pollfds[i].fd == fd_srv_socket)
@@ -364,7 +343,6 @@ void	Server::initializeServer(int port_nbr,std::string str)
 	}
 	close_all_fds();
 }
-
 
 Server::~Server()
 {

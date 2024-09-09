@@ -15,14 +15,14 @@ SRC = ./mandatory/main.cpp ./mandatory/client.cpp \
 BONUS = ./bonus/bonus_main.cpp ./bonus/bot_bonus.cpp
 
 OBJ = $(SRC:.cpp=.o)
- 
+
 HEADER =  ./include/server.hpp ./include/client.hpp  ./include/channels.hpp ./include/reply.hpp ./include/global.hpp
 
 BOBJ = $(BONUS:.cpp=.o)
 
 HEADER_bonus =  ./include/bot_bonus.hpp
 
-CFLAGS = -Wall -Wextra -Werror  -std=c++98 #-fsanitize=address -g
+CFLAGS = -Wall -Wextra -Werror  -std=c++98
 
 CC = c++
 

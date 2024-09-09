@@ -86,16 +86,12 @@ void Bot::SendMessage(const std::string &message) {
         std::cerr << "Failed to send message " << std::endl;
 }
 
-// old
 void Bot::PrSendMessage(const std::string &message, const std::string &client_nick)
 {
     std::string formatted_message = "PRIVMSG " + client_nick + " :" + message + "\r\n";
     
     if (send(bot_fd, formatted_message.c_str(), formatted_message.length(), 0) < 0)
-    {
-        // RemoveClient(client_nick); // Remove client if sending fails
         std::cerr << "Failed to send message to client " << client_nick << std::endl;
-    }
 }
 
 void Bot::signalHandler(int signal)
@@ -162,6 +158,7 @@ void Bot::PlayNwetat(const std::string &sender)
         "galk aymane douzi 3ando l insta bach takli l passta , w galk oussama douzi 3ando l facebook atl9ayh dayr f profil rwayda bla slouk ",
         "galk sel3a slou3 w mohammed mol l bot ga3ma mekhlou3 , tahyati l khouya mohammed lkouk wl kheyzzo me7kouk",
         "galk l3alam kooollo wla khdam libror, li mikiddich l bizza kila77ag lhedra",
+        "galk wlah wmakenty chrif la saybti irc f sif",
         "[1]    44471 segmentation fault  ./ircserv 8080 x ------{ CHOUF F SMA 3AWTANI CHOUF F SMA HHHHHHH }-------"
     };
 

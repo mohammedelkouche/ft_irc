@@ -20,7 +20,6 @@ Client::Client() : ipaddress(""), nickname(""), pass_client(""), username (""), 
 	this->registred = false;
 }
 
-
 Client::Client(const Client& copy)
 {
 	fd = copy.fd;
@@ -40,7 +39,6 @@ void	Client::set_fd(int fd_client)
 {
 	this->fd  = fd_client;
 }
-
 
 int    Client::get_fd()
 {
@@ -119,7 +117,6 @@ std::string	Client::get_hostname()
 	return this->hostname;
 }
 
-// add
 bool	Client::get_correct_pass()
 {
 	return this->correct_pass;
@@ -137,11 +134,10 @@ bool	Client::check_registration(Client *user)
 		return false;
 }
 
-
 std::string Client::get_client_host()
 {
     struct in_addr addr;
-    inet_aton(ipaddress.c_str(), &addr); // Convert IP string to in_addr structure
+    inet_aton(ipaddress.c_str(), &addr);
 
     struct hostent* hostInfo = gethostbyaddr((const void*)&addr, sizeof(addr), AF_INET);
     if (hostInfo != NULL)
@@ -149,13 +145,10 @@ std::string Client::get_client_host()
     return "Unknown";
 }
 
-
 std::map<std::string, bool>& Client::getInvitedChannels()
 {
 	return this->invitedChannels;
 }
-
-
 
 Client::~Client()
 {

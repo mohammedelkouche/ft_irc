@@ -45,8 +45,7 @@ class Server
 		std::vector<Client> 		clients;
 		std::vector<Channel *> 		channels;
 		std::vector <struct pollfd> pollfds;
-		std::map<int, std::string> 	partial_messages; // To store incomplete messages
-		// char buffer[BUFFER_SIZE];
+		std::map<int, std::string> 	partial_messages;
 		static bool 				stopServer;
 		struct sockaddr_in 			server_addr;
 		struct sockaddr_in 			client_addr;
@@ -64,11 +63,8 @@ class Server
 		void					parse_message(std::string buffer, int fd);
 		Client					*get_connect_client(int fd);
 		void					execute_commande(Client *user);
-		// void	sendToClient(int fd, const std::string message);
 		void					sendToClient(int fd, const std::string& message);
 		void					close_all_fds();
-		
-		// handel cmd
 		void					handle_pass(Client *user);
 		void					handle_nickname(Client *user);
 		void					handle_username(Client *user);
@@ -100,7 +96,7 @@ class Server
 		// add
 		bool					check_valid_realname(std::string realname);
 		static void 			handleSigint(int sig);
-		/*                        AYGAOUA SPEAKING                        */
+
 		/*------------------------TOPIC COMMAND---------------------------*/
 		void					Topic_Command(std::vector<std::string> Topic, Client *user);
 		void					DisplayTopic(std::vector<std::string> channel_name, Client *user);
@@ -112,17 +108,11 @@ class Server
 		void					Private_message(std::vector<std::string> command, Client *user);
 		void					sendToChannel(Client *user, const std::string& message, std::string Chnl);
 		int						no_suck_channel_msg(std::string chnl);
-		/*----------------------------------------------------------------*/
+		/*-----------------------------------------------------------------*/
 
-		/*------------------------PRIVMSG COMMAND---------------------------*/
+		/*------------------------MODE COMMAND---------------------------*/
 		void					ModeCommand(std::vector<std::string> command, Client *user);
-		// void DisplayMode(std::vector<std::string> command, Client *user);
-		/*----------------------------------------------------------------*/
-		/*                        AYGAOUA SPEAKING                        */
-		// void	check_registration(Client *user);
-
-		//
-
+		/*---------------------------------------------------------------*/
 };
 
 #endif

@@ -18,7 +18,6 @@ Client* Server::staticGetClientByNickplus(std::vector<Client *> clients, std::st
    return NO_CL;
 }
 
-
 void Server::KickConstruction(Client *client)
 {
     std::vector<std::string> vec = client->get_commande();
@@ -36,13 +35,11 @@ void Server::KickConstruction(Client *client)
         Channel* check = getChannelByName(channels, eachChannel);
         if (eachChannel[0] != '#' )
         {
-            std::cout << "if\n" << std::endl;
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
             return ;
         }
         else if (eachChannel.find(' ') != std::string::npos)
         {
-            std::cout << "else if\n" << std::endl;
             SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
             return ;
         }
@@ -56,9 +53,9 @@ void Server::KickConstruction(Client *client)
             SendResponse(client, ERROR_NOTONCHANNEL(client->get_hostname(), eachChannel));
             continue ;
         }
-        if (staticGetClientByNickplus((check->GetClientssHouse()), client->get_nickname()) && !staticGetClientByNickplus(check->GetClientssHouse(), client->get_nickname())->getIsOperatorStatus())
+        if (staticGetClientByNickplus((check->GetClientssHouse()), client->get_nickname()) && \
+            !staticGetClientByNickplus(check->GetClientssHouse(), client->get_nickname())->getIsOperatorStatus())
         {
-            std::cout << " Client OBJECT ---------------------> " << staticGetClientByNickplus((check->GetClientssHouse()), client->get_nickname());
             SendResponse(client, ERROR_NOPRIVILEGES(client->get_nickname(), client->get_hostname()));
             continue;
         }
@@ -100,5 +97,4 @@ void Server::KickConstruction(Client *client)
             }
         }
     }
-
 }

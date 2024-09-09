@@ -1,6 +1,5 @@
 #include "../include/server.hpp"
 
-
 void Server::deleteTheChannelWhenNoUserInIt(Channel *channel)
 {
     for (std::vector<Channel *>::iterator itrem = channels.begin(); itrem != channels.end(); ++itrem)
@@ -54,5 +53,4 @@ void  	Server::PartConstruction(Client *client)
             deleteTheChannelWhenNoUserInIt(&channel);
         }
     }
-    
 }

@@ -10,7 +10,7 @@ server_port = 8080
 initial_lines = [
     'pass h\r\n',
     'nick moha\r\n',
-    # 'nick aygaoua\r\n',
+    'nick aygaoua\r\n',
     'nick oussama\r\n',
     'user r r r r\r\n',
     'join #c\r\n'
