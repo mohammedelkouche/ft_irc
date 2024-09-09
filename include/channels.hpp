@@ -16,7 +16,6 @@ class Channel
     private:
         std::string             name;
         std::vector<Client *>   ClientssHouse;
-        std::vector<Client *>   Operators;
         std::string             topic;
         std::string             topic_setter;
         std::string             topic_time;
@@ -41,7 +40,6 @@ class Channel
         Client*                 getTheOperator();
         std::string             getChannelKey();
         std::vector<Client *>   GetClientssHouse();
-        std::vector<Client *>   GetTheOperators();
         void                    set_topic(std::string topic);
         std::string             get_topic();
 		void	                set_topic_setter(std::string topicsetter);
