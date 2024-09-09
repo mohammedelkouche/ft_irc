@@ -27,9 +27,9 @@ void Server::InviteConstruction(Client *client)
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
         return;
     }
-    std::string targetNick = vec[1];
-    std::string channelName = vec[2];
-    if (channelName[0] != '#' || channeDoesntlExists(channels, channelName))
+    std::string targetNick = (vec.size() >= 4 && vec[1] == ":") ? vec[2] : vec[1]; //ternary hh
+    std::string channelName =  (vec.size() >= 4 && vec[2] == ":") ? vec[3] : vec[2];
+    if (channelName[0] != '#' || channeDoesntlExists(channels, channelName) || channelName.find(' ', 0) != std::string::npos)
     {
         SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelName, client->get_nickname()));
         return;
@@ -55,7 +55,7 @@ void Server::InviteConstruction(Client *client)
     }
     if (channel->get_i())
     {
-        if (!client->getIsOperatorStatus())
+        if (staticGetClientByNickplus((channel->GetClientssHouse()), client->get_nickname()) && !staticGetClientByNickplus(channel->GetClientssHouse(), client->get_nickname())->getIsOperatorStatus())
         {
             SendResponse(client, ERROR_NOPRIVILEGES(client->get_hostname(), channelName));
             return;

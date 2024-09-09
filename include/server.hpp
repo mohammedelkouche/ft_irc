@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 15:38:13 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/03 22:47:37 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/07 23:11:18 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ class Server
 		void 					joinZeroo(Client *client);
 		void 					broadcastWithoutTargetedChannel(Client *user, std::string message);
 		void 					deleteTheChannelWhenNoUserInIt(Channel *channel);
+		Client* 				staticGetClientByNickplus(std::vector<Client *> clients, std::string nickname);
 		// server utils		
 		bool					unique_nickname(std::string nickname);
 		bool					check_valid_nick_name(std::string nick_name);

@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:05:25 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/09 02:37:04 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/09 02:43:36 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 #define REPLY_NICKCHANGE(oldNick, nick, hostname) ":" + oldNick + "!~u@" + hostname + " NICK " + nick + "\r\n"
 #define ERROR_NEEDMOREPARAMS(nick, hostname) (std::string (":") + hostname + std::string(" 461 ") + nick + " :Not enough parameters !\r\n")
 
-#define PART_REPLY(nickname, username, hostname, channel) ":" + std::string(nickname) + "!~" + std::string(username) + "@" + std::string(hostname) + " PART " + std::string(channel) + "\r\n"
+#define PART_REPLY(nickname, username, hostname, channel, reason) ":" + std::string(nickname) + "!~" + std::string(username) + "@" + std::string(hostname) + " PART " + std::string(channel) + " :" + reason + "\r\n"
 
 #define RPL_AWAY(sender , username, hostname, message , nick_resever) ":" + std::string(sender) + "!~" + std::string(username) + "@" + std::string(hostname) + " PRIVMSG " + nick_resever + " :" + message + "\r\n"
 
@@ -51,9 +51,11 @@
 
 #define ERROR_INVALIDMODEPARAM_LIMIT(channel, hostname, flag) ":" + hostname + " 696 " + channel + " " + flag + " * You must specify a parameter for the limit mode. Syntax: <limit>.\r\n"
 #define ERROR_INVALIDMODEPARAM(channel, hostname, flag) ":" + hostname + " 696 " + channel + " " + flag + " * you must specifiy a parameter for the op mode. Syntax: <nick>.\r\n"
-#define ERROR_INVALIDMODEPARAM_KEY(channel, hostname, flag, param) ":" + hostname + " 696 " + channel + " " + flag + " * :Invalid mode " + flag + " parameter: `" + param + "`\r\n"
+#define ERROR_INVALIDKEY(channel, hostname, key) ":" + hostname + " 525 " + channel + " :Key is not well-formed :`" + key + "`\r\n"
+#define ERROR_INVALIDMODEPARAM__KEY(channel, hostname, flag) ":" + hostname + " 696 " + channel + " " + flag + " * You must specify a parameter for the limit mode. Syntax: <key>.\r\n"
 #define ERROR_USERNOTINCHANNEL(hostname, channel) ":" + hostname + " 441 " + channel + " " + ":they aren't on that channel\r\n"
 #define ERROR_NOPRIVILEGES(hostname, channel) ":" + hostname + " 482 " + channel + " " + ":You're not a channel operator\r\n"
+#define ERROR_NOPRIVILEGES__(hostname, channel, flag) ":" + hostname + " 482 " + channel + " " + ":You're not a channel operator to set channel mode " + flag + "\r\n"
 
 #define REPLY_CREATIONTIME(hostname, channelName, nick, channel_time) ":" + hostname + " 329 " + nick + " " + channelName + " " + channel_time + "\r\n"
 #define REPLY_CHANNELMODES(hostname, channelName, nick, channelmode) ":" + hostname + " 324 " + nick + " " + channelName + " " + channelmode + "\r\n"

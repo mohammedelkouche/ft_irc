@@ -75,7 +75,7 @@ void Server::joinZeroo(Client *client)
                 (*iterate)->removeFromChannel((*iterate)->GetClientssHouse()[i]);
                 channelLeft = (*iterate)->getChannelName();
                 flag = true;
-                SendResponse(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), (*iterate)->getChannelName()));
+                SendResponse(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), (*iterate)->getChannelName(), ""));
                 break ;
             }
         }
@@ -86,7 +86,7 @@ void Server::joinZeroo(Client *client)
         }
         if (flag)
         {
-            sendToChannel(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), channelLeft), channelLeft);
+            sendToChannel(client, PART_REPLY(client->get_nickname(), client->get_hostname(), client->get_username(), channelLeft, ""), channelLeft);
             flag = false;
         }
     }
@@ -98,19 +98,22 @@ void Server::JoinConstruction(Client *client)
 
     std::stringstream ss(cmd[1]);
     std::string zero ;
+    std::vector<std::string> channelNames;
     ss >> zero; 
     if (zero == "0")
     {
         joinZeroo(client);
         return ;
     }
-    else if (cmd.size() < 2 || cmd[1].empty() || !cmd[1][1])
+    else if (cmd.size() < 2 || cmd[1].empty())
     {
         SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
         return ;
     }
-
-    std::vector<std::string> channelNames = Splitter(cmd[1], ",");
+    if (cmd[1] == ":" && cmd.size() >= 3)
+        channelNames = Splitter(cmd[2], ",");
+    else
+        channelNames = Splitter(cmd[1], ",");
     std::vector<std::string> splittedKeys;
     std::vector<std::string> initialize;
     std::vector<std::string>::iterator keyIt = initialize.begin();
@@ -141,7 +144,7 @@ void Server::JoinConstruction(Client *client)
         }    
         else
             key_var = "";
-        if (channelName[0] != '#')
+        if (channelName[0] != '#' || channelName.substr(1).find(" ") != std::string::npos)
         {
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelName, client->get_nickname()));
             continue ;
@@ -198,21 +201,21 @@ void Server::JoinConstruction(Client *client)
             sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
         }
     }
-    for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
-    {
-        std::cout << "Channel: " << (*it)->getChannelName() << std::endl;
-        std::vector<Client*> clientsHouse = (*it)->GetClientssHouse();
-        if (clientsHouse.empty())
-        {
-            std::cout << "No clients in channel: " << (*it)->getChannelName() << std::endl;
-            continue ;
-        }
+    // for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
+    // {
+    //     std::cout << "Channel: " << (*it)->getChannelName() << std::endl;
+    //     std::vector<Client*> clientsHouse = (*it)->GetClientssHouse();
+    //     if (clientsHouse.empty())
+    //     {
+    //         std::cout << "No clients in channel: " << (*it)->getChannelName() << std::endl;
+    //         continue ;
+    //     }
 
-        for (std::vector<Client*>::iterator clientIt = clientsHouse.begin(); clientIt != clientsHouse.end(); ++clientIt)
-        {
-            std::cout << "Client fd: " << (*clientIt)->get_fd()
-                      << " nickname: " << (*clientIt)->get_nickname()
-                      << " operator status: " << (*clientIt)->getIsOperatorStatus() << std::endl;
-        }
-    }
+    //     for (std::vector<Client*>::iterator clientIt = clientsHouse.begin(); clientIt != clientsHouse.end(); ++clientIt)
+    //     {
+    //         std::cout << "Client fd: " << (*clientIt)->get_fd()
+    //                   << " nickname: " << (*clientIt)->get_nickname()
+    //                   << " operator status: " << (*clientIt)->getIsOperatorStatus() << std::endl;
+    //     }
+    // }
 }
