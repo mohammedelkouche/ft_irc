@@ -8,8 +8,9 @@
 (FIXED)-> diplay the mode of the channel when join it.
 (FIXED)-> (invite) :testnet.ergo.chat 443 oussama oussama #c :User is already on that channel
 (FIXED)-> (join) #, 
- -> CHECKING LEAAAAAAAAKS :)
+(FIXED)-> CHECKING LEAAAAAAAAKS :)
  "while true; do leaks ircserv ; sleep 1; done"
+(FIXED)-> user out of channel can kick someone inside the channel
 
 ->        if (!channelName[1])
         {
@@ -24,7 +25,6 @@ invite ll
 invite jj #!#
 :localhost 401 bot jj :No such nickname```
 
--> user out of channel can kick someone inside the channel
  _   _        __        __   _                            __  __       _    _ _      _     _   
 | \ | | ___   \ \      / /__| | ___ ___  _ __ ___   ___  |  \/  | __ _| |_ (_|_) ___| |__ (_)
 |  \| |/ _ \   \ \ /\ / / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | |\/| |/ _` | __|| | |/ __| '_ \| |

@@ -144,14 +144,9 @@ void Server::JoinConstruction(Client *client)
         }    
         else
             key_var = "";
-        if (channelName[0] != '#' || channelName.substr(1).find(" ") != std::string::npos)
+        if (channelName[0] != '#' || !channelName[1] || channelName.substr(1).find(" ") != std::string::npos)
         {
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), channelName, client->get_nickname()));
-            continue ;
-        }
-        if (!channelName[1])
-        {
-            SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
             continue ;
         }
         std::vector<Channel*>::iterator channelIt;

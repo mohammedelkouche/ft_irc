@@ -28,15 +28,22 @@ void Server::KickConstruction(Client *client)
         return ;
     }
     std::vector<std::string> splittedChannels ;
-    splittedChannels = (vec[1] == ":" && vec.size() >= 4) ? Splitter(vec[2], ",") : Splitter(vec[1], ",");
+    splittedChannels = (vec[1] == ":" && vec.size() >= 3) ? Splitter(vec[2], ",") : Splitter(vec[1], ",");
 
     for(std::vector<std::string>::iterator iterate = splittedChannels.begin() ; iterate != splittedChannels.end(); ++iterate)
     {
         std::string eachChannel = *iterate;
         Channel* check = getChannelByName(channels, eachChannel);
-        if (eachChannel[0] != '#' || eachChannel.substr(1).find(" ") != std::string::npos)
+        if (eachChannel[0] != '#' )
         {
+            std::cout << "if\n" << std::endl;
             SendResponse(client, ERROR_NOSUCHCHANNEL(client->get_hostname(), eachChannel, client->get_nickname()));
+            continue ;
+        }
+        else if (eachChannel.find(' ') != std::string::npos)
+        {
+            std::cout << "else if\n" << std::endl;
+            SendResponse(client, ERROR_NEEDMOREPARAMS(client->get_nickname(), client->get_hostname()));
             continue ;
         }
         else if(channeDoesntlExists(channels, eachChannel))
@@ -62,17 +69,27 @@ void Server::KickConstruction(Client *client)
             std::string eachUser = *it;
             if (!isClientExist(clients, eachUser))
                 SendResponse(client, ERROR_NOSUCHNICK(client->get_hostname(),client->get_nickname(), eachUser));
+            else if (!IsClientInChannel(getChannelByName(channels, eachChannel)->GetClientssHouse(), client->get_fd()))
+                SendResponse(client, ERROR_NOTONCHANNEL(client->get_hostname(), eachChannel));
             else if (getClientByNick(clients, eachUser).get_fd())
             {
                 Client& target = getClientByNick(clients, eachUser);
                 Channel* channelPtr = getChannelByName(channels, eachChannel);
                 std::string reason;
+                if(!IsClientInChannel(getChannelByName(channels, eachChannel)->GetClientssHouse(), target.get_fd()))
+                {
+                    SendResponse(client, ERROR_USERNOTINCHANNEL(client->get_hostname(), eachChannel));
+                    return ;
+                }
                 if (!channelPtr)
                     return ;
                 if (vec.size() == 3)
                     reason = "no comment is given";
-                else if(vec.size() >= 4 && vec[3] == ":")
+                else if (vec.size() > 3 && vec[3] == ":")
                     reason = vec[4];
+                else
+                    reason = vec[3];
+
                 Channel& channel = *channelPtr;
                 channel.removeFromChannel(&target);
                 std::string rpl = REPLY_KICK(client->get_nickname(), client->get_username(), \

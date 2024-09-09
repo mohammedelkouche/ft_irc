@@ -9,9 +9,9 @@ server_port = 8080
 # Initial lines to send
 initial_lines = [
     'pass x\r\n',
-    'nick eama\r\n',
+    'nick ema\r\n',
     'user r r r r\r\n',
-    'join #c\r\n',
+    'join #w\r\n',
     # 'mode #c +k key\r\n'
     # 'mode #r +k key\r\n'
 ]
