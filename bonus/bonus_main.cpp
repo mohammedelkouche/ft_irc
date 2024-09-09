@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:52:46 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/08/29 18:13:54 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/08 22:42:58 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@ void	CheckArg(char **argv)
 	if (port < 1024 || port > 65535) {
 		throw std::out_of_range("Error: Invalid port number");
 	}
-	if (ip_address != "localhost" && ip_address != "LOCALHOST" && ip_address != "127.0.0.1")
-		throw std::invalid_argument("Error: Invalid ip_address");
-	
 }
 
 int main(int argc, char **argv)

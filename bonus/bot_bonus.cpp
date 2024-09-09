@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bot_bonus.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 17:04:27 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/07 00:33:00 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/08 23:26:21 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ Bot::Bot(const std::string &ip, int port, const std::string &password) : port(po
 	memset(&server_addr, 0, sizeof(server_addr));
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(port);
-	if (inet_pton(AF_INET, server_ip.c_str(), &server_addr.sin_addr) <= 0)
-		throw std::runtime_error("Invalid address/ Address not supported");
+    if (inet_pton(AF_INET, server_ip.c_str(), &server_addr.sin_addr) <= 0)
+        throw std::runtime_error("Invalid address/ Address not supported");
     
     signal(SIGPIPE, SIG_IGN);
     signal(SIGINT, signalHandler);
     
-    std::srand(std::time(0)); // Initialize random number generator
+    std::srand(std::time(0));
 
 }
 

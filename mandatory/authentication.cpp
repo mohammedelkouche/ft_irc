@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/04 01:10:03 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/09 02:27:51 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,11 @@ void	Server::handle_pass(Client *user)
 		else
 		{
 			if (this->pass != commande[1])
-			{
-				if (user->get_correct_pass())
-					sendToClient(user->get_fd(), ERROR_ALREADYSETPASS("*", user->get_hostname()));
-				else
-					sendToClient(user->get_fd(), ERROR_PASSWDMISMATCH(" * ", user->get_hostname()));
-			}
+				sendToClient(user->get_fd(), ERROR_PASSWDMISMATCH(" * ", user->get_hostname()));
 			else
 			{ 
-				if (user->get_correct_pass())
-				{
-					sendToClient(user->get_fd(), ERROR_ALREADYSETPASS("*", user->get_hostname()));
-				}
-				else
-				{
-					user->set_pass_client(commande[1]);
-					user->set_correct_pass(true);
-				}
+				user->set_pass_client(commande[1]);
+				user->set_correct_pass(true);
 			}
 		}
 	}

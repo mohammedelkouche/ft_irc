@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/07 19:48:37 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/09 02:23:26 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,30 +139,23 @@ std::vector<std::string>	devide_commande(std::string message)
 {
 	std::vector<std::string> vector;
 	std::string Command;
+
+	
 	for (size_t space = 0; space < message.size(); space++)
 	{
 		if (!std::isspace(message[space]))
 		{
 			size_t	next_space = message.find(' ', space);
-			size_t	next_tab = message.find('	', space);
 			if (message[space] == ':')
 			{
 				vector.push_back(message.substr(space,1));
 				vector.push_back(message.substr(space + 1, message.size() - (space + 1)));
 				break ;
 			}
-			else if (next_space != std::string::npos || next_tab != std::string::npos)
+			else if (next_space != std::string::npos)
 			{
-				if (next_tab < next_space)
-				{
-					vector.push_back(message.substr(space, next_tab - space));
-					space = next_tab;
-				}
-				else
-				{
-					vector.push_back(message.substr(space, next_space - space));
-					space = next_space;
-				}
+				vector.push_back(message.substr(space, next_space - space));
+				space = next_space;
 			}
 			else
 			{
@@ -198,7 +191,7 @@ void	Server::execute_commande(Client *user)
 			success_connect(user);
 	}
 	if (user->is_enregistred())
-	{		
+	{
 		if (commande[0] == "join" || commande[0] == "JOIN")
 			JoinConstruction(user);
 		else if (commande[0] == "invite" || commande[0] == "INVITE")
