@@ -28,7 +28,7 @@ The JOIN command indicates that the client wants to join the given channel(s), e
   
 >USER:  
     USER name 0 * fullname  
-  
+   s
 >INVITE:  
     INVITE nickname #channel_name // [operator]: add nickname to invite list (no to the channel)  
   
