@@ -67,14 +67,9 @@ void Server::Private_message(std::vector<std::string> command, Client *user)
                 {
                     if (on_channel((*it)->GetClientssHouse(), user))
                     {
-                        if (command[2][0] == ':')
-                        {
-                            command[2].erase(0, 1);
-                            for (size_t j = 2; j < command.size(); j++)
-                                full_message += command[j];
-                        }
-                        else
-                            full_message += command[2];
+                        if (command[2] == ":")
+                            command.erase(command.begin() + 2);
+                        full_message = command[2];
                         if (full_message.empty())
                             sendToChannel(user, ERR_NOTEXTTOSEND(user->get_hostname()), (*it)->getChannelName());
                         else
@@ -95,28 +90,15 @@ void Server::Private_message(std::vector<std::string> command, Client *user)
             {
                 if (clients[i].get_nickname() == (*it_t) && clients[i].is_enregistred())
                 {
-                    if (command[2][0] == ':')
-                    {
-                        command[2].erase(0, 1);
-                        for (size_t j = 2; j < command.size(); j++)
-                            full_message += command[j];
-                        if (full_message.empty())
-                            sendToClient(user->get_fd(), ERR_NOTEXTTOSEND(user->get_hostname()));
-                        else
-                            sendToClient(clients[i].get_fd(), RPL_AWAY(user->get_nickname(), \
-                                            user->get_username(), user->get_hostname(), full_message, \
-                                                clients[i].get_nickname()));
-                    }
+                    if (command[2] == ":")
+                        command.erase(command.begin() + 2);
+                    full_message = command[2];
+                    if (full_message.empty())
+                        sendToClient(user->get_fd(), ERR_NOTEXTTOSEND(user->get_hostname()));
                     else
-                    {
-                        full_message += command[2];
-                        if (full_message.empty())
-                            sendToClient(user->get_fd(), ERR_NOTEXTTOSEND(user->get_hostname()));
-                        else
-                            sendToClient(clients[i].get_fd(), RPL_AWAY(user->get_nickname(), \
-                                            user->get_username(), user->get_hostname(), full_message, \
-                                                clients[i].get_nickname()));
-                    }
+                        sendToClient(clients[i].get_fd(), RPL_AWAY(user->get_nickname(), \
+                                        user->get_username(), user->get_hostname(), full_message, \
+                                            clients[i].get_nickname()));
                     break ;
                 }
             }

@@ -171,7 +171,7 @@ void Bot::PlayGame()
 {
     while (!terminate) {
         std::string client_message = ReceiveMessage();
-        if (client_message.empty()) // like Server closed connection
+        if (client_message.empty())
             break;
 
         if (client_message.size() >= 2 && client_message.substr(client_message.size() - 2) == "\r\n") 
@@ -196,11 +196,17 @@ void Bot::PlayGame()
         if (command == "PRIVMSG")
         {
             std::string sender = senderdomaine.substr(1, senderdomaine.find('!') - 1);
+            std::string orange = "\033[38;5;208m";
+            std::string red = "\033[0;31m";
+            std::string purple = "\033[35m";
+            std::string green = "\033[32m";
+            std::string reset = "\033[0m";
             if (msgContent == "start")
             {
-                PrSendMessage("Choose a game: 'Roshambo(rock paper scissors)' or 'Dolly'. Type 'exit' to quit.", sender);
+                // PrSendMessage("Choose a game: 'Roshambo(rock paper scissors)' or 'Dolly'. Type 'exit' to quit.", sender);
+                PrSendMessage(" Choose a game:" + orange + "Roshambo" + reset + "(rock paper scissors) or " + green + "Dolly" + reset + " Type" + red + " exit" + reset + " to quit", sender);
                 client_in_game[sender] = true;
-                current_game[sender] = "";  // Initialize to no game selected
+                current_game[sender] = "";
             }
             else if (msgContent == "Roshambo" && client_in_game[sender])
             {
