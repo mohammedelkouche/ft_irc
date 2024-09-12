@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/06 21:51:43 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/12 15:10:39 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <iostream>
 
 
-Client::Client() : ipaddress(""), nickname(""), pass_client(""), username (""), isOperator(false),correct_pass(false)
+Client::Client() : ipaddress(""), nickname(""), pass_client(""), username (""), isOperator(false),correct_pass(false),isdelimiter(false), saveData("")
 {
 	this->registred = false;
 }
@@ -31,6 +31,7 @@ Client::Client(const Client& copy)
 	registred = copy.registred;
 	isOperator = copy.isOperator;
 	correct_pass = copy.correct_pass;
+	isdelimiter = copy.isdelimiter;
 	commande = copy.commande;
 	invitedChannels = copy.invitedChannels;
 }

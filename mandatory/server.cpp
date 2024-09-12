@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/09 02:23:26 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/12 21:47:49 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,12 +211,60 @@ void	Server::parse_message(std::string buffer, int fd)
 	Client	*user = get_connect_client(fd);
 	size_t pos = 0;
     size_t end_pos = 0;
-	while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos) {
-		std::string command = buffer.substr(pos, end_pos - pos);
-		std::vector<std::string> commande = devide_commande(command);
-		user->set_commande(commande);
-		execute_commande(user);
+	std::string command;
+	// size_t index;
+	// size_t flag = 0;
+	
+	// while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos)
+	// {
+	// 	command = buffer.substr(pos, end_pos - pos);
+	// 	std::vector<std::string> commande = devide_commande(command);
+	// 	user->set_commande(commande);
+	// 	execute_commande(user);
+	// 	pos = end_pos + 2;
+	// }
+	
+
+	while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos)
+	{
+		// std::cout << "posbefor ->{" << pos << "}"<< std::endl;
+		// std::cout << "buff_pos ->{" << buffer[pos] << "}"<< std::endl;
+		command = buffer.substr(pos, end_pos - pos);
+		if (user->isdelimiter)
+		{
+			user->saveData += command;
+			std::vector<std::string> commande = devide_commande(user->saveData);
+			user->set_commande(commande);
+			execute_commande(user);
+			user->isdelimiter = 0;
+			// std::cout << "command ={" << command << "}"<< std::endl;
+			// std::cout << "command ={" << "wwwwwwwwww" << "}"<< std::endl;
+			user->saveData.clear();
+		}
+		// std::cout << command.size() << std::endl;
+		// std::cout << buffer.size() << std::endl;
+		else{
+			// std::cout << "hhhhh" << std::endl;
+			std::vector<std::string> commande = devide_commande(command);
+			user->set_commande(commande);
+			// std::cout << "command ={" << command << "}"<< std::endl;
+			execute_commande(user);
+		}
 		pos = end_pos + 2;
+		// index = pos;
+		buffer.erase(0, pos);
+		pos = 0;
+		// std::cout << "index ->{" << index << "}"<< std::endl;
+		
+		if (buffer.size() > 0 and buffer.find("\r\n", pos) == std::string::npos)
+		{
+			// std::cout << "command ={" << "lalalalalal" << "}"<< std::endl;
+			user->isdelimiter = 1;
+			user->saveData += buffer;
+			break ;
+		}
+		// std::cout << "pos ->{" << pos << "}"<< std::endl;
+		// std::cout << "the rest buffer ->{" << buffer << "}"<< std::endl;
 	}
 }
 
@@ -248,6 +296,8 @@ void	Server::ReceiveClientData(int fd)
 	size_t pos = 0;
     size_t end_pos = 0;
 	size_t bytes_received = recv(fd, buffer, BUFFER_SIZE - 1, 0);
+	// std::cout << "bytes_received ={" << bytes_received << "}"<< std::endl;
+	// std::cout << "buffer ={" << buffer << "}"<< std::endl;
 	std::string red = "\033[31m";
 	std::string yellow = "\033[33m";
 	std::string reset = "\033[0m";
@@ -281,15 +331,23 @@ void	Server::ReceiveClientData(int fd)
         } else {
             buffer[BUFFER_SIZE - 1] = '\0';
         }
-		message = buffer;
+		message.append(buffer, BUFFER_SIZE);
+		// std::cout << "message ={" << message << "}"<< std::endl;
 		if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
 		{
 			partial_messages[fd] += message;
 			parse_message(partial_messages[fd],fd);
+			// std::cout << "partial_messages size -> {" << partial_messages[fd].size()  << "}" << std::endl;
+
+			// std::cout << "partial_messages {" << partial_messages[fd]  << "}" << std::endl;
 			partial_messages[fd].clear();
 		}
-		else if (message.find("\n", pos) == std::string::npos)
+		// else if (message.find("\n", pos) == std::string::npos)
+		else
+		{
+			// std::cout << "oooolaaa" << std::endl;
 			partial_messages[fd] += message;
+		}
 	}
 }
 
@@ -330,14 +388,19 @@ void	Server::initializeServer(int port_nbr,std::string str)
 	{
 		if (poll(&pollfds[0], pollfds.size(), -1) == -1 && !stopServer)
 			throw(std::runtime_error("poll() failed"));
+		// std::cout << "chooof fsmaaa " << std::endl;
 		for (size_t i = 0; i < pollfds.size(); i++)
 		{
 			if (pollfds[i].revents & POLLIN)
 			{
+				// std::cout << "3aaawadd choouf  " << std::endl;
 				if (pollfds[i].fd == fd_srv_socket)
 					AcceptNewClient();
 				else
+				{
 					ReceiveClientData(pollfds[i].fd);
+					// std::cout << "helllooooo " << std::endl;
+				}
 			}
 		}
 	}

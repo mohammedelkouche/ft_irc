@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 17:11:32 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/09 18:11:24 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/12 15:10:27 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ class   Client
 		bool						isOperator;
 		bool 						correct_pass;
 	public :
+		bool						isdelimiter;
+		std::string					saveData;
 		Client();
 		Client(const Client& copy);
 		~Client();
