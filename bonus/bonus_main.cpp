@@ -23,9 +23,6 @@ void	CheckArg(char **argv)
 	}
 	std::stringstream portstream(portstr);
 	portstream >> port;
-	// if (portstream.fail()) {
-	//     throw std::invalid_argument("Error: Failed to convert port to integer");
-	// }
 	if (port < 1024 || port > 65535) {
 		throw std::out_of_range("Error: Invalid port number");
 	}

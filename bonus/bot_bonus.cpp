@@ -86,16 +86,12 @@ void Bot::SendMessage(const std::string &message) {
         std::cerr << "Failed to send message " << std::endl;
 }
 
-// old
 void Bot::PrSendMessage(const std::string &message, const std::string &client_nick)
 {
     std::string formatted_message = "PRIVMSG " + client_nick + " :" + message + "\r\n";
     
     if (send(bot_fd, formatted_message.c_str(), formatted_message.length(), 0) < 0)
-    {
-        // RemoveClient(client_nick); // Remove client if sending fails
         std::cerr << "Failed to send message to client " << client_nick << std::endl;
-    }
 }
 
 void Bot::signalHandler(int signal)
@@ -162,6 +158,7 @@ void Bot::PlayNwetat(const std::string &sender)
         "galk aymane douzi 3ando l insta bach takli l passta , w galk oussama douzi 3ando l facebook atl9ayh dayr f profil rwayda bla slouk ",
         "galk sel3a slou3 w mohammed mol l bot ga3ma mekhlou3 , tahyati l khouya mohammed lkouk wl kheyzzo me7kouk",
         "galk l3alam kooollo wla khdam libror, li mikiddich l bizza kila77ag lhedra",
+        "galk wlah wmakenty chrif la saybti irc f sif",
         "[1]    44471 segmentation fault  ./ircserv 8080 x ------{ CHOUF F SMA 3AWTANI CHOUF F SMA HHHHHHH }-------"
     };
 
@@ -174,7 +171,7 @@ void Bot::PlayGame()
 {
     while (!terminate) {
         std::string client_message = ReceiveMessage();
-        if (client_message.empty()) // like Server closed connection
+        if (client_message.empty())
             break;
 
         if (client_message.size() >= 2 && client_message.substr(client_message.size() - 2) == "\r\n") 
@@ -199,11 +196,17 @@ void Bot::PlayGame()
         if (command == "PRIVMSG")
         {
             std::string sender = senderdomaine.substr(1, senderdomaine.find('!') - 1);
+            std::string orange = "\033[38;5;208m";
+            std::string red = "\033[0;31m";
+            std::string purple = "\033[35m";
+            std::string green = "\033[32m";
+            std::string reset = "\033[0m";
             if (msgContent == "start")
             {
-                PrSendMessage("Choose a game: 'Roshambo(rock paper scissors)' or 'Dolly'. Type 'exit' to quit.", sender);
+                // PrSendMessage("Choose a game: 'Roshambo(rock paper scissors)' or 'Dolly'. Type 'exit' to quit.", sender);
+                PrSendMessage(" Choose a game:" + orange + "Roshambo" + reset + "(rock paper scissors) or " + green + "Dolly" + reset + " Type" + red + " exit" + reset + " to quit", sender);
                 client_in_game[sender] = true;
-                current_game[sender] = "";  // Initialize to no game selected
+                current_game[sender] = "";
             }
             else if (msgContent == "Roshambo" && client_in_game[sender])
             {

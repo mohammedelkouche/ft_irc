@@ -14,7 +14,6 @@
 #include "../include/reply.hpp"
 #include "../include/channels.hpp"
 
-
 void Channel::set_time_ctime()
 {
     time_t present_time;
@@ -58,7 +57,7 @@ int Server::on_channel(std::vector<Client *>  Clnts, Client *nick)
 
 void    Server::Topic_Command(std::vector<std::string> Topic, Client *user) {
     std::string full_name_topic;
- 
+
     if (Topic.size() == 3 && Topic[1] == ":")
     {
         Topic.erase(Topic.begin() + 1);

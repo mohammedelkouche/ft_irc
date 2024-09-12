@@ -26,7 +26,7 @@ bool Server::channeDoesntlExists(std::vector<Channel*> haystack, std::string nee
 void SendResponse(Client *client, std::string msg)
 {
     if (send(client->get_fd(), msg.c_str(), msg.length(), 0) == -1)
-        std::cout << " Failed Send JOIN message to the client " << std::endl;
+        std::cout << " Failed Send message to the client " << std::endl;
 }
 
 std::string Server::buildNamReply(Channel *channel) 
@@ -155,7 +155,6 @@ void Server::JoinConstruction(Client *client)
                 break;    
         if (channelIt == channels.end()) 
         {
-            // Channel doesn't exist, create new channel and add client
             Channel* newChannel = new Channel(channelName, "");
             if (!newChannel->addToChannel(client, ""))
                 continue ;
@@ -165,7 +164,6 @@ void Server::JoinConstruction(Client *client)
         }
         else
         {
-            // Channel exists, check key requirement
             Channel* existingChannel = *channelIt;
             std::map<std::string, bool>::iterator it = client->getInvitedChannels().find(existingChannel->getChannelName());
             if (IsClientInChannel(existingChannel->GetClientssHouse(), client->get_fd()))
@@ -196,21 +194,4 @@ void Server::JoinConstruction(Client *client)
             sendToChannel(client, REPLY_JOIN(client->get_nickname(), client->get_username(), channelName, client->get_hostname()), channelName);
         }
     }
-    // for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
-    // {
-    //     std::cout << "Channel: " << (*it)->getChannelName() << std::endl;
-    //     std::vector<Client*> clientsHouse = (*it)->GetClientssHouse();
-    //     if (clientsHouse.empty())
-    //     {
-    //         std::cout << "No clients in channel: " << (*it)->getChannelName() << std::endl;
-    //         continue ;
-    //     }
-
-    //     for (std::vector<Client*>::iterator clientIt = clientsHouse.begin(); clientIt != clientsHouse.end(); ++clientIt)
-    //     {
-    //         std::cout << "Client fd: " << (*clientIt)->get_fd()
-    //                   << " nickname: " << (*clientIt)->get_nickname()
-    //                   << " operator status: " << (*clientIt)->getIsOperatorStatus() << std::endl;
-    //     }
-    // }
 }

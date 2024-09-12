@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:07:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/09 23:39:59 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/12 21:53:02 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,10 @@
 #include <iostream>
 
 
-Client::Client() : ipaddress(""), nickname(""), pass_client(""), username (""), isOperator(false),correct_pass(false)
+Client::Client() : ipaddress(""), nickname(""), pass_client(""), username (""), isOperator(false),correct_pass(false),isdelimiter(false), saveData("")
 {
 	this->registred = false;
 }
-
 
 Client::Client(const Client& copy)
 {
@@ -32,6 +31,7 @@ Client::Client(const Client& copy)
 	registred = copy.registred;
 	isOperator = copy.isOperator;
 	correct_pass = copy.correct_pass;
+	isdelimiter = copy.isdelimiter;
 	commande = copy.commande;
 	invitedChannels = copy.invitedChannels;
 }
@@ -40,7 +40,6 @@ void	Client::set_fd(int fd_client)
 {
 	this->fd  = fd_client;
 }
-
 
 int    Client::get_fd()
 {
@@ -119,7 +118,6 @@ std::string	Client::get_hostname()
 	return this->hostname;
 }
 
-// add
 bool	Client::get_correct_pass()
 {
 	return this->correct_pass;
@@ -137,11 +135,10 @@ bool	Client::check_registration(Client *user)
 		return false;
 }
 
-
 std::string Client::get_client_host()
 {
     struct in_addr addr;
-    inet_aton(ipaddress.c_str(), &addr); // Convert IP string to in_addr structure
+    inet_aton(ipaddress.c_str(), &addr);
 
     struct hostent* hostInfo = gethostbyaddr((const void*)&addr, sizeof(addr), AF_INET);
     if (hostInfo != NULL)
@@ -149,13 +146,10 @@ std::string Client::get_client_host()
     return "Unknown";
 }
 
-
 std::map<std::string, bool>& Client::getInvitedChannels()
 {
 	return this->invitedChannels;
 }
-
-
 
 Client::~Client()
 {

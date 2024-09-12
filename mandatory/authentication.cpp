@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/09 23:39:54 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/12 21:52:14 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void Server::broadcastWithoutTargetedChannel(Client *user, std::string message)
 void	Server::sendToClient(int fd, const std::string& message)
 {
 	if (send(fd, message.c_str(), message.length(), 0) == -1)
-		std::cerr << "send() faild" << std::endl;
+        std::cout << " Failed Send message to the client " << std::endl;
 }
 
 void Server::updateClientsOnTheChannel(Client *user, std::string newNick)
@@ -90,7 +90,6 @@ void	Server::handle_nickname(Client *user)
 	int	flag = 0;
 	while (iter != commande.end())
 	{
-        // if ((*iter == ":" || *iter == "") && !flag)
         if (*iter == ":" || *iter == "")
 		{
             iter = commande.erase(iter);
@@ -107,7 +106,6 @@ void	Server::handle_nickname(Client *user)
 		else
 			sendToClient(user->get_fd(), ERROR_NONICKNAMEGIVEN(" * ", user->get_hostname()));
 	}
-	// else if (commande.size() == 2 && flag && (!commande[1].compare("") || std::isspace(commande[1][0])))
 	else if (commande.size() == 2 && flag && !check_notisspace_nick(commande[1]))
 	{
 		if (!user->is_enregistred())
@@ -189,14 +187,11 @@ void	Server::handle_Unknown_command(Client *user)
 {
 	std::vector<std::string> commande = user->get_commande();
 	
-	// array for  enregistred client
 	std::string rg_arr[20] = {"pass", "PASS",  "nick",  "NICK", "user", "USER", "join", "JOIN", "invite", "INVITE", "kick", "KICK", "part", "PART", "topic", "TOPIC", "privmsg", "PRIVMSG", "mode", "MODE"};
 	std::vector <std::string> rg_cmd(rg_arr, rg_arr + sizeof(rg_arr) / sizeof(rg_arr[0]));
 	std::vector<std::string>::iterator it;
 	it = std::find(rg_cmd.begin(), rg_cmd.end(), commande[0]);
-	
-	
-	//array for not enregistred client
+
 	std::string arr_2[14] = {"join", "JOIN", "invite", "INVITE", "kick", "KICK", "part", "PART", "topic", "TOPIC", "privmsg", "PRIVMSG", "mode", "MODE"};
 	std::vector <std::string> not_rg_cmd(arr_2, arr_2 + sizeof(arr_2) / sizeof(arr_2[0]));
 	std::vector<std::string>::iterator iterator;

@@ -55,7 +55,8 @@ void Server::InviteConstruction(Client *client)
     }
     if (channel->get_i())
     {
-        if (staticGetClientByNickplus((channel->GetClientssHouse()), client->get_nickname()) && !staticGetClientByNickplus(channel->GetClientssHouse(), client->get_nickname())->getIsOperatorStatus())
+        if (staticGetClientByNickplus((channel->GetClientssHouse()), client->get_nickname()) && \
+            !staticGetClientByNickplus(channel->GetClientssHouse(), client->get_nickname())->getIsOperatorStatus())
         {
             SendResponse(client, ERROR_NOPRIVILEGES(client->get_hostname(), channelName));
             return;

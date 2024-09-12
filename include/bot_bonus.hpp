@@ -38,7 +38,7 @@ class Bot
 		bool terminate;
 		void Cleanup();
 		std::map<std::string, bool> client_in_game;
-		std::map<std::string, std::string> current_game; // Tracks the current game of each client
+		std::map<std::string, std::string> current_game;
 	public :
 		static void signalHandler(int signal);
 		Bot(const std::string &ip, int port, const std::string &password);
@@ -51,16 +51,9 @@ class Bot
 		void	SendMessage(const std::string &message);
 		void	PrSendMessage(const std::string &message, const std::string &client_nick);
 		void	PlayNwetat(const std::string &sender);
-    	// void	PlayRoshambo(const std::string &sender);
     	void	PlayRoshambo(const std::string &sender, const std::string &content);
 		
 		~Bot();
 };
 
 #endif
-
-// privmsg bot paper
-// privmsg bot paper
-// :bot!~ahmed@e3r9p11.1337.ma PRIVMSG ew :Bot chose paper
-// :bot!~ahmed@e3r9p11.1337.ma PRIVMSG ew :It's a tie!
-// :bot!~ahmed@e3r9p11.1337.ma PRIVMSG ew :Send 'rock', 'paper', or 'scissors' to play again, or 'exit' to quit.

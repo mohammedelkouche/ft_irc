@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/11 22:04:23 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/12 21:52:38 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,12 @@
 #include "../include/server.hpp"
 #include "../include/reply.hpp"
 
-
 Server::Server() : pass("")
 {
     signal(SIGINT, handleSigint);
     signal(SIGPIPE, SIG_IGN);
 }
 
-	
 Server::Server(const Server &obj)
 {
 	port = obj.port;
@@ -46,15 +44,14 @@ Server &Server::operator=(Server const &other){
 	return *this;
 }
 
-
 void	Server::config_server()
 {
 	int enable = 1;
-	
+
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(this->port);
 	server_addr.sin_addr.s_addr = INADDR_ANY;
-	
+
 	fd_srv_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (fd_srv_socket == -1)
 		throw(std::runtime_error("Failed to create socket"));
@@ -66,7 +63,7 @@ void	Server::config_server()
 		throw(std::runtime_error("Failed to bind socket"));
 	if (listen(fd_srv_socket, SOMAXCONN) == -1)
 		throw(std::runtime_error("listen() failed"));
-	
+
 	client_poll_fd.fd = fd_srv_socket;
 	client_poll_fd.events = POLLIN;
 	client_poll_fd.revents = 0;
@@ -75,23 +72,19 @@ void	Server::config_server()
 
 void	Server::AcceptNewClient()
 {
-	Client	newclient;
+	Client		newclient;
 	std::string	host;
-
-	socklen_t addresslenght = sizeof(client_addr);
+	socklen_t 	addresslenght = sizeof(client_addr);
 
 	int fd_client_sock = accept(fd_srv_socket, (sockaddr *)&client_addr, &addresslenght);
 	if (fd_client_sock == -1)
-	{
-		//  std::cout << "accept() failed" << std::endl;
         return;
-    }
 	if (fcntl(fd_client_sock, F_SETFL, O_NONBLOCK) == -1)
 	{
 		std::cout << "fcntl() failed" << std::endl;
         return;
 	}
-	
+
 	client_poll_fd.fd = fd_client_sock;
 	client_poll_fd.events = POLLIN;
 	client_poll_fd.revents = 0;
@@ -100,10 +93,9 @@ void	Server::AcceptNewClient()
 	newclient.set_fd(fd_client_sock);
 	host = newclient.get_client_host();
 	newclient.set_hostname(host);
-	
+
 	clients.push_back(newclient);
 	pollfds.push_back(client_poll_fd);
-	// insert a new buffer entry for the new client
 	partial_messages.insert(std::make_pair(fd_client_sock, ""));
 	std::string yellow = "\033[33m";
 	std::string green = "\033[32m";
@@ -114,8 +106,6 @@ void	Server::AcceptNewClient()
 
 void	Server::RemoveClient(int fd)
 {
-
-	// for vector
 	for (size_t i = 0; i < pollfds.size(); i++)
 	{
 		if (clients[i].get_fd() == fd)
@@ -132,7 +122,7 @@ void	Server::RemoveClient(int fd)
 			break ;
 		}
 	}
-	partial_messages.erase(fd);  // Remove any stored partial messages for the client
+	partial_messages.erase(fd);
 }
 
 std::vector<std::string>	devide_commande(std::string message)
@@ -140,7 +130,6 @@ std::vector<std::string>	devide_commande(std::string message)
 	std::vector<std::string> vector;
 	std::string Command;
 
-	
 	for (size_t space = 0; space < message.size(); space++)
 	{
 		if (!std::isspace(message[space]))
@@ -166,7 +155,6 @@ std::vector<std::string>	devide_commande(std::string message)
 	}
 	return vector;
 }
-
 
 void	Server::execute_commande(Client *user)
 {
@@ -223,14 +211,61 @@ void	Server::parse_message(std::string buffer, int fd)
 	Client	*user = get_connect_client(fd);
 	size_t pos = 0;
     size_t end_pos = 0;
-	while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos) {
-		std::string command = buffer.substr(pos, end_pos - pos);
-		std::vector<std::string> commande = devide_commande(command);
-		user->set_commande(commande);
-		execute_commande(user);
-		pos = end_pos + 2; // Move past "\r\n"
-	}
+	std::string command;
+	// size_t index;
+	// size_t flag = 0;
+	
+	// while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos)
+	// {
+	// 	command = buffer.substr(pos, end_pos - pos);
+	// 	std::vector<std::string> commande = devide_commande(command);
+	// 	user->set_commande(commande);
+	// 	execute_commande(user);
+	// 	pos = end_pos + 2;
+	// }
+	
 
+	while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos)
+	{
+		// std::cout << "posbefor ->{" << pos << "}"<< std::endl;
+		// std::cout << "buff_pos ->{" << buffer[pos] << "}"<< std::endl;
+		command = buffer.substr(pos, end_pos - pos);
+		if (user->isdelimiter)
+		{
+			user->saveData += command;
+			std::vector<std::string> commande = devide_commande(user->saveData);
+			user->set_commande(commande);
+			execute_commande(user);
+			user->isdelimiter = 0;
+			// std::cout << "command ={" << command << "}"<< std::endl;
+			// std::cout << "command ={" << "wwwwwwwwww" << "}"<< std::endl;
+			user->saveData.clear();
+		}
+		// std::cout << command.size() << std::endl;
+		// std::cout << buffer.size() << std::endl;
+		else{
+			// std::cout << "hhhhh" << std::endl;
+			std::vector<std::string> commande = devide_commande(command);
+			user->set_commande(commande);
+			// std::cout << "command ={" << command << "}"<< std::endl;
+			execute_commande(user);
+		}
+		pos = end_pos + 2;
+		// index = pos;
+		buffer.erase(0, pos);
+		pos = 0;
+		// std::cout << "index ->{" << index << "}"<< std::endl;
+		
+		if (buffer.size() > 0 and buffer.find("\r\n", pos) == std::string::npos)
+		{
+			// std::cout << "command ={" << "lalalalalal" << "}"<< std::endl;
+			user->isdelimiter = 1;
+			user->saveData += buffer;
+			break ;
+		}
+		// std::cout << "pos ->{" << pos << "}"<< std::endl;
+		// std::cout << "the rest buffer ->{" << buffer << "}"<< std::endl;
+	}
 }
 
 Client* Server::get_connect_client(int fd)
@@ -242,7 +277,6 @@ Client* Server::get_connect_client(int fd)
 	}
 	return (NULL);
 }
-
 
 std::vector<Client> Server::getClientsInServer()
 {
@@ -262,6 +296,8 @@ void	Server::ReceiveClientData(int fd)
 	size_t pos = 0;
     size_t end_pos = 0;
 	size_t bytes_received = recv(fd, buffer, BUFFER_SIZE - 1, 0);
+	// std::cout << "bytes_received ={" << bytes_received << "}"<< std::endl;
+	// std::cout << "buffer ={" << buffer << "}"<< std::endl;
 	std::string red = "\033[31m";
 	std::string yellow = "\033[33m";
 	std::string reset = "\033[0m";
@@ -295,15 +331,23 @@ void	Server::ReceiveClientData(int fd)
         } else {
             buffer[BUFFER_SIZE - 1] = '\0';
         }
-		message = buffer;
+		message.append(buffer, BUFFER_SIZE);
+		// std::cout << "message ={" << message << "}"<< std::endl;
 		if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
 		{
 			partial_messages[fd] += message;
 			parse_message(partial_messages[fd],fd);
+			// std::cout << "partial_messages size -> {" << partial_messages[fd].size()  << "}" << std::endl;
+
+			// std::cout << "partial_messages {" << partial_messages[fd]  << "}" << std::endl;
 			partial_messages[fd].clear();
 		}
-		else if (message.find("\n", pos) == std::string::npos)
+		// else if (message.find("\n", pos) == std::string::npos)
+		else
+		{
+			// std::cout << "oooolaaa" << std::endl;
 			partial_messages[fd] += message;
+		}
 	}
 }
 
@@ -312,8 +356,7 @@ bool Server::stopServer = 0;
 void Server::handleSigint(int sig)
 {
 	(void) sig;
-    // std::cout << "Caught SIGINT (" << sig << "). Shutting down server gracefully." << std::endl;
-    Server::stopServer = 1; // Set the flag to stop the server loop
+    Server::stopServer = 1;
 }
 
 void	Server::close_all_fds()
@@ -335,36 +378,34 @@ void	Server::close_all_fds()
 	}
 }
 
-
 void	Server::initializeServer(int port_nbr,std::string str)
 {
 	this->port = port_nbr;
 	this->pass = str;
 	config_server();
-	
-	// std::cout << "Server with fd <" << fd_srv_socket << "> Connected" << std::endl;
-	// std::cout << "Server started. Listening on port : " << this->port << std::endl;
-	// std::cout << "Waiting to accept a connection..." << std::endl;
-	
+
 	while (!stopServer)
 	{
 		if (poll(&pollfds[0], pollfds.size(), -1) == -1 && !stopServer)
 			throw(std::runtime_error("poll() failed"));
+		// std::cout << "chooof fsmaaa " << std::endl;
 		for (size_t i = 0; i < pollfds.size(); i++)
 		{
-			// check if file descriptor has data available for reading
 			if (pollfds[i].revents & POLLIN)
 			{
+				// std::cout << "3aaawadd choouf  " << std::endl;
 				if (pollfds[i].fd == fd_srv_socket)
 					AcceptNewClient();
 				else
+				{
 					ReceiveClientData(pollfds[i].fd);
+					// std::cout << "helllooooo " << std::endl;
+				}
 			}
 		}
 	}
 	close_all_fds();
 }
-
 
 Server::~Server()
 {

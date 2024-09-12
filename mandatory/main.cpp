@@ -53,7 +53,8 @@ int main(int argc, char **argv) {
 	{
 		Server irc;
 		
-		if (argc != 3) {
+		if (argc != 3)
+		{
 			std::cout << "write: executable file  <port> <password>" << std::endl;
 			return 1;
 		}
