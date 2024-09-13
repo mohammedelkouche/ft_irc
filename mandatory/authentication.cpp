@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   authentication.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 19:38:36 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/12 17:46:20 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/13 04:59:41 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/server.hpp"
 #include "../include/client.hpp"
 #include "../include/reply.hpp"
+#include <errno.h>
+
 
 void	Server::handle_pass(Client *user)
 {
@@ -65,7 +67,10 @@ void Server::broadcastWithoutTargetedChannel(Client *user, std::string message)
 void	Server::sendToClient(int fd, const std::string& message)
 {
 	if (send(fd, message.c_str(), message.length(), 0) == -1)
+	{
         std::cout << " Failed Send message to the client " << std::endl;
+		fprintf(stderr, "send failed: %s\n", strerror(errno));
+	}
 }
 
 void Server::updateClientsOnTheChannel(Client *user, std::string newNick)

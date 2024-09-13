@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/13 18:30:07 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/13 18:38:38 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,12 +297,11 @@ void	Server::ReceiveClientData(int fd)
 	size_t pos = 0;
     size_t end_pos = 0;
 	size_t bytes_received = recv(fd, buffer, BUFFER_SIZE - 1, 0);
-	// std::cout << "bytes_received ={" << bytes_received << "}"<< std::endl;
 	// std::cout << "buffer ={" << buffer << "}"<< std::endl;
 	std::string red = "\033[31m";
 	std::string yellow = "\033[33m";
 	std::string reset = "\033[0m";
-	if (bytes_received <= 0)
+	if (bytes_received <= 0 || bytes_received > BUFFER_SIZE)
 	{
 		std::cout << yellow << "Client fd = " << fd  << reset << red  << " Disconnected " << reset << std::endl;
 		Client * client = get_connect_client(fd);
