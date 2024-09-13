@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:30 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/13 23:24:44 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/14 00:17:16 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,6 @@ int main(int argc, char **argv) {
 	{
 		std::cerr << error_message << std::endl;
 		return 1;
-	}
-	catch(const std::length_error& e)
-	{
-		std::cerr << "Caught length_error: " << e.what() << std::endl;
-		// return 1;
 	}
 	return 0;
 }
