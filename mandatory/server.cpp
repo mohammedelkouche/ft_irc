@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/12 21:47:49 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/13 01:40:43 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,11 +254,11 @@ void	Server::parse_message(std::string buffer, int fd)
 		// index = pos;
 		buffer.erase(0, pos);
 		pos = 0;
+
 		// std::cout << "index ->{" << index << "}"<< std::endl;
 		
 		if (buffer.size() > 0 and buffer.find("\r\n", pos) == std::string::npos)
 		{
-			// std::cout << "command ={" << "lalalalalal" << "}"<< std::endl;
 			user->isdelimiter = 1;
 			user->saveData += buffer;
 			break ;
@@ -331,15 +331,11 @@ void	Server::ReceiveClientData(int fd)
         } else {
             buffer[BUFFER_SIZE - 1] = '\0';
         }
-		message.append(buffer, BUFFER_SIZE);
-		// std::cout << "message ={" << message << "}"<< std::endl;
+		message.append(buffer, bytes_received);
 		if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
 		{
 			partial_messages[fd] += message;
 			parse_message(partial_messages[fd],fd);
-			// std::cout << "partial_messages size -> {" << partial_messages[fd].size()  << "}" << std::endl;
-
-			// std::cout << "partial_messages {" << partial_messages[fd]  << "}" << std::endl;
 			partial_messages[fd].clear();
 		}
 		// else if (message.find("\n", pos) == std::string::npos)
@@ -402,6 +398,10 @@ void	Server::initializeServer(int port_nbr,std::string str)
 					// std::cout << "helllooooo " << std::endl;
 				}
 			}
+			// if (pollfds[i].revents & ( POLLHUP|POLLERR|POLLNVAL) )
+			// {
+			// 	//erASE AND CLOSE
+			// }
 		}
 	}
 	close_all_fds();
