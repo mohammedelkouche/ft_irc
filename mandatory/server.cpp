@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/13 01:40:43 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/13 18:30:07 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ Server::Server() : pass("")
 
 Server::Server(const Server &obj)
 {
+	// *this = obj;
 	port = obj.port;
 	pass = obj.pass;
 	fd_srv_socket = obj.fd_srv_socket;
@@ -398,12 +399,20 @@ void	Server::initializeServer(int port_nbr,std::string str)
 					// std::cout << "helllooooo " << std::endl;
 				}
 			}
-			// if (pollfds[i].revents & ( POLLHUP|POLLERR|POLLNVAL) )
+			// if (pollfds[i].revents & (POLLHUP | POLLERR | POLLNVAL))
 			// {
-			// 	//erASE AND CLOSE
+			// 	std::cout << "Handling error or disconnect event for fd " << pollfds[i].fd << std::endl;
+
+			// 	// Remove client, close socket and clean up
+			// 	// close(pollfds[i].fd);
+			// 	// pollfds.erase(pollfds.begin() + i);  // Remove fd from pollfds
+			// 	// You should also remove the client from your client management data structures
 			// }
 		}
 	}
+	clients.clear();
+	// clients.erase(clients.begin(), clients.end());
+	pollfds.clear();
 	close_all_fds();
 }
 
