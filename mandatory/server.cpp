@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/14 00:18:01 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/14 00:21:20 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,8 @@ void	Server::parse_message(std::string buffer, int fd)
 		}
 		// std::cout << command.size() << std::endl;
 		// std::cout << buffer.size() << std::endl;
-		else{
+		else
+		{
 			// std::cout << "hhhhh" << std::endl;
 			std::vector<std::string> commande = devide_commande(command);
 			user->set_commande(commande);
