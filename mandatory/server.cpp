@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/14 01:06:57 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/14 04:08:17 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ void	Server::execute_commande(Client *user)
 	commande = user->get_commande();
 	if (user->get_commande().empty())
 		return ;
-	if(commande[0] == "pong" || commande[0] == "PONG") 
+	if(commande[0] == "pong" || commande[0] == "PONG")
 		return;
 	if (commande[0] == "pass" || commande[0] == "PASS")
 		handle_pass(user);
@@ -244,8 +244,7 @@ void	Server::parse_message(std::string buffer, int fd)
 		}
 		// std::cout << command.size() << std::endl;
 		// std::cout << buffer.size() << std::endl;
-		else
-		{
+		else{
 			// std::cout << "hhhhh" << std::endl;
 			std::vector<std::string> commande = devide_commande(command);
 			user->set_commande(commande);
