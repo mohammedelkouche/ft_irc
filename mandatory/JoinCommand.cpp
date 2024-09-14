@@ -26,7 +26,7 @@ bool Server::channeDoesntlExists(std::vector<Channel*> haystack, std::string nee
 void SendResponse(Client *client, std::string msg)
 {
     if (send(client->get_fd(), msg.c_str(), msg.length(), 0) == -1)
-        std::cout << " Failed Send message to the client " << std::endl;
+        return ;
 }
 
 std::string Server::buildNamReply(Channel *channel) 
