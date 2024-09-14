@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/14 00:21:20 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/14 01:06:57 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ void	Server::execute_commande(Client *user)
 	commande = user->get_commande();
 	if (user->get_commande().empty())
 		return ;
-	if(commande[0] == "pong" || commande[0] == "PONG")
+	if(commande[0] == "pong" || commande[0] == "PONG") 
 		return;
 	if (commande[0] == "pass" || commande[0] == "PASS")
 		handle_pass(user);
@@ -301,7 +301,7 @@ void	Server::ReceiveClientData(int fd)
 	std::string red = "\033[31m";
 	std::string yellow = "\033[33m";
 	std::string reset = "\033[0m";
-	if (bytes_received <= 0)
+	if (bytes_received <= 0 || bytes_received > BUFFER_SIZE)
 	{
 		std::cout << yellow << "Client fd = " << fd  << reset << red  << " Disconnected " << reset << std::endl;
 		Client * client = get_connect_client(fd);
@@ -388,7 +388,16 @@ void	Server::initializeServer(int port_nbr,std::string str)
 				throw(std::runtime_error("poll() failed"));
 			for (size_t i = 0; i < pollfds.size(); i++)
 			{
-				if (pollfds[i].revents & (POLLHUP | POLLERR | POLLNVAL))
+				if (pollfds[i].revents & POLLIN)
+				{
+					if (pollfds[i].fd == fd_srv_socket)
+						AcceptNewClient();
+					else
+					{
+						ReceiveClientData(pollfds[i].fd);
+					}
+				}
+				else if (pollfds[i].revents & (POLLHUP | POLLERR | POLLNVAL))
 				{
 					std::cout << yellow << "Client fd = " << pollfds[i].fd << reset << red  << " Disconnected " << reset << std::endl;
 					Client * client = get_connect_client(pollfds[i].fd);
@@ -410,15 +419,6 @@ void	Server::initializeServer(int port_nbr,std::string str)
 					}
 					close(pollfds[i].fd);
 					RemoveClient(pollfds[i].fd);
-				}
-				else if (pollfds[i].revents & POLLIN)
-				{
-					if (pollfds[i].fd == fd_srv_socket)
-						AcceptNewClient();
-					else
-					{
-						ReceiveClientData(pollfds[i].fd);
-					}
 				}
 			}
 		}
