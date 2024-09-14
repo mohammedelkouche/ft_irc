@@ -153,5 +153,5 @@ std::map<std::string, bool>& Client::getInvitedChannels()
 
 Client::~Client()
 {
-	
+
 }

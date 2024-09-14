@@ -20,31 +20,6 @@ Server::Server() : pass("")
     signal(SIGPIPE, SIG_IGN);
 }
 
-// Server::Server(const Server &obj)
-// {
-// 	// *this = obj;
-// 	port = obj.port;
-// 	pass = obj.pass;
-// 	fd_srv_socket = obj.fd_srv_socket;
-// 	for(size_t i = 0; i < clients.size(); i++)
-//         	clients[i] = obj.clients[i];
-// 	for(size_t i = 0; i < channels.size(); i++)
-//         	channels[i] = obj.channels[i];
-// }
-
-// Server &Server::operator=(Server const &other){
-// 	if (this != &other)
-// 	{
-// 		this->fd_srv_socket = other.fd_srv_socket;
-// 		this->port = other.port;
-// 		this->pass = other.pass;
-// 		this->clients = other.clients;
-// 		this->pollfds = other.pollfds;
-// 		this->channels = other.channels;
-// 	}
-// 	return *this;
-// }
-
 void	Server::config_server()
 {
 	int enable = 1;
@@ -108,7 +83,7 @@ void	Server::AcceptNewClient()
 void	Server::RemoveClient(int fd)
 {
 	for (size_t i = 0; i < pollfds.size(); i++)
-	{3
+	{
 		if (clients[i].get_fd() == fd)
 		{
 			clients.erase(clients.begin() + i);
@@ -213,23 +188,9 @@ void	Server::parse_message(std::string buffer, int fd)
 	size_t pos = 0;
     size_t end_pos = 0;
 	std::string command;
-	// size_t index;
-	// size_t flag = 0;
-	
-	// while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos)
-	// {
-	// 	command = buffer.substr(pos, end_pos - pos);
-	// 	std::vector<std::string> commande = devide_commande(command);
-	// 	user->set_commande(commande);
-	// 	execute_commande(user);
-	// 	pos = end_pos + 2;
-	// }
-	
 
 	while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos)
 	{
-		// std::cout << "posbefor ->{" << pos << "}"<< std::endl;
-		// std::cout << "buff_pos ->{" << buffer[pos] << "}"<< std::endl;
 		command = buffer.substr(pos, end_pos - pos);
 		if (user->isdelimiter)
 		{
@@ -238,34 +199,22 @@ void	Server::parse_message(std::string buffer, int fd)
 			user->set_commande(commande);
 			execute_commande(user);
 			user->isdelimiter = 0;
-			// std::cout << "command ={" << command << "}"<< std::endl;
-			// std::cout << "command ={" << "wwwwwwwwww" << "}"<< std::endl;
 			user->saveData.clear();
 		}
-		// std::cout << command.size() << std::endl;
-		// std::cout << buffer.size() << std::endl;
 		else{
-			// std::cout << "hhhhh" << std::endl;
 			std::vector<std::string> commande = devide_commande(command);
 			user->set_commande(commande);
-			// std::cout << "command ={" << command << "}"<< std::endl;
 			execute_commande(user);
 		}
 		pos = end_pos + 2;
-		// index = pos;
 		buffer.erase(0, pos);
 		pos = 0;
-
-		// std::cout << "index ->{" << index << "}"<< std::endl;
-		
 		if (buffer.size() > 0 and buffer.find("\r\n", pos) == std::string::npos)
 		{
 			user->isdelimiter = 1;
 			user->saveData += buffer;
 			break ;
 		}
-		// std::cout << "pos ->{" << pos << "}"<< std::endl;
-		// std::cout << "the rest buffer ->{" << buffer << "}"<< std::endl;
 	}
 }
 
@@ -301,29 +250,7 @@ void	Server::ReceiveClientData(int fd)
 	std::string yellow = "\033[33m";
 	std::string reset = "\033[0m";
 	if (bytes_received <= 0 || bytes_received > BUFFER_SIZE)
-	{
 		return ;
-		// std::cout << yellow << "Client fd = " << fd  << reset << red  << " Disconnected " << reset << std::endl;
-		// Client * client = get_connect_client(fd);
-		// for(std::vector<Channel *>::iterator iterate = channels.begin(); iterate != channels.end(); ++iterate)
-    	// {
-    	//     for(size_t i = 0; i < (*iterate)->GetClientssHouse().size(); i++)
-    	//     {
-    	//         if((*iterate)->GetClientssHouse()[i]->get_fd() == client->get_fd())
-    	//         {
-    	//             (*iterate)->removeFromChannel((*iterate)->GetClientssHouse()[i]);
-    	//             break ;
-    	//         }
-    	//     }
-    	//     if ((*iterate)->GetClientssHouse().size() == 0)
-    	//     {
-    	//         deleteTheChannelWhenNoUserInIt(*iterate);
-    	//         iterate--;
-    	//     }
-    	// }
-        // close(fd);
-        // RemoveClient(fd);
-	}
 	else
 	{
 		if (bytes_received < BUFFER_SIZE)
