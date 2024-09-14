@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/14 10:35:42 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/14 14:09:36 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	Server::AcceptNewClient()
 void	Server::RemoveClient(int fd)
 {
 	for (size_t i = 0; i < pollfds.size(); i++)
-	{
+	{3
 		if (clients[i].get_fd() == fd)
 		{
 			clients.erase(clients.begin() + i);
@@ -163,7 +163,7 @@ void	Server::execute_commande(Client *user)
 	commande = user->get_commande();
 	if (user->get_commande().empty())
 		return ;
-	if(commande[0] == "pong" || commande[0] == "PONG") 
+	if(commande[0] == "pong" || commande[0] == "PONG")
 		return;
 	if (commande[0] == "pass" || commande[0] == "PASS")
 		handle_pass(user);
@@ -244,8 +244,7 @@ void	Server::parse_message(std::string buffer, int fd)
 		}
 		// std::cout << command.size() << std::endl;
 		// std::cout << buffer.size() << std::endl;
-		else
-		{
+		else{
 			// std::cout << "hhhhh" << std::endl;
 			std::vector<std::string> commande = devide_commande(command);
 			user->set_commande(commande);
