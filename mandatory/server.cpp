@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/14 01:06:57 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/14 10:35:42 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,26 +303,27 @@ void	Server::ReceiveClientData(int fd)
 	std::string reset = "\033[0m";
 	if (bytes_received <= 0 || bytes_received > BUFFER_SIZE)
 	{
-		std::cout << yellow << "Client fd = " << fd  << reset << red  << " Disconnected " << reset << std::endl;
-		Client * client = get_connect_client(fd);
-		for(std::vector<Channel *>::iterator iterate = channels.begin(); iterate != channels.end(); ++iterate)
-    	{
-    	    for(size_t i = 0; i < (*iterate)->GetClientssHouse().size(); i++)
-    	    {
-    	        if((*iterate)->GetClientssHouse()[i]->get_fd() == client->get_fd())
-    	        {
-    	            (*iterate)->removeFromChannel((*iterate)->GetClientssHouse()[i]);
-    	            break ;
-    	        }
-    	    }
-    	    if ((*iterate)->GetClientssHouse().size() == 0)
-    	    {
-    	        deleteTheChannelWhenNoUserInIt(*iterate);
-    	        iterate--;
-    	    }
-    	}
-        close(fd);
-        RemoveClient(fd);
+		return ;
+		// std::cout << yellow << "Client fd = " << fd  << reset << red  << " Disconnected " << reset << std::endl;
+		// Client * client = get_connect_client(fd);
+		// for(std::vector<Channel *>::iterator iterate = channels.begin(); iterate != channels.end(); ++iterate)
+    	// {
+    	//     for(size_t i = 0; i < (*iterate)->GetClientssHouse().size(); i++)
+    	//     {
+    	//         if((*iterate)->GetClientssHouse()[i]->get_fd() == client->get_fd())
+    	//         {
+    	//             (*iterate)->removeFromChannel((*iterate)->GetClientssHouse()[i]);
+    	//             break ;
+    	//         }
+    	//     }
+    	//     if ((*iterate)->GetClientssHouse().size() == 0)
+    	//     {
+    	//         deleteTheChannelWhenNoUserInIt(*iterate);
+    	//         iterate--;
+    	//     }
+    	// }
+        // close(fd);
+        // RemoveClient(fd);
 	}
 	else
 	{
@@ -397,7 +398,7 @@ void	Server::initializeServer(int port_nbr,std::string str)
 						ReceiveClientData(pollfds[i].fd);
 					}
 				}
-				else if (pollfds[i].revents & (POLLHUP | POLLERR | POLLNVAL))
+				if (pollfds[i].revents & (POLLHUP | POLLERR | POLLNVAL))
 				{
 					std::cout << yellow << "Client fd = " << pollfds[i].fd << reset << red  << " Disconnected " << reset << std::endl;
 					Client * client = get_connect_client(pollfds[i].fd);
