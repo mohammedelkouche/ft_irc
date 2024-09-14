@@ -64,5 +64,5 @@ void Server::InviteConstruction(Client *client)
     }
     target.getInvitedChannels()[channelName] = true;
     SendResponse(client, REPLY_INVITING(client->get_hostname(), client->get_nickname(), target.get_nickname(), channelName));
-    SendResponse(&target, REPLY_INVITE(target.get_nickname(), target.get_username(), target.get_hostname(), client->get_nickname(), channelName));
+    SendResponse(&target, REPLY_INVITE( client->get_nickname(), target.get_username(), target.get_hostname(), target.get_nickname(), channelName));
 }

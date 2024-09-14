@@ -6,7 +6,7 @@
 /*   By: oredoine <oredoine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/13 01:56:33 by oredoine         ###   ########.fr       */
+/*   Updated: 2024/09/14 04:08:17 by oredoine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,30 @@ Server::Server() : pass("")
     signal(SIGPIPE, SIG_IGN);
 }
 
-Server::Server(const Server &obj)
-{
-	port = obj.port;
-	pass = obj.pass;
-	fd_srv_socket = obj.fd_srv_socket;
-	for(size_t i = 0; i < clients.size(); i++)
-        	clients[i] = obj.clients[i];
-	for(size_t i = 0; i < channels.size(); i++)
-        	channels[i] = obj.channels[i];
-}
+// Server::Server(const Server &obj)
+// {
+// 	// *this = obj;
+// 	port = obj.port;
+// 	pass = obj.pass;
+// 	fd_srv_socket = obj.fd_srv_socket;
+// 	for(size_t i = 0; i < clients.size(); i++)
+//         	clients[i] = obj.clients[i];
+// 	for(size_t i = 0; i < channels.size(); i++)
+//         	channels[i] = obj.channels[i];
+// }
 
-Server &Server::operator=(Server const &other){
-	if (this != &other)
-	{
-		this->fd_srv_socket = other.fd_srv_socket;
-		this->port = other.port;
-		this->pass = other.pass;
-		this->clients = other.clients;
-		this->pollfds = other.pollfds;
-		this->channels = other.channels;
-	}
-	return *this;
-}
+// Server &Server::operator=(Server const &other){
+// 	if (this != &other)
+// 	{
+// 		this->fd_srv_socket = other.fd_srv_socket;
+// 		this->port = other.port;
+// 		this->pass = other.pass;
+// 		this->clients = other.clients;
+// 		this->pollfds = other.pollfds;
+// 		this->channels = other.channels;
+// 	}
+// 	return *this;
+// }
 
 void	Server::config_server()
 {
@@ -296,12 +297,10 @@ void	Server::ReceiveClientData(int fd)
 	size_t pos = 0;
     size_t end_pos = 0;
 	size_t bytes_received = recv(fd, buffer, BUFFER_SIZE - 1, 0);
-	// std::cout << "bytes_received ={" << bytes_received << "}"<< std::endl;
-	// std::cout << "buffer ={" << buffer << "}"<< std::endl;
 	std::string red = "\033[31m";
 	std::string yellow = "\033[33m";
 	std::string reset = "\033[0m";
-	if (bytes_received <= 0)
+	if (bytes_received <= 0 || bytes_received > BUFFER_SIZE)
 	{
 		std::cout << yellow << "Client fd = " << fd  << reset << red  << " Disconnected " << reset << std::endl;
 		Client * client = get_connect_client(fd);
@@ -321,16 +320,16 @@ void	Server::ReceiveClientData(int fd)
     	        iterate--;
     	    }
     	}
-        RemoveClient(fd);
         close(fd);
+        RemoveClient(fd);
 	}
 	else
 	{
-		if (bytes_received < BUFFER_SIZE) {
+		if (bytes_received < BUFFER_SIZE)
             buffer[bytes_received] = '\0';
-        } else {
+        else 
             buffer[BUFFER_SIZE - 1] = '\0';
-        }
+			
 		message.append(buffer, bytes_received);
 		if ((end_pos = message.find("\r\n", pos)) != std::string::npos)
 		{
@@ -338,12 +337,8 @@ void	Server::ReceiveClientData(int fd)
 			parse_message(partial_messages[fd],fd);
 			partial_messages[fd].clear();
 		}
-		// else if (message.find("\n", pos) == std::string::npos)
 		else
-		{
-			// std::cout << "oooolaaa" << std::endl;
 			partial_messages[fd] += message;
-		}
 	}
 }
 
@@ -379,33 +374,63 @@ void	Server::initializeServer(int port_nbr,std::string str)
 	this->port = port_nbr;
 	this->pass = str;
 	config_server();
-
-	while (!stopServer)
+	std::string red = "\033[31m";
+	std::string yellow = "\033[33m";
+	std::string reset = "\033[0m";
+	
+	try
 	{
-		if (poll(&pollfds[0], pollfds.size(), -1) == -1 && !stopServer)
-			throw(std::runtime_error("poll() failed"));
-		// std::cout << "chooof fsmaaa " << std::endl;
-		for (size_t i = 0; i < pollfds.size(); i++)
+		while (!stopServer)
 		{
-			if (pollfds[i].revents & POLLIN)
+			
+			if (poll(&pollfds[0], pollfds.size(), -1) == -1 && !stopServer)
+				throw(std::runtime_error("poll() failed"));
+			for (size_t i = 0; i < pollfds.size(); i++)
 			{
-				// std::cout << "3aaawadd choouf  " << std::endl;
-				if (pollfds[i].fd == fd_srv_socket)
-					AcceptNewClient();
-				else
+				if (pollfds[i].revents & POLLIN)
 				{
-					ReceiveClientData(pollfds[i].fd);
-					// std::cout << "helllooooo " << std::endl;
+					if (pollfds[i].fd == fd_srv_socket)
+						AcceptNewClient();
+					else
+					{
+						ReceiveClientData(pollfds[i].fd);
+					}
+				}
+				else if (pollfds[i].revents & (POLLHUP | POLLERR | POLLNVAL))
+				{
+					std::cout << yellow << "Client fd = " << pollfds[i].fd << reset << red  << " Disconnected " << reset << std::endl;
+					Client * client = get_connect_client(pollfds[i].fd);
+					for(std::vector<Channel *>::iterator iterate = channels.begin(); iterate != channels.end(); ++iterate)
+					{
+						for(size_t i = 0; i < (*iterate)->GetClientssHouse().size(); i++)
+						{
+							if((*iterate)->GetClientssHouse()[i]->get_fd() == client->get_fd())
+							{
+								(*iterate)->removeFromChannel((*iterate)->GetClientssHouse()[i]);
+								break ;
+							}
+						}
+						if ((*iterate)->GetClientssHouse().size() == 0)
+						{
+							deleteTheChannelWhenNoUserInIt(*iterate);
+							iterate--;
+						}
+					}
+					close(pollfds[i].fd);
+					RemoveClient(pollfds[i].fd);
 				}
 			}
-			// if (pollfds[i].revents & ( POLLHUP|POLLERR|POLLNVAL) )
-			// {
-			// 	//erASE AND CLOSE
-			// }
 		}
 	}
+	catch(const std::length_error& e)
+	{
+		std::cerr << "Caught length_error: " << e.what() << std::endl;
+	}
+	pollfds.clear();
 	close_all_fds();
+	clients.clear();
 }
+
 
 Server::~Server()
 {
