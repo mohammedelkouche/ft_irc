@@ -108,7 +108,7 @@ void	Server::AcceptNewClient()
 void	Server::RemoveClient(int fd)
 {
 	for (size_t i = 0; i < pollfds.size(); i++)
-	{3
+	{
 		if (clients[i].get_fd() == fd)
 		{
 			clients.erase(clients.begin() + i);
