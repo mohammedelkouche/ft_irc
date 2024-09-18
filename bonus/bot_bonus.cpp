@@ -150,6 +150,9 @@ void Bot::PlayNwetat(const std::string &sender)
 {
     std::string nwetat_arr[] = 
     {
+        "mamkafyanach meeting ara chi 500, nta ghabach tn3as khssek 7arb 3ala'Mia",
+        "chareb webserv f IRC, b7al chi Science Math glebha PC, w stockage dyalek 3endi gha VRAM f PC",
+        "kanfere9ch bin ayman w ayssar, tatla3 n tanja wddrab 3and motcho payssar",
         "galk wlah wmaknti zwen lasybty irc 7da twin",
         "gals gals rebbi l flals w weklhom lkhobz yabes w t3alem srabss",
         "tahya khassa l ay 3abdia 7la mn l hendia w b7alha b7al chehdya w machi beldya",

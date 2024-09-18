@@ -13,7 +13,6 @@
 #include "../include/server.hpp"
 #include "../include/client.hpp"
 #include "../include/reply.hpp"
-#include <errno.h>
 
 
 void	Server::handle_pass(Client *user)
@@ -67,10 +66,7 @@ void Server::broadcastWithoutTargetedChannel(Client *user, std::string message)
 void	Server::sendToClient(int fd, const std::string& message)
 {
 	if (send(fd, message.c_str(), message.length(), 0) == -1)
-	{
-        std::cout << " Failed Send message to the client " << std::endl;
-		fprintf(stderr, "send failed: %s\n", strerror(errno));
-	}
+        return ;
 }
 
 void Server::updateClientsOnTheChannel(Client *user, std::string newNick)

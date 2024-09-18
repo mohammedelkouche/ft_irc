@@ -20,31 +20,6 @@ Server::Server() : pass("")
     signal(SIGPIPE, SIG_IGN);
 }
 
-// Server::Server(const Server &obj)
-// {
-// 	// *this = obj;
-// 	port = obj.port;
-// 	pass = obj.pass;
-// 	fd_srv_socket = obj.fd_srv_socket;
-// 	for(size_t i = 0; i < clients.size(); i++)
-//         	clients[i] = obj.clients[i];
-// 	for(size_t i = 0; i < channels.size(); i++)
-//         	channels[i] = obj.channels[i];
-// }
-
-// Server &Server::operator=(Server const &other){
-// 	if (this != &other)
-// 	{
-// 		this->fd_srv_socket = other.fd_srv_socket;
-// 		this->port = other.port;
-// 		this->pass = other.pass;
-// 		this->clients = other.clients;
-// 		this->pollfds = other.pollfds;
-// 		this->channels = other.channels;
-// 	}
-// 	return *this;
-// }
-
 void	Server::config_server()
 {
 	int enable = 1;

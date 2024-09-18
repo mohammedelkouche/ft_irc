@@ -6,21 +6,19 @@ import threading
 server_address = 'localhost'
 server_port = 8080
 
+# chareb webserve f FT_IRC, f7al Science Math fach kay9lebha PC
+# 
+
 # Initial lines to send
 initial_lines = [
-    'pass x\r\n',
+    'pass h\r\n',
     'nick testtest\r\n',
+    'nick testtestt\r\n',
+    'nick testtesttt\r\n',
     'user r r r r\r\n',
-    'join #c\r\n'
-] 
-# initial_lines = [
-#     'pass h\r\n',
-#     'nick moha\r\n',
-#     'nick aygaoua\r\n',
-#     'nick oussama\r\n',
-#     'user r r r r\r\n',
-#     'join #c\r\n'
-# ] 
+    'join #c\r\n',
+    'privmsg aygaoua,mohammed :\r\n'
+]
 def receive_from_server(sock):
     while True:
         try:
