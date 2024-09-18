@@ -6,7 +6,7 @@
 /*   By: mel-kouc <mel-kouc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:08:51 by mel-kouc          #+#    #+#             */
-/*   Updated: 2024/09/14 14:09:36 by mel-kouc         ###   ########.fr       */
+/*   Updated: 2024/09/15 13:32:55 by mel-kouc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,23 +213,9 @@ void	Server::parse_message(std::string buffer, int fd)
 	size_t pos = 0;
     size_t end_pos = 0;
 	std::string command;
-	// size_t index;
-	// size_t flag = 0;
-	
-	// while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos)
-	// {
-	// 	command = buffer.substr(pos, end_pos - pos);
-	// 	std::vector<std::string> commande = devide_commande(command);
-	// 	user->set_commande(commande);
-	// 	execute_commande(user);
-	// 	pos = end_pos + 2;
-	// }
-	
 
 	while ((end_pos = buffer.find("\r\n", pos)) != std::string::npos)
 	{
-		// std::cout << "posbefor ->{" << pos << "}"<< std::endl;
-		// std::cout << "buff_pos ->{" << buffer[pos] << "}"<< std::endl;
 		command = buffer.substr(pos, end_pos - pos);
 		if (user->isdelimiter)
 		{
@@ -238,34 +224,22 @@ void	Server::parse_message(std::string buffer, int fd)
 			user->set_commande(commande);
 			execute_commande(user);
 			user->isdelimiter = 0;
-			// std::cout << "command ={" << command << "}"<< std::endl;
-			// std::cout << "command ={" << "wwwwwwwwww" << "}"<< std::endl;
 			user->saveData.clear();
 		}
-		// std::cout << command.size() << std::endl;
-		// std::cout << buffer.size() << std::endl;
 		else{
-			// std::cout << "hhhhh" << std::endl;
 			std::vector<std::string> commande = devide_commande(command);
 			user->set_commande(commande);
-			// std::cout << "command ={" << command << "}"<< std::endl;
 			execute_commande(user);
 		}
 		pos = end_pos + 2;
-		// index = pos;
 		buffer.erase(0, pos);
-		pos = 0;
-
-		// std::cout << "index ->{" << index << "}"<< std::endl;
-		
+		pos = 0;		
 		if (buffer.size() > 0 and buffer.find("\r\n", pos) == std::string::npos)
 		{
 			user->isdelimiter = 1;
 			user->saveData += buffer;
 			break ;
 		}
-		// std::cout << "pos ->{" << pos << "}"<< std::endl;
-		// std::cout << "the rest buffer ->{" << buffer << "}"<< std::endl;
 	}
 }
 
@@ -301,29 +275,7 @@ void	Server::ReceiveClientData(int fd)
 	std::string yellow = "\033[33m";
 	std::string reset = "\033[0m";
 	if (bytes_received <= 0 || bytes_received > BUFFER_SIZE)
-	{
 		return ;
-		// std::cout << yellow << "Client fd = " << fd  << reset << red  << " Disconnected " << reset << std::endl;
-		// Client * client = get_connect_client(fd);
-		// for(std::vector<Channel *>::iterator iterate = channels.begin(); iterate != channels.end(); ++iterate)
-    	// {
-    	//     for(size_t i = 0; i < (*iterate)->GetClientssHouse().size(); i++)
-    	//     {
-    	//         if((*iterate)->GetClientssHouse()[i]->get_fd() == client->get_fd())
-    	//         {
-    	//             (*iterate)->removeFromChannel((*iterate)->GetClientssHouse()[i]);
-    	//             break ;
-    	//         }
-    	//     }
-    	//     if ((*iterate)->GetClientssHouse().size() == 0)
-    	//     {
-    	//         deleteTheChannelWhenNoUserInIt(*iterate);
-    	//         iterate--;
-    	//     }
-    	// }
-        // close(fd);
-        // RemoveClient(fd);
-	}
 	else
 	{
 		if (bytes_received < BUFFER_SIZE)

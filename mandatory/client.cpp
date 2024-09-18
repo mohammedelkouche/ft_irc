@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../include/server.hpp"
 #include "../include/client.hpp"
 #include <iostream>
 
